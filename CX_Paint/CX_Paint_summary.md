@@ -169,7 +169,7 @@ CSPlot(Shape1,P1,54,"Location 2",nil,1,32,P1) -- 유닛 생성
    - Radius : 도형의 크기 (각 Layer 사이의 거리)
    - Angle : 도형의 회전각
    - Number : 도형에 찍을 점의 갯수
-   - Hollow : 내부에서부터 지울 점의 갯수 (X함수의 경우 원점이 아닌 첫번재 껍질부터 시작함)
+   - Hollow : 내부에서부터 지울 점의 갯수 (X함수의 경우 원점이 아닌 첫번째 껍질부터 시작함)
 ```lua
 
 shape1 = CSMakeLine(1,64,0,19,0)
