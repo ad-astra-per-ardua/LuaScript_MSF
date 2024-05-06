@@ -1,4 +1,4 @@
-# Chapt 3. CS_EditFunction(이미지 편집 함수)
+![image](https://github.com/ad-astra-per-ardua/LuaScript_MSF/assets/50827253/80877fe2-7956-481c-b7ef-39ea4f75ba19)# Chapt 3. CS_EditFunction(이미지 편집 함수)
 
 CS_ 함수는 Shape, Path 데이터를 편집할 수 있습니다. <br>
 - 기본 자유변형 함수 : Move / Rotate / Invert / Ratio / Mirror
@@ -211,6 +211,69 @@ CSPlot(CS_FillXY(1,{SXmin,SXmax},{SYmin,SYmax},32,32),P1,54,"Location 1",nil,1,3
 ```
 그냥 x,y좌표 최소 ~ x,y,좌표 최대를 전부 fill하는거라고 보면될거같음
 
+14. CS_FillRA(Edge, areaR, areaA, sizeR, sizeA) <br>
+: 극좌표 내부영역을 방사형 모양으로 칠함 (원점이 중심) <br>
+- Edge : 내부영역의 테두리까지 칠할지 여부 선택 (0: X , 1: O , Default 1)
+- areaR : 칠할 영역의 R좌표 범위 = {Rmin, Rmax} / AreaA : 칠할영역의 (Theta)좌표 범위 = {(Theta) min , (Theta) max}
+- sizeR : 칠할 점의 R좌표 간격 / sizeR : 칠할 점의 (Theta) 좌표 간격
+
+※ (R,Θ) ∈ ([Rmin,Rmax],[Θmin,Θmax])인 잘린 부채꼴 영역이 칠할영역임
+
+![image](https://github.com/ad-astra-per-ardua/LuaScript_MSF/assets/50827253/86765a2e-a86a-455d-8f6a-2561467b2b7f)
+
+```lua
+SXmax = CS_GetXmax(SnowFlake) -- X 최댓값
+SXmin = CS_GetXmin(SnowFlake) -- X 최솟값
+SYmax = CS_GetYmax(SnowFlake) -- Y 최댓값
+SYmin = CS_GetYmin(SnowFlake) -- Y 최솟값
+CSPlot(CS_FillRA(1,{0,math.sqrt(SYmax^2+SXmax^2)},{0,360},32,16),P1,54,"Location 2",nil,1,32,P1)
+ -- RA 채우기
+```
+15. CS_FillHX(Edge,areaX,areaY,sizeX,sizeY,Direction) <br>
+: 직교좌표 내부영역을 육각 격자모양으로 칠함 
+- Edge : 내부영역의 테두리까지 칠할지를 선택 (0입력시 안칠함,1입력시 칠함) - 비우면 1로 입력됨
+- areaX : 칠할영역의 X좌표 범위 = {Xmin,Xmax} / areaY : 칠할영역의 Y좌표 범위 = {Ymin,Ymax}
+- sizeX : 칠할 점의 X좌표 간격 / sizeY : 칠할 점의 Y좌표 간격
+- Direction : 육각 격자를 쌓는 방향 (0 :↓121, 1:↓212, 2:→121, 3:→212) - 비우면 0으로 입력됨
+※ (X,Y) ∈ ([Xmin,Xmax],[Ymin,Ymax])인 직사각형 영역이 칠할영역임
+
+![image](https://github.com/ad-astra-per-ardua/LuaScript_MSF/assets/50827253/fae9d7dd-ceca-44ac-bb3e-d9c9ed4e865f)
+
+```lua
+CSPlot(SnowFlake,P1,54,"Location 1",nil,1,32,P1) -- 원본 도형
+
+SXmax = CS_GetXmax(SnowFlake) -- X 최댓값
+SXmin = CS_GetXmin(SnowFlake) -- X 최솟값
+SYmax = CS_GetYmax(SnowFlake) -- Y 최댓값
+SYmin = CS_GetYmin(SnowFlake) -- Y 최솟값
+CSPlot(CS_FillHx(1,{SXmin,SXmax},{SYmin,SYmax},32,32,0),P1,54,"Location 4",nil,1,32,P1) -- HX 채우기 ↑
+CSPlot(CS_FillHX(1,{SXmin,SXmax},{SYmin,SYmax},32,32,1),P1,54,"Location 5",nil,1,32,P1) -- HX 채우기 ↓
+CSPlot(CS_FillHX(1,{SXmin,SXmax},{SYmin,SYmax},32,32,2),P1,54,"Location 6",nil,1,32,P1) -- HX 채우기 ←
+CSPlot(CS_FillHX(1,{SXmin,SXmax},{SYmin,SYmax},32,32,3),P1,54,"Location 7",nil,1,32,P1) -- HX 채우기 →
+```
+
+16. CS_FillRD(Edge,areaX,areaY,sizeX,sizeY,StackSizeX,StackSizeY) <br>
+: 직교좌표 내부영역을 무작위로 칠함 (컴파일 할때마다 바뀜)
+- Edge : 내부영역의 테두리까지 칠할지를 선택 (0입력시 안칠함,1입력시 칠함) - 비우면 1로 입력됨
+- areaX : 칠할영역의 X좌표 범위 = {Xmin,Xmax} / areaY : 칠할영역의 Y좌표 범위 = {Ymin,Ymax}
+- sizeX : 칠할 점의 X좌표 간격 / sizeY : 칠할 점의 Y좌표 간격
+- StackSizeX : 칠할 점의 중복 방지 X좌표 간격
+- StackSizeY : 칠할 점의 중복 방지 Y좌표 간격
+
+![image](https://github.com/ad-astra-per-ardua/LuaScript_MSF/assets/50827253/a5b0f00a-8c19-4aee-a7e9-95426d36a301)
+
+```lua
+CSPlot(SnowFlake,P1,54,"Location 1",nil,1,32,P1) -- 원본 도형
+
+SXmax = CS_GetXmax(SnowFlake) -- X 최댓값
+SXmin = CS_GetXmin(SnowFlake) -- X 최솟값
+SYmax = CS_GetYmax(SnowFlake) -- Y 최댓값
+SYmin = CS_GetYmin(SnowFlake) -- Y 최솟값
+CSPlot(CS_FillRD(1,{SXmin,SXmax},{SYmin,SYmax},32,32),P1,54,"Location 8",nil,1,32,P1) -- RD 채우기
+```
+
+## 총 정리
+![image](https://github.com/ad-astra-per-ardua/LuaScript_MSF/assets/50827253/eb6a3604-f4c2-450c-8a3c-ccb2d9368b48)
 
 
 
