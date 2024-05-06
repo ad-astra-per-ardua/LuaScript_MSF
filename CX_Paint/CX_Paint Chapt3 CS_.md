@@ -190,7 +190,26 @@ CSPlot(S4,P1,0,"Location 12",nil,1,32,P1)
 CSPlot(CS_RemoveStack(S4,16),P1,54,"Location 13",nil,1,32,p1) -- Overlap + RemoveStack 응용
 ```
 
+13. CS_FillXY(Edge, areaX, areaY, sizeX, sizeY) <br>
+: 직교좌표 내부영역을 직각 격자모양으로 칠함 <br>
+- Edge : 내부영역의 테두리까지 칠할지 선택 (0 : 안칠함, 1 : 칠함) + Default 1
+- areaR : 칠할영역의 R좌표범위 = {Rmin, Rmax} / areaA : 칠할영역의 (Theta) 좌표범위 = {(Theta)min, (Theta)max}
+- sizeR : 칠할 점의 R좌표 간격 / sizeA : 칠할 점의 (Theta) 좌표 간격
+- (X,Y) ∈ ([Xmin,Xmax],[Ymin,Ymax])인 직사각형 영역이 칠할영역
+  
+![image](https://github.com/ad-astra-per-ardua/LuaScript_MSF/assets/50827253/daff44ae-7152-479a-b729-4993a0d1c032)
 
+```lua
+CSPlot(SnowFlake,P1,0,"Location 1",nil,1,32,P1) -- 원본 도형 + 마린으로 확인
+
+SXmax = CS_GetXmax(SnowFlake) -- X 최댓값
+SXmin = CS_GetXmin(SnowFlake) -- X 최솟값
+SYmax = CS_GetYmax(SnowFlake) -- Y 최댓값
+SYmin = CS_GetYmin(SnowFlake) -- Y 최솟값
+
+CSPlot(CS_FillXY(1,{SXmin,SXmax},{SYmin,SYmax},32,32),P1,54,"Location 1",nil,1,32,P1) -- XY 채우기 + 저글링으로 확인
+```
+그냥 x,y좌표 최소 ~ x,y,좌표 최대를 전부 fill하는거라고 보면될거같음
 
 
 
