@@ -1,4 +1,4 @@
-![image](https://github.com/ad-astra-per-ardua/LuaScript_MSF/assets/50827253/80877fe2-7956-481c-b7ef-39ea4f75ba19)# Chapt 3. CS_EditFunction(이미지 편집 함수)
+# Chapt 3. CS_EditFunction(이미지 편집 함수)
 
 CS_ 함수는 Shape, Path 데이터를 편집할 수 있습니다. <br>
 - 기본 자유변형 함수 : Move / Rotate / Invert / Ratio / Mirror
