@@ -4,18 +4,65 @@
 FP = P6
 SetForces({P1,P2,P3,P4},{P6,P7,P8},{},{},{P1,P2,P3,P4,P6,P7,P8}) 
 SetFixedPlayer(P6)
-StartCtrig(1)
+StartCtrig(1,nil,0,1)
 CJump(AllPlayers,0)
 
 CJumpEnd(AllPlayers,0)
 
-
+Nextptrs = CreateVar(FP)
 NoAirCollision(FP)
 DoActions(FP,{SetSpeed(SetTo, "#X2")})
 -- 여기에 변수, 배열 및 Include류 함수 선언 --
 
 
+Trigger { -- 맵전체유닛수 표기
+	players = {P6},
+	conditions = {
+			Always();
+		},
+	actions = {
+		SetMemory(0x0582264,SetTo,2400); --현재가능인구수
+		SetMemory(0x0582268,SetTo,2400);
+		SetMemory(0x058226C,SetTo,2400);
+		SetMemory(0x0582270,SetTo,2400);
+		SetMemory(0x0582274,SetTo,2400);
 
+		SetMemory(0x05822C4,SetTo,3400); --최대 인구수
+		SetMemory(0x05822C8,SetTo,3400);
+		SetMemory(0x05822CC,SetTo,3400);
+		SetMemory(0x05822D0,SetTo,3400);
+		SetMemory(0x05822D4,SetTo,3400);
+		
+		}
+}
+
+Trigger { -- 동맹설정
+	players = {Force1},
+	conditions = {
+		Always();
+	},
+	actions = {
+		SetAllianceStatus(Force1,AlliedVictory);
+		SetResources(P1, SetTo, 999999, Ore);
+		SetResources(P2, SetTo, 999999, Ore);
+		SetResources(P3, SetTo, 999999, Ore);
+		SetResources(P4, SetTo, 999999, Ore);
+		PreserveTrigger();
+	},
+}
+
+Trigger { -- 컴퓨터동맹설정
+	players = {Force2},
+	conditions = {
+		Always();
+	},
+	actions = {
+		SetResources(P7, SetTo, 9999999, OreAndGas);
+		SetResources(P6, SetTo, 9999999, OreAndGas);
+		PreserveTrigger();
+		SetAllianceStatus(Force1, Enemy);
+	},
+}
 
 Trigger {
 	players = {P1},
@@ -6901,7 +6948,56 @@ Trigger{
     }
 }
 
+------- 건작 ---------
 
+Trigger { -- 건물데스값 -1
+	players = {P6},
+	conditions = {
+		Always();
+	},
+	actions = {
+		SetDeaths(P6,Subtract,1,131);
+		SetDeaths(P6,Subtract,1,132);
+		SetDeaths(P6,Subtract,1,133);
+		SetDeaths(P6,Subtract,1,148);
+		SetDeaths(P6,Subtract,1,151);
+		SetDeaths(P6,Subtract,1,127);
+		SetDeaths(P6,Subtract,1,111);
+		SetDeaths(P6,Subtract,1,113);
+		SetDeaths(P6,Subtract,1,114);
+		SetDeaths(P6,Subtract,1,174);
+		SetDeaths(P6,Subtract,1,175);
+		SetDeaths(P6,Subtract,1,168);
+		SetDeaths(P6,Subtract,1,160);
+		SetDeaths(P6,Subtract,1,167);
+		SetDeaths(P6,Subtract,1,154);
+		PreserveTrigger()
+	}
+}
+
+GunLock = CreateVar(P6)
+GunLock = CreateVar(P7)
+GunLock = CreateVar(P8)
+
+CIf(P6,{NVar(GunLock,Exactly,0)})
+
+local hexagon1 = CSMakePolygonX(6,80,0,61,0)
+local hexagon2 = CSMakePolygonX(6,80,0,37,1)
+
+
+Trigger{
+	players = {P6},
+	conditions = {
+		CommandLeastAt(Unit, Location)
+	},
+	actions = {
+		CreateUnit(10, "Protoss Observer", "Hat1", P6);
+		KillUnitAt(All, "Protoss Observer", "Hat1", P6);
+		CSPlotOrder(hexagon1, P6, 37, "Hat1", nil, 1, 64, hexagon1, 0, Attack, "HealZone", nil, 0, nil, P6)
+	}
+}
+
+CIfEnd()
 
 EndCtrig()
 ErrorCheck()
