@@ -1,0 +1,42 @@
+아군 : <13><11>｡˙+ﾟ<07>Private <1f>Guardians of <19>Galaxy<11>ﾟ.+｡
+
+적군 : <13><11>｡˙+ﾟ<8>Ravagers <3>Unclean One <11> ﾟ.+｡
+
+계급 공격타입 : 
+<13><19> ˚☆｡ <7>N o r m a l <04> :  <1f>7, 5 0 0 <19> ☆ °
+<13><19> ˚☆｡ <7>C o n c u s s i v e <04> :  <1f>9, 0 0 0 <19> ☆ °
+<13><19> ˚☆｡ <7>E x p l o s i v e <04> :  <1f>9, 0 0 0 <19> ☆ °
+
+일마 : 16000 : 500 / 50 / 45 + 7 to 200 == min 45 , max 1445
+영마 : 22500 : 1000 / 75 / 120 + 17 to 200 == min 120 max 3520
+스마 : 35000 : 1500 / 100 / 225 + 32 to 200 == min 225 max 6625
+
+
+영작 : 
+fenixZ, ㅇ
+fenixD, ㅇ
+infestDuran,ㅇ 
+Wraith, ㅇ
+scout, ㅇ
+devour, 
+tank, 
+danimoth, 
+dropship, 
+firebat, 
+goliath, 
+yamatoBattle, 
+scv, 
+battle, 
+corsair, 
+tank, 
+scout
+prove, 
+zeratul,
+intercepter
+archon
+darkarchon
+tassadar, 
+dark, 
+emp battle, 
+dugalle battle, 
+nuke battle
