@@ -14,7 +14,207 @@ NoAirCollision(FP)
 NoAirCollision(P7)
 NoAirCollision(P8)
 DoActions(FP,{SetSpeed(SetTo, "#X2")})
+function RotatePlayer(Print,Players,RecoverCP)
+	return CopyCpAction(Print,Players,RecoverCP)
+end
 -- 여기에 변수, 배열 및 Include류 함수 선언 --
+
+Trigger {
+	players = {P8},
+	conditions = {
+		Memory(0x58F44C,Exactly,1);
+	},
+	actions = {
+		LeaderBoardScore(Kills,"\x1FP\x04oints -- [Ver. Test]");
+	},
+		flag = {Preserved}
+}
+
+Trigger {
+	players = {P8},
+	conditions = {
+		Memory(0x58F44C,Exactly,121);
+	},
+	actions = {
+		LeaderBoardScore(Custom,"\x06D\x04eaths -- [Ver. Test]");
+	},
+		flag = {Preserved}
+}
+
+Trigger{
+	players = {P8},
+	conditions = {
+		Memory(0x58F44C, AtLeast, 241);
+	},
+	actions = {
+		LeaderBoardKills("Any unit", "\x11K\x04ills\x07 -- [Ver. Test]");
+	}
+}
+
+Trigger {
+	players = {P8},
+	conditions = {
+		Always();
+	},
+	actions = {
+		SetMemory(0x58F44C, Add, 0x00000001);
+	},
+	flag = {Preserved}
+}
+
+
+Trigger {
+	players = {P8},
+	conditions = {
+		Memory(0x58F44C,AtLeast,360);
+	},
+	actions = {
+		SetMemory(0x58F44C, SetTo, 0x00000000);
+	},
+	flag = {Preserved}
+}
+
+Trigger { -- 
+	players = {P8},
+	conditions = {
+	},
+	actions = {
+		SetMemory(0x6509A0, SetTo, 0x00000000);
+	},
+	flag = {Preserved}
+}
+
+Trigger { -- 컴퓨터 리더보드 비활성화
+	players = {P6},
+	conditions = {
+			Always();
+		},
+	actions = {
+			LeaderBoardComputerPlayers(Disable);
+		}
+}
+
+-------- Exchance Trigger ----------
+
+Trigger {
+	players = {Force1},
+	conditions = {
+		Score(CurrentPlayer, Kills, AtLeast, 400);
+	},
+	actions = {
+		SetScore(CurrentPlayer, Subtract, 400, Kills);
+		SetResources(CurrentPlayer, Add, 100, Ore);
+		PreserveTrigger();
+	},
+}
+
+Trigger {
+	players = {Force1},
+	conditions = {
+		Score(CurrentPlayer, Kills, AtLeast, 1000);
+	},
+	actions = {
+		SetScore(CurrentPlayer, Subtract, 1000, Kills);
+		SetResources(CurrentPlayer, Add, 250, Ore);
+		PreserveTrigger();
+	},
+}
+
+Trigger {
+	players = {Force1},
+	conditions = {
+		Score(CurrentPlayer, Kills, AtLeast, 2000);
+	},
+	actions = {
+		SetScore(CurrentPlayer, Subtract, 2000, Kills);
+		SetResources(CurrentPlayer, Add, 500, Ore);
+		PreserveTrigger();
+	},
+}
+
+Trigger {
+	players = {Force1},
+	conditions = {
+		Score(CurrentPlayer, Kills, AtLeast, 4000);
+	},
+	actions = {
+		SetScore(CurrentPlayer, Subtract, 4000, Kills);
+		SetResources(CurrentPlayer, Add, 1000, Ore);
+		PreserveTrigger();
+	},
+}
+
+Trigger {
+	players = {Force1},
+	conditions = {
+		Score(CurrentPlayer, Kills, AtLeast, 8000);
+	},
+	actions = {
+		SetScore(CurrentPlayer, Subtract, 8000, Kills);
+		SetResources(CurrentPlayer, Add, 2000, Ore);
+		PreserveTrigger();
+	},
+}
+
+Trigger {
+	players = {Force1},
+	conditions = {
+		Score(CurrentPlayer, Kills, AtLeast, 16000);
+	},
+	actions = {
+		SetScore(CurrentPlayer, Subtract, 16000, Kills);
+		SetResources(CurrentPlayer, Add, 4000, Ore);
+		PreserveTrigger();
+	},
+}
+
+Trigger {
+	players = {Force1},
+	conditions = {
+		Score(CurrentPlayer, Kills, AtLeast, 70000);
+	},
+	actions = {
+		SetScore(CurrentPlayer, Subtract, 70000, Kills);
+		SetResources(CurrentPlayer, Add, 17500, Ore);
+		PreserveTrigger();
+	},
+}
+
+Trigger {
+	players = {Force1},
+	conditions = {
+		Score(CurrentPlayer, Kills, AtLeast, 100000);
+	},
+	actions = {
+		SetScore(CurrentPlayer, Subtract, 100000, Kills);
+		SetResources(CurrentPlayer, Add, 25000, Ore);
+		PreserveTrigger();
+	},
+}
+
+Trigger { 
+	players = {Force1},
+	conditions = {
+		Score(CurrentPlayer, Kills, AtLeast, 1000000);
+	},
+	actions = {
+		SetScore(CurrentPlayer, Subtract, 1000000, Kills);
+		SetResources(CurrentPlayer, Add, 250000, Ore);
+		PreserveTrigger();
+	},
+}
+
+Trigger { 
+	players = {Force1},
+	conditions = {
+		Score(CurrentPlayer, Kills, AtLeast, 40000);
+	},
+	actions = {
+		SetScore(CurrentPlayer, Subtract, 40000, Kills);
+		SetResources(CurrentPlayer, Add, 10000, Ore);
+		PreserveTrigger();
+	},
+}
 
 
 Trigger{
@@ -23,6 +223,7 @@ Trigger{
 		Always();
 	},
 	actions = {
+		ModifyUnitShields(All, "Any unit", AllPlayers, "Anywhere", 100);
 		ModifyUnitHitPoints(All, "Any unit", AllPlayers, "Anywhere", 100)
 	}
 }
@@ -49,6 +250,8 @@ Trigger { -- 기지유닛 끌당
 		PreserveTrigger()
 	}
 }
+
+
 
 Trigger { -- 나간플레이어 유닛삭제
 	players = {P8},
@@ -140,85 +343,164 @@ Trigger {
 	},
 	actions = {
 		CreateUnit(1, 148, "makeOvermind", P7);
-	},
-}
-
-
-Trigger {
-	players = {P7},
-	conditions = {
-		Always();
-	},
-	actions = {
 		CreateUnit(1, 127, "makeIoncannon", P7);
-	},
-}
-
-
-Trigger {
-	players = {P7},
-	conditions = {
-		Always();
-	},
-	actions = {
 		CreateUnit(1, 175, "makeXelnaga", P7);
-	},
-}
-
-
-Trigger {
-	players = {P7},
-	conditions = {
-		Always();
-	},
-	actions = {
 		CreateUnit(1, 174, "makeTemple", P7);
-	},
-}
-
-Trigger {
-	players = {P7},
-	conditions = {
-		Always();
-	},
-	actions = {
-		CreateUnit(1, 152, "makeDaggoth", P7)
-	}
-}
-
-
-Trigger {
-	players = {P7},
-	conditions = {
-		Always();
-	},
-	actions = {
+		CreateUnit(1, 152, "makeDaggoth", P7);
 		CreateUnit(1, 200, "makepowergenerator", P7);
-	},
-}
-
-
-Trigger {
-	players = {P7},
-	conditions = {
-		Always();
-	},
-	actions = {
 		CreateUnit(1, 168, "makestasiscell", P7);
-	},
-}
-
-
-Trigger {
-	players = {P7},
-	conditions = {
-		Always();
-	},
-	actions = {
 		CreateUnit(1, 151, "makecelebrate", P7);
 	},
 }
 
+Trigger{
+	players = {P7},
+	conditions = {
+		Always();
+	},
+	actions = {
+		CreateUnit(4, 77, "herofenixZ", P7);
+		CreateUnit(4, 78, "herofenixD", P7);
+		CreateUnit(4, 52, "herounclean", P7);
+		CreateUnit(4, 104, "heroinfestduran", P7);
+		CreateUnit(4, 70, "heroscout", P7);
+		CreateUnit(4, 21, "herowraith", P7);
+		CreateUnit(1, 23, "herotank", P7);
+
+
+	}
+}
+
+Trigger { -- No comment (ABB625F6)
+	players = {Force1},
+	conditions = {
+		Deaths(P7, AtLeast, 1, 77);
+		Deaths(P9,Exactly,0,200)
+	},
+	actions = {
+		DisplayText("<13><11>｡˙+ﾟ<8>Ravagers <3>Fenix Zealot <11>ﾟ.+｡ <1>을 \x06처치 \x04하였습니다 + 35000 \x1FPoints!\x04", 4);
+		SetScore(CurrentPlayer, Add, 35000, Kills);
+		PlayWAV("sound\\Protoss\\ARBITER\\PAbPss04.WAV");
+		PlayWAV("sound\\Protoss\\ARBITER\\PAbPss04.WAV");
+		PlayWAV("sound\\Protoss\\ARBITER\\PAbPss04.WAV");
+		PreserveTrigger();
+	},
+}
+
+Trigger { -- No comment (ABB625F6)
+	players = {Force1},
+	conditions = {
+		Deaths(P7, AtLeast, 1, 78);
+		Deaths(P9,Exactly,0,200)
+	},
+	actions = {
+		DisplayText("<13><11>｡˙+ﾟ<8>Ravagers <3>Fenix Dragoon <11>ﾟ.+｡ <1>을 \x06처치 \x04하였습니다 + 40000 \x1FPoints!\x04", 4);
+		SetScore(CurrentPlayer, Add, 40000, Kills);
+		PlayWAV("sound\\Protoss\\ARBITER\\PAbPss04.WAV");
+		PlayWAV("sound\\Protoss\\ARBITER\\PAbPss04.WAV");
+		PlayWAV("sound\\Protoss\\ARBITER\\PAbPss04.WAV");
+		PreserveTrigger();
+	},
+}
+
+Trigger { -- No comment (ABB625F6)
+	players = {Force1},
+	conditions = {
+		Deaths(P7, AtLeast, 1, 52);
+		Deaths(P9,Exactly,0,200)
+	},
+	actions = {
+		DisplayText("<13><11>｡˙+ﾟ<8>Ravagers <3>Unclean One <11>ﾟ.+｡ <1>을 \x06처치 \x04하였습니다 + 45000 \x1FPoints!\x04", 4);
+		SetScore(CurrentPlayer, Add, 45000, Kills);
+		PlayWAV("sound\\Protoss\\ARBITER\\PAbPss04.WAV");
+		PlayWAV("sound\\Protoss\\ARBITER\\PAbPss04.WAV");
+		PlayWAV("sound\\Protoss\\ARBITER\\PAbPss04.WAV");
+		PreserveTrigger();
+	},
+}
+
+Trigger { -- No comment (ABB625F6)
+	players = {Force1},
+	conditions = {
+		Deaths(P7, AtLeast, 1, 104);
+		Deaths(P9,Exactly,0,200)
+	},
+	actions = {
+		DisplayText("<13><11>｡˙+ﾟ<8>Ravagers <3>Infested Duran <11>ﾟ.+｡ <1>을 \x06처치 \x04하였습니다 + 45000 \x1FPoints!\x04", 4);
+		SetScore(CurrentPlayer, Add, 45000, Kills);
+		PlayWAV("sound\\Protoss\\ARBITER\\PAbPss04.WAV");
+		PlayWAV("sound\\Protoss\\ARBITER\\PAbPss04.WAV");
+		PlayWAV("sound\\Protoss\\ARBITER\\PAbPss04.WAV");
+		PreserveTrigger();
+	},
+}
+
+Trigger { -- No comment (ABB625F6)
+	players = {Force1},
+	conditions = {
+		Deaths(P7, AtLeast, 1, 70);
+		Deaths(P9,Exactly,0,200)
+	},
+	actions = {
+		DisplayText("<13><11>｡˙+ﾟ<8>Ravagers <3>Restriction <11>ﾟ.+｡ <1>을 \x06처치 \x04하였습니다 + 50000 \x1FPoints!\x04", 4);
+		SetScore(CurrentPlayer, Add, 50000, Kills);
+		PlayWAV("sound\\Protoss\\ARBITER\\PAbPss04.WAV");
+		PlayWAV("sound\\Protoss\\ARBITER\\PAbPss04.WAV");
+		PlayWAV("sound\\Protoss\\ARBITER\\PAbPss04.WAV");
+		PreserveTrigger();
+	},
+}
+
+Trigger { -- No comment (ABB625F6)
+	players = {Force1},
+	conditions = {
+		Deaths(P7, AtLeast, 1, 21);
+		Deaths(P9,Exactly,0,200)
+	},
+	actions = {
+		DisplayText("<13><11>｡˙+ﾟ<8>Ravagers <3>Tom Kazansky <11>ﾟ.+｡ <1>를 \x06처치 \x04하였습니다 + 55000 \x1FPoints!\x04", 4);
+		SetScore(CurrentPlayer, Add, 55000, Kills);
+		PlayWAV("sound\\Protoss\\ARBITER\\PAbPss04.WAV");
+		PlayWAV("sound\\Protoss\\ARBITER\\PAbPss04.WAV");
+		PlayWAV("sound\\Protoss\\ARBITER\\PAbPss04.WAV");
+		PreserveTrigger();
+	},
+}
+
+Trigger { -- No comment (ABB625F6)
+	players = {Force1},
+	conditions = {
+		Deaths(P7, AtLeast, 1, 23);
+		Deaths(P9,Exactly,0,200)
+	},
+	actions = {
+		DisplayText("<13><11>｡˙+ﾟ<8>Ravagers <3>Edmund Duke T <11>ﾟ.+｡ <1>을 \x06처치 \x04하였습니다 + 40000 \x1FPoints!\x04", 4);
+		SetScore(CurrentPlayer, Add, 40000, Kills);
+		PlayWAV("sound\\Protoss\\ARBITER\\PAbPss04.WAV");
+		PlayWAV("sound\\Protoss\\ARBITER\\PAbPss04.WAV");
+		PlayWAV("sound\\Protoss\\ARBITER\\PAbPss04.WAV");
+		PreserveTrigger();
+	},
+}
+
+
+
+Trigger { -- 영작유닛 데스값 -1
+	players = {P7},
+	conditions = {
+		Always();
+	},
+	actions = {
+		SetDeaths(CurrentPlayer, Subtract, 1, 77);
+		SetDeaths(CurrentPlayer, Subtract, 1, 78);
+		SetDeaths(CurrentPlayer, Subtract, 1, 52);
+		SetDeaths(CurrentPlayer, Subtract, 1, 104);
+		SetDeaths(CurrentPlayer, Subtract, 1, 70);
+		SetDeaths(CurrentPlayer, Subtract, 1, 21);
+		SetDeaths(CurrentPlayer, Subtract, 1, 23);
+		PreserveTrigger();
+	},
+}
 
 Trigger {
 	players = {Force1},
@@ -335,8 +617,8 @@ Trigger { -- 경우 3
 		Deaths(CurrentPlayer, Exactly, 1, "Unused Terran Bldg type   1");
 		Deaths(CurrentPlayer, Exactly, 0, "Zerg Flag Beacon");
 		Deaths(CurrentPlayer, Exactly, 0, "Unused Terran Bldg type   2");
-		Deaths(CurrentPlayer, Exactly, 0, "Unused Zerg Bldg");	
-		Deaths(CurrentPlayer, Exactly, 0, 158);	
+		Deaths(CurrentPlayer, Exactly, 0, "Unused Zerg Bldg");
+		Deaths(CurrentPlayer, Exactly, 0, 158);
 	},
 	actions = {
 		SetDeaths(CurrentPlayer, SetTo, 1734, "Unused Terran Bldg type   2");
@@ -508,7 +790,7 @@ Trigger { -- 스마 생산
 	},
 }
 
-
+----------- Heal Zone -----------
 
 Trigger {
 	players = {Force1},
@@ -517,8 +799,8 @@ Trigger {
 	},
 	actions = {
 		SetDeaths(CurrentPlayer, SetTo, 0, "Young Chrysalis");
-		ModifyUnitHitPoints(All, "Any unit", CurrentPlayer, "HealZone", 100);
-        ModifyUnitShields(All, "Any unit", CurrentPlayer, "HealZone", 100);
+		ModifyUnitHitPoints(All, "Men", CurrentPlayer, "HealZone", 100);
+        ModifyUnitShields(All, "Men", CurrentPlayer, "HealZone", 100);
 		PreserveTrigger();
 	},
 }
@@ -534,6 +816,158 @@ Trigger {
 		PreserveTrigger();
 	},
 }
+
+Trigger{
+	players = {Force1},
+	conditions = {
+		Bring(CurrentPlayer, AtLeast, 1, 125, "HealZone");
+	actions = {
+		SetDeaths(P8, Add, 1, 176);
+		PreserveTrigger();
+	}
+	}
+}
+
+Trigger{
+	players = {Force1},
+	conditions = {
+		Deaths(P8, AtLeast, 1, 125);
+	},
+	actions = {
+		SetDeaths(P8, SetTo, 0, 125);
+		ModifyUnitHitPoints(All, 125, CurrentPlayer, "bunkerHeal", 100);
+		ModifyUnitShields(All, 125, CurrentPlayer, "bunkerHeal", 100)
+	}
+}
+
+------<  기부 트리거  >--------------------------------------------- [ GiveRateUnit = 8  ]
+GText1 = "\x13\x1F─━┫ \x04기부금액 단위가 \x1F5,000 Ore \x04로 \x11변경\x04되었습니다. \x1F┣━─"
+GText2 = "\x13\x1F─━┫ \x04기부금액 단위가 \x1F10,000 Ore \x04로 \x11변경\x04되었습니다. \x1F┣━─"
+GText3 = "\x13\x1F─━┫ \x04기부금액 단위가 \x1F50,000 Ore \x04로 \x11변경\x04되었습니다. \x1F┣━─"
+GText4 = "\x13\x1F─━┫ \x04기부금액 단위가 \x1F100,000 Ore \x04로 \x11변경\x04되었습니다. \x1F┣━─"
+GText5 = "\x13\x1F─━┫ \x04기부금액 단위가 \x1F500,000 Ore \x04로 \x11변경\x04되었습니다. \x1F┣━─"
+GText6 = "\x13\x1F─━┫ \x04기부금액 단위가 \x1F1,000 Ore \x04로 \x11변경\x04되었습니다. \x1F┣━─"
+-- 1000 = 0 // 5000 = 1 // 10000 = 2 // 50000 = 3 // 100000 = 4 // 500000 = 5
+GTable = {{0,1,GText1},{1,2,GText2},{2,3,GText3},{3,4,GText4},{4,5,GText5},{5,0,GText6}}
+--Give Trig -- [ GiveUnit (58,60,69,71,72) ]
+--GiveRate 0~5 [ 5000, 10000, 50000, 100000, 500000, 1000 ]
+
+GiveRate = CreateNcode()
+
+GiveRate2 = {1000,5000,10000,50000,100000,500000}
+GiveUnitID = {58,60,69,71,72}
+PlayerArr = {"\x08P1","\x0EP2","\x0FP3","\x10P4","\x11P5"}
+
+CIf(Force1,{Bring(CurrentPlayer,AtLeast,1,11,"Anywhere")})
+
+for i = 0, 3 do
+for j = 1, 6 do
+Trigger {
+	players = {i},
+	conditions = {
+			Label(0);
+			NDeaths(i,Exactly,GTable[j][1],GiveRate);
+			Bring(CurrentPlayer,AtLeast,1,11,"Anywhere")
+		},
+	actions = {
+			GiveUnits(all,11,i,"Anywhere",P12);
+			ModifyUnitEnergy(all, 11, P12, "Anywhere", 0);
+			RemoveUnit(11,P12);
+			DisplayText(GTable[j][3],4);
+			SetNDeaths(i,SetTo,GTable[j][2],GiveRate);
+			PreserveTrigger();
+		}
+}
+
+end end
+
+CIfEnd()
+
+for k = 0, 3 do
+for j = 0, 3 do
+if k~=j then
+CIf(k,Bring(k,AtLeast,1,GiveUnitID[j+1],"Anywhere"))
+	for i = 0, 5 do
+	Trigger {
+			players = {k},
+			conditions = {
+					Label(0);
+					Bring(k,AtLeast,1,GiveUnitID[j+1],"Anywhere");
+					PlayerCheck(j,1);
+					NDeaths(k,Exactly,i,GiveRate);
+					Accumulate(k,AtMost,GiveRate2[i+1],Ore);
+				},
+			actions = {
+					ModifyUnitEnergy(all, GiveUnitID[j+1], k, "Anywhere", 0);
+					RemoveUnitAt(1,GiveUnitID[j+1],"Anywhere",k);
+					DisplayText("\x1F─━┫ “ \x1F잔액\x04이 부족합니다.\x0F”",4);
+					PreserveTrigger()
+				},
+		}
+	Trigger {
+			players = {k},
+			conditions = {
+					Label(0);
+					Bring(k,AtLeast,1,GiveUnitID[j+1],"Anywhere");
+					PlayerCheck(j,1);
+					NDeaths(k,Exactly,i,GiveRate);
+					Accumulate(k,AtLeast,GiveRate2[i+1],Ore);
+					Accumulate(k,AtMost,0x7FFFFFFF,Ore);
+				},
+			actions = {
+					SetResources(k,Subtract,GiveRate2[i+1],Ore);
+					SetResources(j,Add,GiveRate2[i+1],Ore);
+					ModifyUnitEnergy(all, GiveUnitID[j+1], k, "Anywhere", 0);
+					RemoveUnitAt(1,GiveUnitID[j+1],"Anywhere",k);
+					DisplayText("\x1F─━┫ “ "..PlayerArr[j+1].."\x04에게 \x1F"..GiveRate2[i+1].." Ore\x04를 기부하였습니다. \x0F”",4);
+					SetMemory(0x6509B0,SetTo,j);
+					DisplayText("\x1F─━┫ “ "..PlayerArr[k+1].."\x04에게 \x1F"..GiveRate2[i+1].." Ore\x04를 기부받았습니다. \x0F”",4);
+					SetMemory(0x6509B0,SetTo,k);
+					PreserveTrigger();
+				},
+		}
+	end
+Trigger {
+	players = {k},
+	conditions = {
+			Label(0);
+			Bring(k,AtLeast,1,GiveUnitID[j+1],"Anywhere");
+			PlayerCheck(j,0);
+		},
+	actions = {
+			DisplayText("\x1F─━┫ “"..PlayerArr[j+1].."\x04이(가) 존재하지 않습니다. \x0F”",4);
+			ModifyUnitEnergy(all, GiveUnitID[j+1], k, "Anywhere", 0);
+			RemoveUnitAt(1,GiveUnitID[j+1],"Anywhere",k);
+			PreserveTrigger();
+				},
+		}
+	
+CIfEnd()
+elseif k==j then
+	TriggerX(k,{Bring(k,AtLeast,1,GiveUnitID[j+1],"Anywhere")},{
+		ModifyUnitEnergy(all, GiveUnitID[j+1], k, "Anywhere", 0);
+		RemoveUnitAt(1,GiveUnitID[j+1],"Anywhere",k);
+	},{Preserved})
+end end end
+
+--------------------- Ban Trigger ------------------------
+
+BanText = "\x13\x1F─━┫【 \x04당신은 \x11방장에 의해 \x08강제퇴장 \x04당하였습니다.  \x1F】┣━─"
+BanLocArr = {"banP1","banP2","banP3","banP4"}
+for i = 0, 3 do
+Trigger {
+	players = {FP},
+	conditions = {
+			Label(0);
+			Bring(Force1,AtLeast,1,96,BanLocArr[i+1]);
+		},
+	actions = {
+			RotatePlayer({DisplayTextX(BanText)},{i},FP);
+			RotatePlayer({Defeat()},{i},FP);
+		}
+}
+end
+
 
 
 Trigger { -- 일마  > 영마 변환
@@ -756,6 +1190,8 @@ spiral1 = CSMakeSpiral(4, 16, 1/2, 40, 0, CS_Level("Spiral", 4, 16), 1)
 spiral2 = CSMakeSpiral(4, 16, 1/2, 40, 45, CS_Level("Spiral", 4, 16), 1)
 
 
+CX2 = CSMakeCircleX(6,80,30,30,0)
+
 Trigger{
 	players = {P6},
 	conditions = {
@@ -768,27 +1204,83 @@ Trigger{
 	}
 }
 -- Hat1 hatchery phase 1
-CSPlotOrder(square1, P6, 37, "Hat1", nil, 1, 16, square1, 0, Patrol, "Location 1", nil, 0, nil, P6,{CommandLeastAt(131, "Hat1"), Deaths(P9, AtLeast, 50, 0)})
-CSPlotOrder(square1, P7, 38, "Hat1", nil, 1, 16, square1, 0, Patrol, "Location 1", nil, 0, nil, P7,{CommandLeastAt(131, "Hat1"), Deaths(P9, AtLeast, 85, 0)})
-CSPlotOrder(square1, P6, 40, "Hat1", nil, 1, 16, square1, 0, Patrol, "Location 1", nil, 0, nil, P6,{CommandLeastAt(131, "Hat1"), Deaths(P9, AtLeast, 115, 0)})
-CSPlotOrder(spiral1, P6, 43, "Hat1", nil, 1, 10, spiral1, 0, Patrol, "Location 1", nil, 0, nil, P6,{CommandLeastAt(131, "Hat1"), Deaths(P9, AtLeast, 180, 0)})
-CSPlotOrder(square1, P7, 39, "Hat1", nil, 1, 16, square1, 0, Patrol, "Location 1", nil, 0, nil, P7,{CommandLeastAt(131, "Hat1"), Deaths(P9, AtLeast, 145, 0)})
+-- CSPlotOrder(square1, P6, 37, "Hat1", nil, 1, 16, square1, 0, Patrol, "Location 1", nil, 0, nil, P6,{CommandLeastAt(131, "Hat1"), Deaths(P9, AtLeast, 50, 0)})
+-- CSPlotOrder(square1, P7, 38, "Hat1", nil, 1, 16, square1, 0, Patrol, "Location 1", nil, 0, nil, P7,{CommandLeastAt(131, "Hat1"), Deaths(P9, AtLeast, 85, 0)})
+-- CSPlotOrder(square1, P6, 40, "Hat1", nil, 1, 16, square1, 0, Patrol, "Location 1", nil, 0, nil, P6,{CommandLeastAt(131, "Hat1"), Deaths(P9, AtLeast, 115, 0)})
+-- CSPlotOrder(spiral1, P6, 43, "Hat1", nil, 1, 10, spiral1, 0, Patrol, "Location 1", nil, 0, nil, P6,{CommandLeastAt(131, "Hat1"), Deaths(P9, AtLeast, 180, 0)})
+-- CSPlotOrder(square1, P7, 39, "Hat1", nil, 1, 16, square1, 0, Patrol, "Location 1", nil, 0, nil, P7,{CommandLeastAt(131, "Hat1"), Deaths(P9, AtLeast, 145, 0)})
 
-CSPlotOrder(spiral1, P7, 43, "Hat1", nil, 1, 12, spiral1, 0, Patrol, "Location 1", nil, 0, nil, P7,{CommandLeastAt(131, "Hat1"), Deaths(P9, AtLeast, 275, 0)})
-CSPlotOrder(spiral2, P6, 44, "Hat1", nil, 1, 12, spiral2, 0, Patrol, "Location 1", nil, 0, nil, P6,{CommandLeastAt(131, "Hat1"), Deaths(P9, AtLeast, 310, 0)})
-CSPlotOrder(spiral1, P7, 43, "Hat1", nil, 1, 12, spiral1, 0, Patrol, "Location 1", nil, 0, nil, P7,{CommandLeastAt(131, "Hat1"), Deaths(P9, AtLeast, 345, 0)})
-CSPlotOrder(spiral2, P6, 44, "Hat1", nil, 1, 12, spiral2, 0, Patrol, "Location 1", nil, 0, nil, P6,{CommandLeastAt(131, "Hat1"), Deaths(P9, AtLeast, 380, 0)})
+-- CSPlotOrder(spiral1, P7, 43, "Hat1", nil, 1, 12, spiral1, 0, Patrol, "Location 1", nil, 0, nil, P7,{CommandLeastAt(131, "Hat1"), Deaths(P9, AtLeast, 275, 0)})
+-- CSPlotOrder(spiral2, P6, 44, "Hat1", nil, 1, 12, spiral2, 0, Patrol, "Location 1", nil, 0, nil, P6,{CommandLeastAt(131, "Hat1"), Deaths(P9, AtLeast, 310, 0)})
+-- CSPlotOrder(spiral1, P7, 43, "Hat1", nil, 1, 12, spiral1, 0, Patrol, "Location 1", nil, 0, nil, P7,{CommandLeastAt(131, "Hat1"), Deaths(P9, AtLeast, 345, 0)})
+-- CSPlotOrder(spiral2, P6, 44, "Hat1", nil, 1, 12, spiral2, 0, Patrol, "Location 1", nil, 0, nil, P6,{CommandLeastAt(131, "Hat1"), Deaths(P9, AtLeast, 380, 0)})
 
--- Hat1 hatchery phase 2
-CSPlotOrder(square2, P7, 37, "Hat1", nil, 1, 20, square2, 0, Patrol, "Location 1", nil, 0, nil, P7,{CommandLeastAt(131, "Hat1"), Deaths(P9, AtLeast, 578, 0)})
-CSPlotOrder(square2, P6, 38, "Hat1", nil, 1, 20, square2, 0, Patrol, "Location 1", nil, 0, nil, P6,{CommandLeastAt(131, "Hat1"), Deaths(P9, AtLeast, 613, 0)})
-CSPlotOrder(spiral1, P7, 43, "Hat1", nil, 1, 12, spiral1, 0, Patrol, "Location 1", nil, 0, nil, P7,{CommandLeastAt(131, "Hat1"), Deaths(P9, AtLeast, 640, 0)})
-CSPlotOrder(spiral2, P6, 44, "Hat1", nil, 1, 12, spiral2, 0, Patrol, "Location 1", nil, 0, nil, P6,{CommandLeastAt(131, "Hat1"), Deaths(P9, AtLeast, 691, 0)})
-CSPlotOrder(square2, P6, 39, "Hat1", nil, 1, 20, square2, 0, Patrol, "Location 1", nil, 0, nil, P6,{CommandLeastAt(131, "Hat1"), Deaths(P9, AtLeast, 691, 0)})
+-- -- Hat1 hatchery phase 2
+-- CSPlotOrder(square2, P7, 37, "Hat1", nil, 1, 20, square2, 0, Patrol, "Location 1", nil, 0, nil, P7,{CommandLeastAt(131, "Hat1"), Deaths(P9, AtLeast, 578, 0)})
+-- CSPlotOrder(square2, P6, 38, "Hat1", nil, 1, 20, square2, 0, Patrol, "Location 1", nil, 0, nil, P6,{CommandLeastAt(131, "Hat1"), Deaths(P9, AtLeast, 613, 0)})
+-- CSPlotOrder(spiral1, P7, 43, "Hat1", nil, 1, 12, spiral1, 0, Patrol, "Location 1", nil, 0, nil, P7,{CommandLeastAt(131, "Hat1"), Deaths(P9, AtLeast, 640, 0)})
+-- CSPlotOrder(spiral2, P6, 44, "Hat1", nil, 1, 12, spiral2, 0, Patrol, "Location 1", nil, 0, nil, P6,{CommandLeastAt(131, "Hat1"), Deaths(P9, AtLeast, 691, 0)})
+-- CSPlotOrder(square2, P6, 39, "Hat1", nil, 1, 20, square2, 0, Patrol, "Location 1", nil, 0, nil, P6,{CommandLeastAt(131, "Hat1"), Deaths(P9, AtLeast, 691, 0)})
 
+for i = 1, 24 do
+	GLi = CSMakeLineX(1,60,0+15*i,7,1) -- 원그리기 1
+	CSPlot(GLi,P6,88,"Hat1",nil,1,32,P7,{CommandLeastAt(131, "Hat1"),Deaths(P9,Exactly,4*i,0)})
+	
+	CSPlot(GLi,P6,60,"Hat1",nil,1,32,P7,{CommandLeastAt(131, "Hat1"),Deaths(P9,Exactly,800+4*i,0)})
+	
+	end
+	
+	CSPlot(CX2,P6,76,"Hat1",nil,1,32,P7,{CommandLeastAt(131, "Hat1"),Deaths(P9,Exactly,96,0)}) --외접원
+	CSPlot(CX2,P6,63,"Hat1",nil,1,32,P7,{CommandLeastAt(131, "Hat1"),Deaths(P9,Exactly,896,0)}) --외접원
+	
 
+Trigger { -- 6시 순대 오더 1
+players = {P7},
+conditions = {
+		CommandLeastAt(131, "Hat1");
+		Deaths(P9,Exactly,100,0);
+	},
+actions = {
+		Order(88,P6,"Hat1",Attack,"HealZone");
+		Order(76,P6,"Hat1",Attack,"HealZone");
+	}
+}
 
+for j = 1, 24 do
+GLj = CSMakeLineX(1,60,360-15*j,11,1) -- 원그리기 2
+CSPlot(GLj,P6,89,"Hat1",nil,1,32,P7,{CommandLeastAt(131, "Hat1"),Deaths(P9,Exactly,400+4*j,0)})
 
+CSPlot(GLj,P6,64,"Hat1",nil,1,32,P7,{CommandLeastAt(131, "Hat1"),Deaths(P9,Exactly,1200+4*j,0)})
+end
+
+Trigger { -- 6시 순대 오더 2
+	players = {P7},
+	conditions = {
+			CommandLeastAt(131, "Hat1");
+			Deaths(P9,Exactly,500,0);
+		},
+	actions = {
+			Order(89,P6,"Hat1",Attack,"HealZone");
+			Order(65,P6,"Hat1",Attack,"HealZone");
+		}
+}
+
+Trigger { -- 6시 순대 오더 4
+	players = {P7},
+	conditions = {
+			CommandLeastAt(131, "Hat1");
+			Deaths(P9,Exactly,1300,0);
+		},
+	actions = {
+			Order(64,P6,"Hat1",Attack,"HealZone");
+			Order(5,P6,"Hat1",Attack,"HealZone");
+		}
+}
+function SHBF(Y) return Y end
+GA1 = CS_MoveXY(CS_InvertXY(CS_FillGradA(0,{0,512},270,18,"SHBF",0),270),-500,0) --A그라데이션
+GA1D = CS_RatioXY(CS_MoveXY(CS_InvertXY(CS_FillGradA(0,{0,512},270,18,"SHBF",0),270),-500,0),0.1,0.1) --도착지 도형
+CSPlotOrder(GA1,P8,25,"Hat1",nil,1,64,GA1D,0,Attack,"HealZone",nil,64,nil,P7,{CommandLeastAt(131,"Hat1"),Deaths(P9,Exactly,1500,0)})
+CSPlotOrder(GA1,P8,96,"Hat1",nil,1,64,GA1D,0,Attack,"HealZone",nil,64,nil,P7,{CommandLeastAt(131,"Hat1"),Deaths(P9,Exactly,1500,0)})
 
 
 CIfEnd()
@@ -798,6 +1290,7 @@ ErrorCheck()
 EUDTurbo(FP)
 -- 에러 체크 함수 선언 위치 --
 --↑Tep에 그대로 붙여넣기-----
+
 
 
 for i = 0, 10 do
