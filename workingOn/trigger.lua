@@ -820,24 +820,26 @@ Trigger {
 Trigger{
 	players = {Force1},
 	conditions = {
-		Bring(CurrentPlayer, AtLeast, 1, 125, "HealZone");
+		Bring(CurrentPlayer, AtLeast, 1, "Any unit", "bunkerHeal");
+		},
 	actions = {
 		SetDeaths(P8, Add, 1, 176);
 		PreserveTrigger();
-	}
-	}
+	},
 }
+
 
 Trigger{
 	players = {Force1},
 	conditions = {
-		Deaths(P8, AtLeast, 1, 125);
+		Deaths(P8, AtLeast, 2, 125);
 	},
 	actions = {
-		SetDeaths(P8, SetTo, 0, 125);
+		SetDeaths(P8, SetTo, 0, 176);
 		ModifyUnitHitPoints(All, 125, CurrentPlayer, "bunkerHeal", 100);
-		ModifyUnitShields(All, 125, CurrentPlayer, "bunkerHeal", 100)
-	}
+		ModifyUnitShields(All, 125, CurrentPlayer, "bunkerHeal", 100);
+		PreserveTrigger();
+	},
 }
 
 ------<  기부 트리거  >--------------------------------------------- [ GiveRateUnit = 8  ]
@@ -959,7 +961,7 @@ Trigger {
 	players = {FP},
 	conditions = {
 			Label(0);
-			Bring(Force1,AtLeast,1,96,BanLocArr[i+1]);
+			Bring(Force1,AtLeast,1,15,BanLocArr[i+1]);
 		},
 	actions = {
 			RotatePlayer({DisplayTextX(BanText)},{i},FP);
