@@ -226,8 +226,8 @@ Trigger{
 		Always();
 	},
 	actions = {
-		ModifyUnitShields(All, "building", AllPlayers, "Anywhere", 100);
-		ModifyUnitHitPoints(All, "building", AllPlayers, "Anywhere", 100);
+		ModifyUnitShields(All, "Buildings", AllPlayers, "Anywhere", 100);
+		ModifyUnitHitPoints(All, "Buildings", AllPlayers, "Anywhere", 100);
 	}
 }
 
@@ -1159,6 +1159,57 @@ Trigger{ -- 해금
     }
 }
 
+-------------------------- Wave Trigger ------------------------------
+
+WAVE1 = CSMakePolygon(4,50,0,25,5)
+WAVE2 = CSMakePolygon(4,50,0,13,5)
+
+----------- 30 sec period --------
+
+Trigger{
+	players = {P6},
+	conditions = {
+		Always();
+	},
+	actions = {
+		SetDeaths(P8, Add, 1, 131);
+		PreserveTrigger();
+	}
+}
+
+Trigger{
+	players = {P6},
+	conditions = {
+		Deaths(P8, AtLeast, 1020, 131);
+	},
+	actions = {
+		SetDeaths(P8, SetTo, 0, 131);
+		PreserveTrigger();
+	}
+}
+
+CSPlotOrder(WAVE1, P6, 40, "smallWave", nil, 1, 32, WAVE1, 0, Attack, "bunkerHeal", nil, 64, nil, P6,{Deaths(P8, Exactly, 1, 131)},nil,1)
+CSPlotOrder(WAVE2, P6, 43, "smallWave", nil, 1, 32, WAVE2, 0, Attack, "bunkerHeal", nil, 64, nil, P6,{Deaths(P8, Exactly, 1, 131)},nil,1)
+
+
+------------------ Big Wave Trigger 132 -----------------
+bigwave = []
+
+Trigger{
+	players = {P6},
+	conditions = {
+		Always();
+	},
+	actions = {
+		SetDeaths(P8, Add, 1, 132);
+		PreserveTrigger()
+	}
+}
+
+----todo : 1min : 16320 , using for function for big wave
+
+
+
 ------- 건작 ---------
 
 Trigger { -- 건물데스값 -1
@@ -1191,7 +1242,6 @@ GunLock = CreateVar(P7)
 GunLock = CreateVar(P8)
 
 CIf(P6,{NVar(GunLock,Exactly,0)})
-
 square1 = CSMakePolygonX(4,80,0,36,0)
 square2 = CSMakePolygonX(4,70,45,36,0)
 
