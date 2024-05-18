@@ -41,15 +41,7 @@ Trigger {
 		flag = {Preserved}
 }
 
-Trigger{
-	players = {P8},
-	conditions = {
-		Memory(0x58F44C, AtLeast, 241);
-	},
-	actions = {
-		LeaderBoardKills("Any unit", "\x11K\x04ills\x07 -- [Ver. Test]");
-	}
-}
+
 
 
 
@@ -226,8 +218,8 @@ Trigger{
 		Always();
 	},
 	actions = {
-		ModifyUnitShields(All, "Buildings", AllPlayers, "Anywhere", 100);
-		ModifyUnitHitPoints(All, "Buildings", AllPlayers, "Anywhere", 100);
+		ModifyUnitShields(All, "Buildings", Force2, "Anywhere", 100);
+		ModifyUnitHitPoints(All, "Buildings", Force2, "Anywhere", 100);
 	}
 }
 
@@ -333,18 +325,18 @@ Trigger {
 		RunAIScript('Turn ON Shared Vision for Player 2');
 		RunAIScript('Turn ON Shared Vision for Player 3');
 		RunAIScript('Turn ON Shared Vision for Player 4');
-		RunAIScript('Turn ON Shared Vision for Player 5');
 		PreserveTrigger();
 	},
 }
 
 
-Trigger {
+Trigger { -- 특건 관련 트리거
 	players = {P7},
 	conditions = {
 		Always();
 	},
 	actions = {
+		Wait(1000);
 		CreateUnit(1, 148, "makeOvermind", P7);
 		CreateUnit(1, 127, "makeIoncannon", P7);
 		CreateUnit(1, 175, "makeXelnaga", P7);
@@ -353,6 +345,11 @@ Trigger {
 		CreateUnit(1, 200, "makepowergenerator", P7);
 		CreateUnit(1, 168, "makestasiscell", P7);
 		CreateUnit(1, 151, "makecelebrate", P7);
+		SetInvincibility(Enable, 148, P7, "Anywhere");
+		SetInvincibility(Enable, 127, P7, "Anywhere");
+		SetInvincibility(Enable, 175, P7, "Anywhere");
+		SetInvincibility(Enable, 168, P7, "Anywhere");
+
 	},
 }
 
@@ -369,19 +366,22 @@ Trigger{
 		CreateUnit(4, 70, "heroscout", P7);
 		CreateUnit(4, 21, "herowraith", P7);
 		CreateUnit(1, 23, "herotank", P7);
-
+		CreateUnit(4, 93, "heromutant", P7);
+		CreateUnit(4, 69, "heroMatriach", P7);
+		CreateUnit(1, 28, "yamabattle", P7);
+		CreateUnit(4, 62, "herodevour", P7);
 
 	}
 }
 
-Trigger { -- No comment (ABB625F6)
+Trigger { -- fenix z
 	players = {Force1},
 	conditions = {
 		Deaths(P7, AtLeast, 1, 77);
 		Deaths(P9,Exactly,0,200)
 	},
 	actions = {
-		DisplayText("\x13\x11｡˙+ﾟ\x08Ravagers \x03Fenix Zealot \x11ﾟ.+｡ \x01을 \x06처치 \x04하였습니다 + 35000 \x1FPoints!\x04", 4);
+		DisplayText("\x13\x11｡˙+ﾟ\x08Ravagers \x03Didymos \x11ﾟ.+｡ \x01을 \x06처치 \x04하였습니다 + 35000 \x1FPoints!\x04", 4);
 		SetScore(CurrentPlayer, Add, 35000, Kills);
 		PlayWAV("staredit\\wav\\killsound.wav");
 		PlayWAV("staredit\\wav\\killsound.wav");
@@ -390,14 +390,14 @@ Trigger { -- No comment (ABB625F6)
 	},
 }
 
-Trigger { -- No comment (ABB625F6)
+Trigger { -- fenix d
 	players = {Force1},
 	conditions = {
 		Deaths(P7, AtLeast, 1, 78);
 		Deaths(P9,Exactly,0,200)
 	},
 	actions = {
-		DisplayText("\x13\x11｡˙+ﾟ\x08Ravagers \x03Fenix Dragoon \x11ﾟ.+｡ \x01을 \x06처치 \x04하였습니다 + 40000 \x1FPoints!\x04", 4);
+		DisplayText("\x13\x11｡˙+ﾟ\x08Ravagers \x03Dimorphos \x11ﾟ.+｡ \x01을 \x06처치 \x04하였습니다 + 40000 \x1FPoints!\x04", 4);
 		SetScore(CurrentPlayer, Add, 40000, Kills);
 		PlayWAV("staredit\\wav\\killsound.wav");
 		PlayWAV("staredit\\wav\\killsound.wav");
@@ -406,14 +406,14 @@ Trigger { -- No comment (ABB625F6)
 	},
 }
 
-Trigger { -- No comment (ABB625F6)
+Trigger { -- unclean
 	players = {Force1},
 	conditions = {
 		Deaths(P7, AtLeast, 1, 52);
 		Deaths(P9,Exactly,0,200)
 	},
 	actions = {
-		DisplayText("\x13\x11｡˙+ﾟ\x08Ravagers \x03Unclean One \x11ﾟ.+｡ \x01을 \x06처치 \x04하였습니다 + 45000 \x1FPoints!\x04", 4);
+		DisplayText("\x13\x11｡˙+ﾟ\x08Ravagers \x03Biela’s Comet \x11ﾟ.+｡ \x01을 \x06처치 \x04하였습니다 + 45000 \x1FPoints!\x04", 4);
 		SetScore(CurrentPlayer, Add, 45000, Kills);
 		PlayWAV("staredit\\wav\\killsound.wav");
 		PlayWAV("staredit\\wav\\killsound.wav");
@@ -422,14 +422,14 @@ Trigger { -- No comment (ABB625F6)
 	},
 }
 
-Trigger { -- No comment (ABB625F6)
+Trigger { -- inf duran
 	players = {Force1},
 	conditions = {
 		Deaths(P7, AtLeast, 1, 104);
 		Deaths(P9,Exactly,0,200)
 	},
 	actions = {
-		DisplayText("\x13\x11｡˙+ﾟ\x08Ravagers \x03Infested Duran \x11.+ﾟ｡ \x01을 \x06처치 \x04하였습니다 + 45000 \x1FPoints!\x04", 4);
+		DisplayText("\x13\x11｡˙+ﾟ\x08Ravagers \x03Psyche \x11.+ﾟ｡ \x01을 \x06처치 \x04하였습니다 + 45000 \x1FPoints!\x04", 4);
 		SetScore(CurrentPlayer, Add, 45000, Kills);
 		PlayWAV("staredit\\wav\\killsound.wav");
 		PlayWAV("staredit\\wav\\killsound.wav");
@@ -438,7 +438,7 @@ Trigger { -- No comment (ABB625F6)
 	},
 }
 
-Trigger { -- No comment (ABB625F6)
+Trigger { -- scout
 	players = {Force1},
 	conditions = {
 		Deaths(P7, AtLeast, 1, 70);
@@ -461,7 +461,7 @@ Trigger { -- No comment (ABB625F6)
 		Deaths(P9,Exactly,0,200)
 	},
 	actions = {
-		DisplayText("\x13\x11｡˙+ﾟ\x08Ravagers \x03Tom Kazansky \x11.+ﾟ｡ \x01를 \x06처치 \x04하였습니다 + 55000 \x1FPoints!\x04", 4);
+		DisplayText("\x13\x11｡˙+ﾟ\x08Ravagers \x03Aphophis \x11.+ﾟ｡ \x01를 \x06처치 \x04하였습니다 + 55000 \x1FPoints!\x04", 4);
 		SetScore(CurrentPlayer, Add, 55000, Kills);
 		PlayWAV("staredit\\wav\\killsound.wav");
 		PlayWAV("staredit\\wav\\killsound.wav");
@@ -470,15 +470,79 @@ Trigger { -- No comment (ABB625F6)
 	},
 }
 
-Trigger { -- No comment (ABB625F6)
+Trigger { -- tank
 	players = {Force1},
 	conditions = {
 		Deaths(P7, AtLeast, 1, 23);
 		Deaths(P9,Exactly,0,200)
 	},
 	actions = {
-		DisplayText("\x13\x11｡˙+ﾟ\x08Ravagers \x03Edmund Duke T \x11.+ﾟ｡ \x01를 \x06처치 \x04하였습니다 + 100000 \x1FPoints!\x04", 4);
+		DisplayText("\x13\x11｡˙+ﾟ\x08Ravagers \x03Comet Hyakutake \x11.+ﾟ｡ \x01를 \x06처치 \x04하였습니다 + 100000 \x1FPoints!\x04", 4);
 		SetScore(CurrentPlayer, Add, 100000, Kills);
+		PlayWAV("staredit\\wav\\killsound.wav");
+		PlayWAV("staredit\\wav\\killsound.wav");
+		PlayWAV("staredit\\wav\\killsound.wav");
+		PreserveTrigger();
+	},
+}
+
+Trigger { -- scantid
+	players = {Force1},
+	conditions = {
+		Deaths(P7, AtLeast, 1, 93);
+		Deaths(P9,Exactly,0,200)
+	},
+	actions = {
+		DisplayText("\x13\x11｡˙+ﾟ\x08Ravagers \x03'Oumuamua \x11.+ﾟ｡ \x01를 \x06처치 \x04하였습니다 + 100000 \x1FPoints!\x04", 4);
+		SetScore(CurrentPlayer, Add, 45000, Kills);
+		PlayWAV("staredit\\wav\\killsound.wav");
+		PlayWAV("staredit\\wav\\killsound.wav");
+		PlayWAV("staredit\\wav\\killsound.wav");
+		PreserveTrigger();
+	},
+}
+
+Trigger { -- matriach
+	players = {Force1},
+	conditions = {
+		Deaths(P7, AtLeast, 1, 69);
+		Deaths(P9,Exactly,0,200)
+	},
+	actions = {
+		DisplayText("\x13\x11｡˙+ﾟ\x08Ravagers \x03Vesta \x11.+ﾟ｡ \x01를 \x06처치 \x04하였습니다 + 100000 \x1FPoints!\x04", 4);
+		SetScore(CurrentPlayer, Add, 50000, Kills);
+		PlayWAV("staredit\\wav\\killsound.wav");
+		PlayWAV("staredit\\wav\\killsound.wav");
+		PlayWAV("staredit\\wav\\killsound.wav");
+		PreserveTrigger();
+	},
+}
+
+Trigger { -- yamabattle
+	players = {Force1},
+	conditions = {
+		Deaths(P7, AtLeast, 1, 28);
+		Deaths(P9,Exactly,0,200)
+	},
+	actions = {
+		DisplayText("\x13\x11｡˙+ﾟ\x08Ravagers \x03Cassini \x11.+ﾟ｡ \x01를 \x06처치 \x04하였습니다 + 100000 \x1FPoints!\x04", 4);
+		SetScore(CurrentPlayer, Add, 130000, Kills);
+		PlayWAV("staredit\\wav\\killsound.wav");
+		PlayWAV("staredit\\wav\\killsound.wav");
+		PlayWAV("staredit\\wav\\killsound.wav");
+		PreserveTrigger();
+	},
+}
+
+Trigger { -- devour H
+	players = {Force1},
+	conditions = {
+		Deaths(P7, AtLeast, 1, 62);
+		Deaths(P9,Exactly,0,200)
+	},
+	actions = {
+		DisplayText("\x13\x11｡˙+ﾟ\x08Ravagers \x03Bennu \x11.+ﾟ｡ \x01를 \x06처치 \x04하였습니다 + 100000 \x1FPoints!\x04", 4);
+		SetScore(CurrentPlayer, Add, 65000, Kills);
 		PlayWAV("staredit\\wav\\killsound.wav");
 		PlayWAV("staredit\\wav\\killsound.wav");
 		PlayWAV("staredit\\wav\\killsound.wav");
@@ -501,6 +565,10 @@ Trigger { -- 영작유닛 데스값 -1
 		SetDeaths(CurrentPlayer, Subtract, 1, 70);
 		SetDeaths(CurrentPlayer, Subtract, 1, 21);
 		SetDeaths(CurrentPlayer, Subtract, 1, 23);
+		SetDeaths(CurrentPlayer, Subtract, 1, 93);
+		SetDeaths(CurrentPlayer, Subtract, 1, 69);
+		SetDeaths(CurrentPlayer, Subtract, 1, 28);
+		SetDeaths(CurrentPlayer, Subtract, 1, 62);
 		PreserveTrigger();
 	},
 }
@@ -736,6 +804,7 @@ Trigger { -- 1틱메딕
 	},
 	actions = {
 		ModifyUnitHitPoints(All, "Men", CurrentPlayer, "Anywhere", 100);
+		ModifyUnitShields(All, "Men", CurrentPlayer, "Anywhere", 100);
 		RemoveUnit("Terran Medic", CurrentPlayer);
 		PreserveTrigger();
 	},
@@ -748,6 +817,7 @@ Trigger { -- 2틱메딕
 	},
 	actions = {
 		ModifyUnitHitPoints(All, "Men", CurrentPlayer, "Anywhere", 100);
+		ModifyUnitShields(All, "Men", CurrentPlayer, "Anywhere", 100);
 		RemoveUnit(2, CurrentPlayer);
 		PreserveTrigger();
 	},
@@ -1163,6 +1233,7 @@ Trigger{ -- 해금
 
 WAVE1 = CSMakePolygon(4,50,0,25,5)
 WAVE2 = CSMakePolygon(4,50,0,13,5)
+WAVE3 = CSMakePolygon(4,50,45,9,5)
 
 ----------- 30 sec period --------
 
@@ -1189,11 +1260,12 @@ Trigger{
 }
 
 CSPlotOrder(WAVE1, P6, 40, "smallWave", nil, 1, 32, WAVE1, 0, Attack, "bunkerHeal", nil, 64, nil, P6,{Deaths(P8, Exactly, 1, 131)},nil,1)
-CSPlotOrder(WAVE2, P6, 43, "smallWave", nil, 1, 32, WAVE2, 0, Attack, "bunkerHeal", nil, 64, nil, P6,{Deaths(P8, Exactly, 1, 131)},nil,1)
+CSPlotOrder(WAVE2, P6, 44, "smallWave", nil, 1, 32, WAVE2, 0, Attack, "bunkerHeal", nil, 64, nil, P6,{Deaths(P8, Exactly, 1, 131)},nil,1)
+CSPlotOrder(WAVE3, P6, 51, "smallWave", nil, 1, 32, WAVE3, 0, Attack, "bunkerHeal", nil, 64, nil, P6,{Deaths(P8, Exactly, 1, 131)},nil,1)
 
 
 ------------------ Big Wave Trigger 132 -----------------
-bigwave = []
+bigwave = {}
 
 Trigger{
 	players = {P6},
