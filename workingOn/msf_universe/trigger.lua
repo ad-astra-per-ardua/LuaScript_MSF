@@ -6,18 +6,31 @@ SetForces({P1,P2,P3,P4},{P6,P7,P8},{},{},{P1,P2,P3,P4,P6,P7,P8})
 SetFixedPlayer(P6)
 StartCtrig(1,nil,0,1)
 CJump(AllPlayers,0)
+Include_DataTransfer()
 
 CJumpEnd(AllPlayers,0)
 
 Nextptrs = CreateVar(FP)
-NoAirCollision(FP)
-NoAirCollision(P7)
-NoAirCollision(P8)
+NoAirCollisionX(FP)
+NoAirCollisionX(P7)
+NoAirCollisionX(P8)
 DoActions(FP,{SetSpeed(SetTo, "#X2")})
 function RotatePlayer(Print,Players,RecoverCP)
 	return CopyCpAction(Print,Players,RecoverCP)
 end
 -- 여기에 변수, 배열 및 Include류 함수 선언 --
+
+
+
+Trigger{
+	players = {P1},
+	conditions = {
+		Always();
+	},
+	actions = {
+		CreateUnit(1, 87, "Location 1", P1);
+	}
+}
 
 Trigger {
 	players = {P8},
@@ -42,7 +55,19 @@ Trigger {
 }
 
 
-
+Trigger { 
+	players = {P7},
+	conditions = {
+		Always()
+	},
+	actions = {
+		KillUnit(84,AllPlayers);
+		KillUnit(72,AllPlayers);
+		KillUnit(67,AllPlayers);
+		KillUnit(94,AllPlayers);
+		PreserveTrigger()
+	}
+}
 
 
 
@@ -218,8 +243,8 @@ Trigger{
 		Always();
 	},
 	actions = {
-		ModifyUnitShields(All, "Buildings", Force2, "Anywhere", 100);
-		ModifyUnitHitPoints(All, "Buildings", Force2, "Anywhere", 100);
+		ModifyUnitShields(All, "Buildings", AllPlayers, "Anywhere", 100);
+		ModifyUnitHitPoints(All, "Buildings", AllPlayers, "Anywhere", 100);
 	}
 }
 
@@ -285,6 +310,7 @@ Trigger { -- 컴퓨터동맹설정
 		SetResources(P7, SetTo, 9999999, OreAndGas);
 		SetResources(P6, SetTo, 9999999, OreAndGas);
 		PreserveTrigger();
+		SetAllianceStatus(Force2,AlliedVictory);
 		SetAllianceStatus(Force1, Enemy);
 	},
 }
@@ -329,14 +355,12 @@ Trigger {
 	},
 }
 
-
 Trigger { -- 특건 관련 트리거
 	players = {P7},
 	conditions = {
 		Always();
 	},
 	actions = {
-		Wait(1000);
 		CreateUnit(1, 148, "makeOvermind", P7);
 		CreateUnit(1, 127, "makeIoncannon", P7);
 		CreateUnit(1, 175, "makeXelnaga", P7);
@@ -353,6 +377,7 @@ Trigger { -- 특건 관련 트리거
 	},
 }
 
+
 Trigger{
 	players = {P7},
 	conditions = {
@@ -361,195 +386,32 @@ Trigger{
 	actions = {
 		CreateUnit(4, 77, "herofenixZ", P7);
 		CreateUnit(4, 78, "herofenixD", P7);
+		CreateUnit(4, 78, "herofenixD2", P7);
 		CreateUnit(4, 52, "herounclean", P7);
 		CreateUnit(4, 104, "heroinfestduran", P7);
 		CreateUnit(4, 70, "heroscout", P7);
 		CreateUnit(4, 21, "herowraith", P7);
 		CreateUnit(1, 23, "herotank", P7);
+		CreateUnit(2, 23, "herotank2", P7);
 		CreateUnit(4, 93, "heromutant", P7);
 		CreateUnit(4, 69, "heroMatriach", P7);
 		CreateUnit(1, 28, "yamabattle", P7);
 		CreateUnit(4, 62, "herodevour", P7);
+		CreateUnit(2, 86, "herodanimoth", P7);
+		CreateUnit(2, 86, "herodanimoth2", P7);
+		CreateUnit(2, 3, "herogoliath", P7);
+		CreateUnit(2, 3, "herogoliath2", P7);
+		CreateUnit(1, 27, "heronukebattle2", P7);
+		CreateUnit(1, 27, "heronukebattle", P7);
+		CreateUnit(4, 64, "heroprove", P7);
+		CreateUnit(4, 64, "heroprove2", P7);
+		CreateUnit(4, 7, "heroscv", P7);
+		CreateUnit(4, 60, "herocorsair", P7);
+		CreateUnit(4, 60, "herocorsair2", P7);
+		CreateUnit(4, 58, "herointercepter", P7);
 
 	}
 }
-
-Trigger { -- fenix z
-	players = {Force1},
-	conditions = {
-		Deaths(P7, AtLeast, 1, 77);
-		Deaths(P9,Exactly,0,200)
-	},
-	actions = {
-		DisplayText("\x13\x11｡˙+ﾟ\x08Ravagers \x03Didymos \x11ﾟ.+｡ \x01을 \x06처치 \x04하였습니다 + 35000 \x1FPoints!\x04", 4);
-		SetScore(CurrentPlayer, Add, 35000, Kills);
-		PlayWAV("staredit\\wav\\killsound.wav");
-		PlayWAV("staredit\\wav\\killsound.wav");
-		PlayWAV("staredit\\wav\\killsound.wav");
-		PreserveTrigger();
-	},
-}
-
-Trigger { -- fenix d
-	players = {Force1},
-	conditions = {
-		Deaths(P7, AtLeast, 1, 78);
-		Deaths(P9,Exactly,0,200)
-	},
-	actions = {
-		DisplayText("\x13\x11｡˙+ﾟ\x08Ravagers \x03Dimorphos \x11ﾟ.+｡ \x01을 \x06처치 \x04하였습니다 + 40000 \x1FPoints!\x04", 4);
-		SetScore(CurrentPlayer, Add, 40000, Kills);
-		PlayWAV("staredit\\wav\\killsound.wav");
-		PlayWAV("staredit\\wav\\killsound.wav");
-		PlayWAV("staredit\\wav\\killsound.wav");
-		PreserveTrigger();
-	},
-}
-
-Trigger { -- unclean
-	players = {Force1},
-	conditions = {
-		Deaths(P7, AtLeast, 1, 52);
-		Deaths(P9,Exactly,0,200)
-	},
-	actions = {
-		DisplayText("\x13\x11｡˙+ﾟ\x08Ravagers \x03Biela’s Comet \x11ﾟ.+｡ \x01을 \x06처치 \x04하였습니다 + 45000 \x1FPoints!\x04", 4);
-		SetScore(CurrentPlayer, Add, 45000, Kills);
-		PlayWAV("staredit\\wav\\killsound.wav");
-		PlayWAV("staredit\\wav\\killsound.wav");
-		PlayWAV("staredit\\wav\\killsound.wav");
-		PreserveTrigger();
-	},
-}
-
-Trigger { -- inf duran
-	players = {Force1},
-	conditions = {
-		Deaths(P7, AtLeast, 1, 104);
-		Deaths(P9,Exactly,0,200)
-	},
-	actions = {
-		DisplayText("\x13\x11｡˙+ﾟ\x08Ravagers \x03Psyche \x11.+ﾟ｡ \x01을 \x06처치 \x04하였습니다 + 45000 \x1FPoints!\x04", 4);
-		SetScore(CurrentPlayer, Add, 45000, Kills);
-		PlayWAV("staredit\\wav\\killsound.wav");
-		PlayWAV("staredit\\wav\\killsound.wav");
-		PlayWAV("staredit\\wav\\killsound.wav");
-		PreserveTrigger();
-	},
-}
-
-Trigger { -- scout
-	players = {Force1},
-	conditions = {
-		Deaths(P7, AtLeast, 1, 70);
-		Deaths(P9,Exactly,0,200)
-	},
-	actions = {
-		DisplayText("\x13\x11｡˙+ﾟ\x08Ravagers \x03Restriction \x11.+ﾟ｡ \x01을 \x06처치 \x04하였습니다 + 50000 \x1FPoints!\x04", 4);
-		SetScore(CurrentPlayer, Add, 50000, Kills);
-		PlayWAV("staredit\\wav\\killsound.wav");
-		PlayWAV("staredit\\wav\\killsound.wav");
-		PlayWAV("staredit\\wav\\killsound.wav");
-		PreserveTrigger();
-	},
-}
-
-Trigger { -- No comment (ABB625F6)
-	players = {Force1},
-	conditions = {
-		Deaths(P7, AtLeast, 1, 21);
-		Deaths(P9,Exactly,0,200)
-	},
-	actions = {
-		DisplayText("\x13\x11｡˙+ﾟ\x08Ravagers \x03Aphophis \x11.+ﾟ｡ \x01를 \x06처치 \x04하였습니다 + 55000 \x1FPoints!\x04", 4);
-		SetScore(CurrentPlayer, Add, 55000, Kills);
-		PlayWAV("staredit\\wav\\killsound.wav");
-		PlayWAV("staredit\\wav\\killsound.wav");
-		PlayWAV("staredit\\wav\\killsound.wav");
-		PreserveTrigger();
-	},
-}
-
-Trigger { -- tank
-	players = {Force1},
-	conditions = {
-		Deaths(P7, AtLeast, 1, 23);
-		Deaths(P9,Exactly,0,200)
-	},
-	actions = {
-		DisplayText("\x13\x11｡˙+ﾟ\x08Ravagers \x03Comet Hyakutake \x11.+ﾟ｡ \x01를 \x06처치 \x04하였습니다 + 100000 \x1FPoints!\x04", 4);
-		SetScore(CurrentPlayer, Add, 100000, Kills);
-		PlayWAV("staredit\\wav\\killsound.wav");
-		PlayWAV("staredit\\wav\\killsound.wav");
-		PlayWAV("staredit\\wav\\killsound.wav");
-		PreserveTrigger();
-	},
-}
-
-Trigger { -- scantid
-	players = {Force1},
-	conditions = {
-		Deaths(P7, AtLeast, 1, 93);
-		Deaths(P9,Exactly,0,200)
-	},
-	actions = {
-		DisplayText("\x13\x11｡˙+ﾟ\x08Ravagers \x03'Oumuamua \x11.+ﾟ｡ \x01를 \x06처치 \x04하였습니다 + 100000 \x1FPoints!\x04", 4);
-		SetScore(CurrentPlayer, Add, 45000, Kills);
-		PlayWAV("staredit\\wav\\killsound.wav");
-		PlayWAV("staredit\\wav\\killsound.wav");
-		PlayWAV("staredit\\wav\\killsound.wav");
-		PreserveTrigger();
-	},
-}
-
-Trigger { -- matriach
-	players = {Force1},
-	conditions = {
-		Deaths(P7, AtLeast, 1, 69);
-		Deaths(P9,Exactly,0,200)
-	},
-	actions = {
-		DisplayText("\x13\x11｡˙+ﾟ\x08Ravagers \x03Vesta \x11.+ﾟ｡ \x01를 \x06처치 \x04하였습니다 + 100000 \x1FPoints!\x04", 4);
-		SetScore(CurrentPlayer, Add, 50000, Kills);
-		PlayWAV("staredit\\wav\\killsound.wav");
-		PlayWAV("staredit\\wav\\killsound.wav");
-		PlayWAV("staredit\\wav\\killsound.wav");
-		PreserveTrigger();
-	},
-}
-
-Trigger { -- yamabattle
-	players = {Force1},
-	conditions = {
-		Deaths(P7, AtLeast, 1, 28);
-		Deaths(P9,Exactly,0,200)
-	},
-	actions = {
-		DisplayText("\x13\x11｡˙+ﾟ\x08Ravagers \x03Cassini \x11.+ﾟ｡ \x01를 \x06처치 \x04하였습니다 + 100000 \x1FPoints!\x04", 4);
-		SetScore(CurrentPlayer, Add, 130000, Kills);
-		PlayWAV("staredit\\wav\\killsound.wav");
-		PlayWAV("staredit\\wav\\killsound.wav");
-		PlayWAV("staredit\\wav\\killsound.wav");
-		PreserveTrigger();
-	},
-}
-
-Trigger { -- devour H
-	players = {Force1},
-	conditions = {
-		Deaths(P7, AtLeast, 1, 62);
-		Deaths(P9,Exactly,0,200)
-	},
-	actions = {
-		DisplayText("\x13\x11｡˙+ﾟ\x08Ravagers \x03Bennu \x11.+ﾟ｡ \x01를 \x06처치 \x04하였습니다 + 100000 \x1FPoints!\x04", 4);
-		SetScore(CurrentPlayer, Add, 65000, Kills);
-		PlayWAV("staredit\\wav\\killsound.wav");
-		PlayWAV("staredit\\wav\\killsound.wav");
-		PlayWAV("staredit\\wav\\killsound.wav");
-		PreserveTrigger();
-	},
-}
-
 
 
 Trigger { -- 영작유닛 데스값 -1
@@ -569,9 +431,321 @@ Trigger { -- 영작유닛 데스값 -1
 		SetDeaths(CurrentPlayer, Subtract, 1, 69);
 		SetDeaths(CurrentPlayer, Subtract, 1, 28);
 		SetDeaths(CurrentPlayer, Subtract, 1, 62);
+		SetDeaths(CurrentPlayer, Subtract, 1, 86);
+		SetDeaths(CurrentPlayer, Subtract, 1, 27);
+		SetDeaths(CurrentPlayer, Subtract, 1, 64);
+		SetDeaths(CurrentPlayer, Subtract, 1, 7);
+		SetDeaths(CurrentPlayer, Subtract, 1, 3);
+		SetDeaths(CurrentPlayer, Subtract, 1, 60);
+		SetDeaths(CurrentPlayer, Subtract, 1, 58);
 		PreserveTrigger();
 	},
 }
+
+
+Trigger{
+	players = {force1},
+	conditions = {
+		Deaths(P6, AtLeast, 1, 150);
+		Deaths(P9,Exactly,0,200)
+	},
+	actions = {
+		DisplayText("\x13\x11｡˙+ﾟ\x08Gift \x03box \x11ﾟ.+｡ \x04를 열어 \x1970000 \x1FPoint\x04를 획득했습니다 !", 4);
+		SetScore(CurrentPlayer, Add, 70000, Kills);
+		PlayWAV("staredit\\wav\\hey.ogg");
+		PlayWAV("staredit\\wav\\hey.ogg");
+		PlayWAV("staredit\\wav\\hey.ogg");
+		PlayWAV("staredit\\wav\\hey.ogg");
+		PlayWAV("staredit\\wav\\hey.ogg");
+		PlayWAV("staredit\\wav\\hey.ogg");
+		PreserveTrigger();
+	}
+}
+
+Trigger{
+	players = {P6},
+	conditions = {
+		Always();
+	},
+	actions = {
+		SetDeaths(P6, Subtract, 1, 150);
+		PreserveTrigger();
+	}
+}
+
+Trigger { -- fenix z
+	players = {Force1},
+	conditions = {
+		Deaths(P7, AtLeast, 1, 77);
+		Deaths(P9,Exactly,0,200)
+	},
+	actions = {
+		DisplayText("\x13\x11｡˙+ﾟ\x08Ravagers \x03Didymos \x11ﾟ.+｡ \x01을 \x06처치 \x04하였습니다 + 35000 \x1FPoints!\x04", 4);
+		SetScore(CurrentPlayer, Add, 35000, Kills);
+		PlayWAV("staredit\\wav\\killsound.wav");
+		PlayWAV("staredit\\wav\\killsound.wav");
+		PreserveTrigger();
+	},
+}
+
+Trigger { -- fenix d
+	players = {Force1},
+	conditions = {
+		Deaths(P7, AtLeast, 1, 78);
+		Deaths(P9,Exactly,0,200)
+	},
+	actions = {
+		DisplayText("\x13\x11｡˙+ﾟ\x08Ravagers \x03Dimorphos \x11ﾟ.+｡ \x01을 \x06처치 \x04하였습니다 + 40000 \x1FPoints!\x04", 4);
+		SetScore(CurrentPlayer, Add, 40000, Kills);
+		PlayWAV("staredit\\wav\\killsound.wav");
+		PlayWAV("staredit\\wav\\killsound.wav");
+		PreserveTrigger();
+	},
+}
+
+Trigger { -- unclean
+	players = {Force1},
+	conditions = {
+		Deaths(P7, AtLeast, 1, 52);
+		Deaths(P9,Exactly,0,200)
+	},
+	actions = {
+		DisplayText("\x13\x11｡˙+ﾟ\x08Ravagers \x03Biela’s Comet \x11ﾟ.+｡ \x01을 \x06처치 \x04하였습니다 + 45000 \x1FPoints!\x04", 4);
+		SetScore(CurrentPlayer, Add, 45000, Kills);
+		PlayWAV("staredit\\wav\\killsound.wav");
+		PlayWAV("staredit\\wav\\killsound.wav");
+		PreserveTrigger();
+	},
+}
+
+Trigger { -- inf duran
+	players = {Force1},
+	conditions = {
+		Deaths(P7, AtLeast, 1, 104);
+		Deaths(P9,Exactly,0,200)
+	},
+	actions = {
+		DisplayText("\x13\x11｡˙+ﾟ\x08Ravagers \x03Psyche \x11.+ﾟ｡ \x01을 \x06처치 \x04하였습니다 + 45000 \x1FPoints!\x04", 4);
+		SetScore(CurrentPlayer, Add, 45000, Kills);
+		PlayWAV("staredit\\wav\\killsound.wav");
+		PlayWAV("staredit\\wav\\killsound.wav");
+		PreserveTrigger();
+	},
+}
+
+Trigger { -- scout
+	players = {Force1},
+	conditions = {
+		Deaths(P7, AtLeast, 1, 70);
+		Deaths(P9,Exactly,0,200)
+	},
+	actions = {
+		DisplayText("\x13\x11｡˙+ﾟ\x08Ravagers \x03Restriction \x11.+ﾟ｡ \x01을 \x06처치 \x04하였습니다 + 50000 \x1FPoints!\x04", 4);
+		SetScore(CurrentPlayer, Add, 50000, Kills);
+		PlayWAV("staredit\\wav\\killsound.wav");
+		PlayWAV("staredit\\wav\\killsound.wav");
+		PreserveTrigger();
+	},
+}
+
+Trigger { -- No comment (ABB625F6)
+	players = {Force1},
+	conditions = {
+		Deaths(P7, AtLeast, 1, 21);
+		Deaths(P9,Exactly,0,200)
+	},
+	actions = {
+		DisplayText("\x13\x11｡˙+ﾟ\x08Ravagers \x03Aphophis \x11.+ﾟ｡ \x01를 \x06처치 \x04하였습니다 + 55000 \x1FPoints!\x04", 4);
+		SetScore(CurrentPlayer, Add, 55000, Kills);
+		PlayWAV("staredit\\wav\\killsound.wav");
+		PlayWAV("staredit\\wav\\killsound.wav");
+		PreserveTrigger();
+	},
+}
+
+Trigger { -- tank
+	players = {Force1},
+	conditions = {
+		Deaths(P7, AtLeast, 1, 23);
+		Deaths(P9,Exactly,0,200)
+	},
+	actions = {
+		DisplayText("\x13\x11｡˙+ﾟ\x08Ravagers \x03Comet Hyakutake \x11.+ﾟ｡ \x01를 \x06처치 \x04하였습니다 + 100000 \x1FPoints!\x04", 4);
+		SetScore(CurrentPlayer, Add, 100000, Kills);
+		PlayWAV("staredit\\wav\\killsound.wav");
+		PlayWAV("staredit\\wav\\killsound.wav");
+		PreserveTrigger();
+	},
+}
+
+Trigger { -- scantid
+	players = {Force1},
+	conditions = {
+		Deaths(P7, AtLeast, 1, 93);
+		Deaths(P9,Exactly,0,200)
+	},
+	actions = {
+		DisplayText("\x13\x11｡˙+ﾟ\x08Ravagers \x03'Oumuamua \x11.+ﾟ｡ \x01를 \x06처치 \x04하였습니다 + 45000 \x1FPoints!\x04", 4);
+		SetScore(CurrentPlayer, Add, 45000, Kills);
+		PlayWAV("staredit\\wav\\killsound.wav");
+		PlayWAV("staredit\\wav\\killsound.wav");
+		PreserveTrigger();
+	},
+}
+
+Trigger { -- matriach
+	players = {Force1},
+	conditions = {
+		Deaths(P7, AtLeast, 1, 69);
+		Deaths(P9,Exactly,0,200)
+	},
+	actions = {
+		DisplayText("\x13\x11｡˙+ﾟ\x08Ravagers \x03Vesta \x11.+ﾟ｡ \x01를 \x06처치 \x04하였습니다 + 50000 \x1FPoints!\x04", 4);
+		SetScore(CurrentPlayer, Add, 50000, Kills);
+		PlayWAV("staredit\\wav\\killsound.wav");
+		PlayWAV("staredit\\wav\\killsound.wav");
+		PreserveTrigger();
+	},
+}
+
+Trigger { -- yamabattle
+	players = {Force1},
+	conditions = {
+		Deaths(P7, AtLeast, 1, 28);
+		Deaths(P9,Exactly,0,200)
+	},
+	actions = {
+		DisplayText("\x13\x11｡˙+ﾟ\x08Ravagers \x03Cassini \x11.+ﾟ｡ \x01를 \x06처치 \x04하였습니다 + 130000 \x1FPoints!\x04", 4);
+		SetScore(CurrentPlayer, Add, 130000, Kills);
+		PlayWAV("staredit\\wav\\killsound.wav");
+		PlayWAV("staredit\\wav\\killsound.wav");
+		PreserveTrigger();
+	},
+}
+
+Trigger { -- devour H
+	players = {Force1},
+	conditions = {
+		Deaths(P7, AtLeast, 1, 62);
+		Deaths(P9,Exactly,0,200)
+	},
+	actions = {
+		DisplayText("\x13\x11｡˙+ﾟ\x08Ravagers \x03Bennu \x11.+ﾟ｡ \x01를 \x06처치 \x04하였습니다 + 65000 \x1FPoints!\x04", 4);
+		SetScore(CurrentPlayer, Add, 65000, Kills);
+		PlayWAV("staredit\\wav\\killsound.wav");
+		PlayWAV("staredit\\wav\\killsound.wav");
+		PreserveTrigger();
+	},
+}
+
+Trigger { -- Danimoth
+	players = {Force1},
+	conditions = {
+		Deaths(P7, AtLeast, 1, 86);
+		Deaths(P9,Exactly,0,200)
+	},
+	actions = {
+		DisplayText("\x13\x11｡˙+ﾟ\x08Ravagers \x03Borisov \x11.+ﾟ｡ \x01를 \x06처치 \x04하였습니다 + 85000 \x1FPoints!\x04", 4);
+		SetScore(CurrentPlayer, Add, 85000, Kills);
+		PlayWAV("staredit\\wav\\killsound.wav");
+		PlayWAV("staredit\\wav\\killsound.wav");
+		PreserveTrigger();
+	},
+}
+
+Trigger { -- Goliath
+	players = {Force1},
+	conditions = {
+		Deaths(P7, AtLeast, 1, 3);
+		Deaths(P9,Exactly,0,200)
+	},
+	actions = {
+		DisplayText("\x13\x11｡˙+ﾟ\x08Ravagers \x03Perseid meteor \x11.+ﾟ｡ \x01를 \x06처치 \x04하였습니다 + 75000 \x1FPoints!\x04", 4);
+		SetScore(CurrentPlayer, Add, 75000, Kills);
+		PlayWAV("staredit\\wav\\killsound.wav");
+		PlayWAV("staredit\\wav\\killsound.wav");
+		PreserveTrigger();
+	},
+}
+
+Trigger { -- Nuke battle
+	players = {Force1},
+	conditions = {
+		Deaths(P7, AtLeast, 1, 27);
+		Deaths(P9,Exactly,0,200)
+	},
+	actions = {
+		DisplayText("\x13\x11｡˙+ﾟ\x08Ravagers \x03Tempel 1 \x11.+ﾟ｡ \x01를 \x06처치 \x04하였습니다 + 200000 \x1FPoints!\x04", 4);
+		SetScore(CurrentPlayer, Add, 200000, Kills);
+		PlayWAV("staredit\\wav\\killsound.wav");
+		PlayWAV("staredit\\wav\\killsound.wav");
+		PreserveTrigger();
+	},
+}
+
+Trigger { -- Prove
+	players = {Force1},
+	conditions = {
+		Deaths(P7, AtLeast, 1, 64);
+		Deaths(P9,Exactly,0,200)
+	},
+	actions = {
+		DisplayText("\x13\x11｡˙+ﾟ\x08Ravagers \x03Halley’s Comet \x11.+ﾟ｡ \x01를 \x06처치 \x04하였습니다 + 70000 \x1FPoints!\x04", 4);
+		SetScore(CurrentPlayer, Add, 70000, Kills);
+		PlayWAV("staredit\\wav\\killsound.wav");
+		PlayWAV("staredit\\wav\\killsound.wav");
+		PreserveTrigger();
+	},
+}
+
+Trigger { -- SCV
+	players = {Force1},
+	conditions = {
+		Deaths(P7, AtLeast, 1, 7);
+		Deaths(P9,Exactly,0,200)
+	},
+	actions = {
+		DisplayText("\x13\x11｡˙+ﾟ\x08Ravagers \x03Pluto \x11.+ﾟ｡ \x01를 \x06처치 \x04하였습니다 + 75000 \x1FPoints!\x04", 4);
+		SetScore(CurrentPlayer, Add, 75000, Kills);
+		PlayWAV("staredit\\wav\\killsound.wav");
+		PlayWAV("staredit\\wav\\killsound.wav");
+		PreserveTrigger();
+	},
+}
+
+Trigger{ -- Corsair
+	players = {force1},
+	conditions = {
+		Deaths(P7, AtLeast, 1, 60);
+		Deaths(P9,Exactly,0,200)
+	},
+	actions = {
+		DisplayText("\x13\x11｡˙+ﾟ\x08Ravagers \x03Ikeya-Seki \x11.+ﾟ｡ \x01를 \x06처치 \x04하였습니다 + 65000 \x1FPoints!\x04", 4);
+		SetScore(CurrentPlayer, Add, 65000, Kills);
+		PlayWAV("staredit\\wav\\killsound.wav");
+		PlayWAV("staredit\\wav\\killsound.wav");
+		PreserveTrigger();
+	}
+}
+
+Trigger{ -- Intercepter
+	players = {force1},
+	conditions = {
+		Deaths(P7, AtLeast, 1, 58);
+		Deaths(P9,Exactly,0,200)
+	},
+	actions = {
+		DisplayText("\x13\x11｡˙+ﾟ\x08Ravagers \x03Intercepter \x11.+ﾟ｡ \x01를 \x06처치 \x04하였습니다 + 70000 \x1FPoints!\x04", 4);
+		SetScore(CurrentPlayer, Add, 70000, Kills);
+		PlayWAV("staredit\\wav\\killsound.wav");
+		PlayWAV("staredit\\wav\\killsound.wav");
+		PreserveTrigger();
+	}
+}
+
+
+
+
 
 Trigger {
 	players = {Force1},
@@ -653,9 +827,9 @@ Trigger { -- 경우 2
 		Deaths(CurrentPlayer, Exactly, 0, 158);
 	},
 	actions = {
-		SetDeaths(CurrentPlayer, SetTo, 1700, "Unused Zerg Bldg");
-		PlayWAV("staredit\\wav\\Void.ogg");
-		PlayWAV("staredit\\wav\\Void.ogg");
+		SetDeaths(CurrentPlayer, SetTo, 966, "Unused Zerg Bldg");
+		PlayWAV("staredit\\wav\\Lair.ogg");
+		PlayWAV("staredit\\wav\\Lair.ogg");
 		PreserveTrigger();
 	},
 }
@@ -730,6 +904,19 @@ Trigger { -- Link with variation with trigger
 		DisplayText("Hatchery Destroyed! + 40000 Points");
 		SetScore(CurrentPlayer, Add, 40000, Kills);
 		SetDeaths(CurrentPlayer, SetTo, 1, "Zerg Beacon");
+		PreserveTrigger();
+	},
+}
+
+Trigger { -- Link with variation with trigger
+	players = {Force1},
+	conditions = {
+		Deaths(P6, AtLeast, 1, 132);
+	},
+	actions = {
+		DisplayText("Lair Destroyed! + 50000 Points");
+		SetScore(CurrentPlayer, Add, 50000, Kills);
+		SetDeaths(CurrentPlayer, SetTo, 1, "Unused Zerg Bldg 5");
 		PreserveTrigger();
 	},
 }
@@ -1182,11 +1369,16 @@ Trigger{
 	players = {Force1},
 	conditions = {
 		Deaths(P7, Exactly, 1, 152);
+		Deaths(P9,Exactly,0,200);
 	},
 	actions = {
 		DisplayText("\x13\x19｡˙+ﾟ\x11Special \x1fGuardians of \x19Galaxy\x19 ｡+ﾟ. 가 전장에 합류했습니다 !", 4);
+		PlayWAV("staredit\\wav\\unlock.ogg");
+		PlayWAV("staredit\\wav\\unlock.ogg");
+		PlayWAV("staredit\\wav\\unlock.ogg");
 	}
 }
+
 
 
 Trigger{ -- 해금
@@ -1280,6 +1472,73 @@ Trigger{
 
 ----todo : 1min : 16320 , using for function for big wave
 
+--------- 잡건 ----------
+local Gspire = {"etcGratespire","etcGratespire1","etcGratespire2","etcGratespire3","etcGratespire4","etcGratespire5","etcGratespire6","etcGratespire7"}
+local Spire = {"etcSpire","etcSpire1","etcSpire2","etcSpire3","etcSpire4"}
+local Ucavern = {"etcUltrarisk","etcUltrarisk1","etcUltrarisk2","etcUltrarisk3"}
+local Dmound = {"etcDefiler","etcDefiler1","etcDefiler2","etcDefiler3","etcDefiler4","etcDefiler5","etcDefiler6"}
+
+
+for i = 1, #Gspire do
+Trigger{
+	players = {Force2},
+	conditions = {
+		Bring(Force2, Exactly, 0, 137, Gspire[i]);
+	},
+	actions = {
+		CreateUnit(6, 44, Gspire[i], P6);
+		CreateUnit(1, 62, Gspire[i], P6);
+		CreateUnit(5, 51, Gspire[i], P6);
+		Order("Any unit", P6, Gspire[i], Patrol, "bunkerHeal");
+	}
+}
+end
+
+for i = 1, #Spire do
+Trigger{
+	players = {Force2},
+	conditions = {
+		Bring(Force2, Exactly, 0, 141, Spire[i]);
+	},
+	actions = {
+		CreateUnit(6, 44, Spire[i], P6);
+		CreateUnit(1, 62, Spire[i], P6);
+		CreateUnit(5, 51, Spire[i], P6);
+		Order("Any unit", P6, Spire[i], Patrol, "bunkerHeal");
+	}
+}
+end
+
+for i = 1, #Ucavern do
+Trigger{
+	players = {Force2},
+	conditions = {
+		Bring(Force2, Exactly, 0, 140, Ucavern[i]);
+	},
+	actions = {
+		CreateUnit(6, 39, Ucavern[i], P6);
+		CreateUnit(1, 93, Ucavern[i], P6);
+		CreateUnit(5, 51, Ucavern[i], P6);
+		Order("Any unit", P6, Ucavern[i], Patrol, "bunkerHeal");
+	}
+}
+end
+
+for i = 1, #Dmound do
+Trigger{
+	players = {Force2},
+	conditions = {
+		Bring(Force2, Exactly, 0, 136, Dmound[i]);
+	},
+	actions = {
+		CreateUnit(6, 46, Dmound[i], P6);
+		CreateUnit(1, 52, Dmound[i], P6);
+		CreateUnit(5, 51, Dmound[i], P6);
+		Order("Any unit", P6, Dmound[i], Patrol, "bunkerHeal");
+	}
+}
+end
+
 
 
 ------- 건작 ---------
@@ -1294,7 +1553,6 @@ Trigger { -- 건물데스값 -1
 		SetDeaths(P6,Subtract,1,132);
 		SetDeaths(P6,Subtract,1,133);
 		SetDeaths(P7,Subtract,1,148);
-		SetDeaths(P7,Subtract,1,151);
 		SetDeaths(P7,Subtract,1,127);
 		SetDeaths(P6,Subtract,1,111);
 		SetDeaths(P6,Subtract,1,113);
@@ -1323,12 +1581,15 @@ Shape3 = CSMakePolygon(6,80,0,37,1)
 Shape2 = CSMakePolygon(6,80,0,19,1)
 Shape1 = CSMakePolygon(6,80,0,7,0)
 
-sixline = CSMakeLine(6,180,0,13,0)
+sixline = CSMakeCircleX(6,64,30,54,0)
 spiral1 = CSMakeSpiral(4, 16, 1/1.2, 40, 0, 37, 5)
 spiral2 = CSMakeSpiral(4, 16, 1/1.2, 40, 45, 37, 5)
 
 
 CX2 = CSMakeCircleX(6,80,30,30,0)
+
+SDspeed = 1000 // 29
+--- SDspeed * pharse timeline ----- 
 
 Trigger{
 	players = {P6},
@@ -1336,88 +1597,398 @@ Trigger{
 		CommandLeastAt(131, "Hat1");
 	},
 	actions = {
-		SetDeaths(P9,Add,1,0);
+		SetDeaths(P10,Add,1,0);
 		PreserveTrigger();
 	}
 }
 -- Hat1 hatchery phase 1
-CSPlotOrder(square1, P6, 54, "Hat1", nil, 1, 16, square1, 0, Patrol, "Location 1", nil, 0, nil, P6,{CommandLeastAt(131, "Hat1"), Deaths(P9, AtLeast, 50,0)})
-CSPlotOrder(square1, P7, 53, "Hat1", nil, 1, 16, square1, 0, Patrol, "Location 1", nil, 0, nil, P7,{CommandLeastAt(131, "Hat1"), Deaths(P9, AtLeast, 85, 0)})
-CSPlotOrder(square1, P6, 40, "Hat1", nil, 1, 16, square1, 0, Patrol, "Location 1", nil, 0, nil, P6,{CommandLeastAt(131, "Hat1"), Deaths(P9, AtLeast, 115, 0)})
-CSPlotOrder(spiral1, P6, 43, "Hat1", nil, 1, 10, spiral1, 0, Patrol, "Location 1", nil, 0, nil, P6,{CommandLeastAt(131, "Hat1"), Deaths(P9, AtLeast, 180, 0)})
-CSPlotOrder(square1, P7, 39, "Hat1", nil, 1, 16, square1, 0, Patrol, "Location 1", nil, 0, nil, P7,{CommandLeastAt(131, "Hat1"), Deaths(P9, AtLeast, 145, 0)})
+CSPlotOrder(square1, P6, 54, "Hat1", nil, 1, 16, square1, 0, Patrol, "bunkerHeal", nil, 0, nil, P6,{CommandLeastAt(131, "Hat1"), Deaths(P10, AtLeast, 50,0)})
+CSPlotOrder(square1, P7, 53, "Hat1", nil, 1, 16, square1, 0, Patrol, "bunkerHeal", nil, 0, nil, P7,{CommandLeastAt(131, "Hat1"), Deaths(P10, AtLeast, 85, 0)})
+CSPlotOrder(square1, P6, 40, "Hat1", nil, 1, 16, square1, 0, Patrol, "bunkerHeal", nil, 0, nil, P6,{CommandLeastAt(131, "Hat1"), Deaths(P10, AtLeast, 115, 0)})
+CSPlotOrder(spiral1, P6, 43, "Hat1", nil, 1, 10, spiral1, 0, Patrol, "bunkerHeal", nil, 0, nil, P6,{CommandLeastAt(131, "Hat1"), Deaths(P10, AtLeast, 180, 0)})
+CSPlotOrder(square1, P7, 39, "Hat1", nil, 1, 16, square1, 0, Patrol, "bunkerHeal", nil, 0, nil, P7,{CommandLeastAt(131, "Hat1"), Deaths(P10, AtLeast, 145, 0)})
 
-CSPlotOrder(spiral1, P7, 43, "Hat1", nil, 1, 12, spiral1, 0, Patrol, "Location 1", nil, 0, nil, P7,{CommandLeastAt(131, "Hat1"), Deaths(P9, AtLeast, 275, 0)})
-CSPlotOrder(spiral2, P6, 44, "Hat1", nil, 1, 12, spiral2, 0, Patrol, "Location 1", nil, 0, nil, P6,{CommandLeastAt(131, "Hat1"), Deaths(P9, AtLeast, 310, 0)})
-CSPlotOrder(spiral1, P7, 43, "Hat1", nil, 1, 12, spiral1, 0, Patrol, "Location 1", nil, 0, nil, P7,{CommandLeastAt(131, "Hat1"), Deaths(P9, AtLeast, 345, 0)})
-CSPlotOrder(spiral2, P6, 44, "Hat1", nil, 1, 12, spiral2, 0, Patrol, "Location 1", nil, 0, nil, P6,{CommandLeastAt(131, "Hat1"), Deaths(P9, AtLeast, 380, 0)})
+CSPlotOrder(spiral1, P7, 43, "Hat1", nil, 1, 12, spiral1, 0, Patrol, "bunkerHeal", nil, 0, nil, P7,{CommandLeastAt(131, "Hat1"), Deaths(P10, AtLeast, 275, 0)})
+CSPlotOrder(spiral2, P6, 44, "Hat1", nil, 1, 12, spiral2, 0, Patrol, "bunkerHeal", nil, 0, nil, P6,{CommandLeastAt(131, "Hat1"), Deaths(P10, AtLeast, 345, 0)})
+CSPlotOrder(spiral1, P7, 43, "Hat1", nil, 1, 12, spiral1, 0, Patrol, "bunkerHeal", nil, 0, nil, P7,{CommandLeastAt(131, "Hat1"), Deaths(P10, AtLeast, 415, 0)})
+CSPlotOrder(spiral2, P6, 44, "Hat1", nil, 1, 12, spiral2, 0, Patrol, "bunkerHeal", nil, 0, nil, P6,{CommandLeastAt(131, "Hat1"), Deaths(P10, AtLeast, 485, 0)})
 
 -- -- Hat1 hatchery phase 2
-CSPlotOrder(square2, P7, 54, "Hat1", nil, 1, 20, square2, 0, Patrol, "Location 1", nil, 0, nil, P7,{CommandLeastAt(131, "Hat1"), Deaths(P9, AtLeast, 578, 0)})
-CSPlotOrder(square2, P6, 53, "Hat1", nil, 1, 20, square2, 0, Patrol, "Location 1", nil, 0, nil, P6,{CommandLeastAt(131, "Hat1"), Deaths(P9, AtLeast, 613, 0)})
-CSPlotOrder(spiral1, P7, 43, "Hat1", nil, 1, 12, spiral1, 0, Patrol, "Location 1", nil, 0, nil, P7,{CommandLeastAt(131, "Hat1"), Deaths(P9, AtLeast, 640, 0)})
-CSPlotOrder(spiral2, P6, 44, "Hat1", nil, 1, 12, spiral2, 0, Patrol, "Location 1", nil, 0, nil, P6,{CommandLeastAt(131, "Hat1"), Deaths(P9, AtLeast, 691, 0)})
-CSPlotOrder(square2, P6, 39, "Hat1", nil, 1, 20, square2, 0, Patrol, "Location 1", nil, 0, nil, P6,{CommandLeastAt(131, "Hat1"), Deaths(P9, AtLeast, 691, 0)})
+CSPlotOrder(square2, P7, 54, "Hat1", nil, 1, 20, square2, 0, Patrol, "bunkerHeal", nil, 0, nil, P7,{CommandLeastAt(131, "Hat1"), Deaths(P10, AtLeast, 578, 0)})
+CSPlotOrder(square2, P6, 53, "Hat1", nil, 1, 20, square2, 0, Patrol, "bunkerHeal", nil, 0, nil, P6,{CommandLeastAt(131, "Hat1"), Deaths(P10, AtLeast, 613, 0)})
+CSPlotOrder(spiral1, P7, 43, "Hat1", nil, 1, 12, spiral1, 0, Patrol, "bunkerHeal", nil, 0, nil, P7,{CommandLeastAt(131, "Hat1"), Deaths(P10, AtLeast, 640, 0)})
+CSPlotOrder(spiral2, P6, 44, "Hat1", nil, 1, 12, spiral2, 0, Patrol, "bunkerHeal", nil, 0, nil, P6,{CommandLeastAt(131, "Hat1"), Deaths(P10, AtLeast, 691, 0)})
+CSPlotOrder(square2, P6, 39, "Hat1", nil, 1, 20, square2, 0, Patrol, "bunkerHeal", nil, 0, nil, P6,{CommandLeastAt(131, "Hat1"), Deaths(P10, AtLeast, 691, 0)})
 
--- for i = 1, 24 do
--- 	GLi = CSMakeLineX(1,60,0+15*i,7,1) -- 원그리기 1
--- 	CSPlot(GLi,P6,88,"Hat1",nil,1,32,P7,{CommandLeastAt(131, "Hat1"),Deaths(P9,Exactly,4*i,0)})
+Trigger{
+	players = {P6},
+	conditions = {
+		CommandLeastAt(131, "Hat2");
+	},
+	actions = {
+		SetDeaths(P10,Add,1,4);
+		PreserveTrigger();
+	}
+}
+
+CSPlotOrder(square1, P6, 54, "Hat2", nil, 1, 16, square1, 0, Patrol, "bunkerHeal", nil, 0, nil, P6,{CommandLeastAt(131, "Hat2"), Deaths(P10, AtLeast, 50,4)})
+CSPlotOrder(square1, P7, 53, "Hat2", nil, 1, 16, square1, 0, Patrol, "bunkerHeal", nil, 0, nil, P7,{CommandLeastAt(131, "Hat2"), Deaths(P10, AtLeast, 85, 4)})
+CSPlotOrder(square1, P6, 40, "Hat2", nil, 1, 16, square1, 0, Patrol, "bunkerHeal", nil, 0, nil, P6,{CommandLeastAt(131, "Hat2"), Deaths(P10, AtLeast, 115, 4)})
+CSPlotOrder(spiral1, P6, 43, "Hat2", nil, 1, 10, spiral1, 0, Patrol, "bunkerHeal", nil, 0, nil, P6,{CommandLeastAt(131, "Hat2"), Deaths(P10, AtLeast, 180, 4)})
+CSPlotOrder(square1, P7, 39, "Hat2", nil, 1, 16, square1, 0, Patrol, "bunkerHeal", nil, 0, nil, P7,{CommandLeastAt(131, "Hat2"), Deaths(P10, AtLeast, 145, 4)})
+
+CSPlotOrder(spiral1, P7, 43, "Hat2", nil, 1, 12, spiral1, 0, Patrol, "bunkerHeal", nil, 0, nil, P7,{CommandLeastAt(131, "Hat2"), Deaths(P10, AtLeast, 275, 4)})
+CSPlotOrder(spiral2, P6, 44, "Hat2", nil, 1, 12, spiral2, 0, Patrol, "bunkerHeal", nil, 0, nil, P6,{CommandLeastAt(131, "Hat2"), Deaths(P10, AtLeast, 345, 4)})
+CSPlotOrder(spiral1, P7, 43, "Hat2", nil, 1, 12, spiral1, 0, Patrol, "bunkerHeal", nil, 0, nil, P7,{CommandLeastAt(131, "Hat2"), Deaths(P10, AtLeast, 415, 4)})
+CSPlotOrder(spiral2, P6, 44, "Hat2", nil, 1, 12, spiral2, 0, Patrol, "bunkerHeal", nil, 0, nil, P6,{CommandLeastAt(131, "Hat2"), Deaths(P10, AtLeast, 485, 4)})
+
+-- -- Hat2 hatchery phase 2
+CSPlotOrder(square2, P7, 54, "Hat2", nil, 1, 20, square2, 0, Patrol, "bunkerHeal", nil, 0, nil, P7,{CommandLeastAt(131, "Hat2"), Deaths(P10, AtLeast, 578, 4)})
+CSPlotOrder(square2, P6, 53, "Hat2", nil, 1, 20, square2, 0, Patrol, "bunkerHeal", nil, 0, nil, P6,{CommandLeastAt(131, "Hat2"), Deaths(P10, AtLeast, 613, 4)})
+CSPlotOrder(spiral1, P7, 43, "Hat2", nil, 1, 12, spiral1, 0, Patrol, "bunkerHeal", nil, 0, nil, P7,{CommandLeastAt(131, "Hat2"), Deaths(P10, AtLeast, 640, 4)})
+CSPlotOrder(spiral2, P6, 44, "Hat2", nil, 1, 12, spiral2, 0, Patrol, "bunkerHeal", nil, 0, nil, P6,{CommandLeastAt(131, "Hat2"), Deaths(P10, AtLeast, 691, 4)})
+CSPlotOrder(square2, P6, 39, "Hat2", nil, 1, 20, square2, 0, Patrol, "bunkerHeal", nil, 0, nil, P6,{CommandLeastAt(131, "Hat2"), Deaths(P10, AtLeast, 691, 4)})
+
+
+Trigger{
+	players = {P6},
+	conditions = {
+		CommandLeastAt(131, "Hat3");
+	},
+	actions = {
+		SetDeaths(P10,Add,1,5);
+		PreserveTrigger();
+	}
+}
+
+CSPlotOrder(square1, P6, 54, "Hat3", nil, 1, 16, square1, 0, Patrol, "bunkerHeal", nil, 0, nil, P6,{CommandLeastAt(131, "Hat3"), Deaths(P10, AtLeast, 50,5)})
+CSPlotOrder(square1, P7, 53, "Hat3", nil, 1, 16, square1, 0, Patrol, "bunkerHeal", nil, 0, nil, P7,{CommandLeastAt(131, "Hat3"), Deaths(P10, AtLeast, 85, 5)})
+CSPlotOrder(square1, P6, 40, "Hat3", nil, 1, 16, square1, 0, Patrol, "bunkerHeal", nil, 0, nil, P6,{CommandLeastAt(131, "Hat3"), Deaths(P10, AtLeast, 115, 5)})
+CSPlotOrder(spiral1, P6, 43, "Hat3", nil, 1, 10, spiral1, 0, Patrol, "bunkerHeal", nil, 0, nil, P6,{CommandLeastAt(131, "Hat3"), Deaths(P10, AtLeast, 180, 5)})
+CSPlotOrder(square1, P7, 39, "Hat3", nil, 1, 16, square1, 0, Patrol, "bunkerHeal", nil, 0, nil, P7,{CommandLeastAt(131, "Hat3"), Deaths(P10, AtLeast, 145, 5)})
+
+CSPlotOrder(spiral1, P7, 43, "Hat3", nil, 1, 12, spiral1, 0, Patrol, "bunkerHeal", nil, 0, nil, P7,{CommandLeastAt(131, "Hat3"), Deaths(P10, AtLeast, 275, 5)})
+CSPlotOrder(spiral2, P6, 44, "Hat3", nil, 1, 12, spiral2, 0, Patrol, "bunkerHeal", nil, 0, nil, P6,{CommandLeastAt(131, "Hat3"), Deaths(P10, AtLeast, 345, 5)})
+CSPlotOrder(spiral1, P7, 43, "Hat3", nil, 1, 12, spiral1, 0, Patrol, "bunkerHeal", nil, 0, nil, P7,{CommandLeastAt(131, "Hat3"), Deaths(P10, AtLeast, 415, 5)})
+CSPlotOrder(spiral2, P6, 44, "Hat3", nil, 1, 12, spiral2, 0, Patrol, "bunkerHeal", nil, 0, nil, P6,{CommandLeastAt(131, "Hat3"), Deaths(P10, AtLeast, 485, 5)})
+
+-- -- Hat3 hatchery phase 2
+CSPlotOrder(square2, P7, 54, "Hat3", nil, 1, 20, square2, 0, Patrol, "bunkerHeal", nil, 0, nil, P7,{CommandLeastAt(131, "Hat3"), Deaths(P10, AtLeast, 578, 5)})
+CSPlotOrder(square2, P6, 53, "Hat3", nil, 1, 20, square2, 0, Patrol, "bunkerHeal", nil, 0, nil, P6,{CommandLeastAt(131, "Hat3"), Deaths(P10, AtLeast, 613, 5)})
+CSPlotOrder(spiral1, P7, 43, "Hat3", nil, 1, 12, spiral1, 0, Patrol, "bunkerHeal", nil, 0, nil, P7,{CommandLeastAt(131, "Hat3"), Deaths(P10, AtLeast, 640, 5)})
+CSPlotOrder(spiral2, P6, 44, "Hat3", nil, 1, 12, spiral2, 0, Patrol, "bunkerHeal", nil, 0, nil, P6,{CommandLeastAt(131, "Hat3"), Deaths(P10, AtLeast, 691, 5)})
+CSPlotOrder(square2, P6, 39, "Hat3", nil, 1, 20, square2, 0, Patrol, "bunkerHeal", nil, 0, nil, P6,{CommandLeastAt(131, "Hat3"), Deaths(P10, AtLeast, 691, 5)})
+
+
+--- Lair -----
+LairTimeline = {3.0, 5.7, 8.5, 14.1, 14.6, 15.3, 15.7, 16, 17, 19.7, 21.6, 22, 22.3, 22.5, }
+--- SDspeed * pharse timeline ----- 
+---  14 ~ 16  , 21.6 ~ 22.3 = Effect ---
+
+TempProperties = {
+clocked = false,
+burrowed = false,
+intransit = false,
+hallucinated = false,
+invincible = false,
+hitpoint = 30,
+shield = 50,
+energy = 0,
+resource = 0,
+hanger = 0,}
+
+LSU = CSMakeLineX(6,64,0,30,0)
+LSU2 = CSMakeLineX(6,64,10,30,0)
+LSU3 = CSMakeLineX(6,64,20,30,0)
+LSU4 = CSMakeLineX(6,64,30,30,0)
+LSU5 = CSMakeLineX(6,64,40,30,0)
+
+LGU1 = CSMakePolygonX(6,64,30,6,0)
+LGU2 = CSMakePolygonX(6,64,30,24,6)
+LGU3 = CSMakePolygonX(6,64,30,54,24)
+
+Eft1 = CSMakeLineX(6,64,10,24,0)
+Eft2 = CSMakeLineX(6,64,20,24,0)
+Eft3 = CSMakeLineX(6,64,30,24,0)
+Eftstar = CSMakeStarX(5,108,64,36,90,0)
+
+
+Trigger{
+	players = {P6},
+	conditions = {
+		CommandLeastAt(132, "Lair1");
+	},
+	actions = {
+		SetDeaths(P10,Add,1,6);
+		PreserveTrigger();
+	}
+}
+---- 1젠 ----
+CSPlotOrder(LGU1, P6, 39, "Lair1", nil, 1, 20, LGU1, 0, Attack , "Lair1", {998,1412}, 0, nil, P6, {CommandLeastAt(132, "Lair1"), Deaths(P10, AtLeast, LairTimeline[1] * SDspeed,6)})
+CSPlotOrder(LGU2, P6, 51, "Lair1", nil, 1, 20, LGU2, 0, Attack , "Lair1", {998,1412}, 0, nil, P6, {CommandLeastAt(132, "Lair1"), Deaths(P10, AtLeast, LairTimeline[1] * SDspeed,6)})
+CSPlotOrder(LGU3, P6, 46, "Lair1", nil, 1, 20, LGU3, 0, Attack , "Lair1", {998,1412}, 0, nil, P6, {CommandLeastAt(132, "Lair1"), Deaths(P10, AtLeast, LairTimeline[1] * SDspeed,6)})
+CSPlotOrder(LSU, P6, 43, "Lair1", nil, 1, 20, LSU, 0, Attack , "Lair1", {998,1412}, 0, nil, P6, {CommandLeastAt(132, "Lair1"), Deaths(P10, AtLeast, LairTimeline[1] * SDspeed,6)})
+CSPlotOrder(LSU2, P6, 44, "Lair1", nil, 1, 20, LSU2, 0, Attack , "Lair1", {998,1412}, 0, nil, P6, {CommandLeastAt(132, "Lair1"), Deaths(P10, AtLeast, LairTimeline[1] * SDspeed,6)})
+
+---2젠
+CSPlotOrder(LGU1, P6, 39, "Lair1", nil, 1, 20, LGU1, 0, Attack , "Lair1", {998,1412}, 0, nil, P6, {CommandLeastAt(132, "Lair1"), Deaths(P10, AtLeast, LairTimeline[2] * SDspeed,6)})
+CSPlotOrder(LGU2, P7, 51, "Lair1", nil, 1, 20, LGU2, 0, Attack , "Lair1", {998,1412}, 0, nil, P7, {CommandLeastAt(132, "Lair1"), Deaths(P10, AtLeast, LairTimeline[2] * SDspeed,6)})
+CSPlotOrder(LGU3, P6, 46, "Lair1", nil, 1, 20, LGU3, 0, Attack , "Lair1", {998,1412}, 0, nil, P6, {CommandLeastAt(132, "Lair1"), Deaths(P10, AtLeast, LairTimeline[2] * SDspeed,6)})
+CSPlotOrder(LSU, P7, 43, "Lair1", nil, 1, 20, LSU, 0, Attack , "Lair1", {998,1412}, 0, nil, P7, {CommandLeastAt(132, "Lair1"), Deaths(P10, AtLeast, LairTimeline[2] * SDspeed,6)})
+CSPlotOrder(LSU2, P6, 44, "Lair1", nil, 1, 20, LSU2, 0, Attack , "Lair1", {998,1412}, 0, nil, P6, {CommandLeastAt(132, "Lair1"), Deaths(P10, AtLeast, LairTimeline[2] * SDspeed,6)})
+--- 3젠
+CSPlotOrder(LGU1, P7, 16, "Lair1", nil, 1, 20, LGU1, 0, Attack , "Lair1", {998,1412}, 0, nil, P7, {CommandLeastAt(132, "Lair1"), Deaths(P10, AtLeast, LairTimeline[3] * SDspeed,6)})
+CSPlotOrder(LGU2, P6, 51, "Lair1", nil, 1, 20, LGU2, 0, Attack , "Lair1", {998,1412}, 0, nil, P6, {CommandLeastAt(132, "Lair1"), Deaths(P10, AtLeast, LairTimeline[3] * SDspeed,6)})
+CSPlotOrder(LGU3, P7, 46, "Lair1", nil, 1, 20, LGU3, 0, Attack , "Lair1", {998,1412}, 0, nil, P7, {CommandLeastAt(132, "Lair1"), Deaths(P10, AtLeast, LairTimeline[3] * SDspeed,6)})
+CSPlotOrder(LSU, P6, 43, "Lair1", nil, 1, 20, LSU, 0, Attack , "Lair1", {998,1412}, 0, nil, P6, {CommandLeastAt(132, "Lair1"), Deaths(P10, AtLeast, LairTimeline[3] * SDspeed,6)})
+CSPlotOrder(LSU2, P7, 16, "Lair1", nil, 1, 20, LSU2, 0, Attack , "Lair1", {998,1412}, 0, nil, P7, {CommandLeastAt(132, "Lair1"), Deaths(P10, AtLeast, LairTimeline[3] * SDspeed,6)})
+
+---이펙트
+
+CSPlot(LSU, P6, 94, "Lair1", nil, 1, 20, P6, {CommandLeastAt(132, "Lair1"), Deaths(P10, AtLeast, LairTimeline[4] * SDspeed,6)})
+CSPlot(LSU2, P6, 94, "Lair1", nil,1, 20, P6, {CommandLeastAt(132, "Lair1"), Deaths(P10, AtLeast, LairTimeline[5] * SDspeed,6)})
+CSPlot(LSU3, P6, 94, "Lair1", nil, 1, 20, P6, {CommandLeastAt(132, "Lair1"), Deaths(P10, AtLeast, LairTimeline[6] * SDspeed,6)})
+CSPlot(LSU4, P6, 94, "Lair1", nil, 1, 20, P6, {CommandLeastAt(132, "Lair1"), Deaths(P10, AtLeast, LairTimeline[7] * SDspeed,6)})
+CSPlot(LSU5, P6, 94, "Lair1", nil, 1, 20, P6, {CommandLeastAt(132, "Lair1"), Deaths(P10, AtLeast, LairTimeline[8] * SDspeed,6)})
+
+---- 4gen ---
+
+CSPlotOrder(LGU1, P7, 51, "Lair1", nil, 1, 20, LGU1, 0, Attack , "Lair1", {998,1412}, 0, nil, P7, {CommandLeastAt(132, "Lair1"), Deaths(P10, AtLeast, LairTimeline[9] * SDspeed,6)})
+CSPlotOrder(LGU2, P6, 16, "Lair1", nil, 1, 20, LGU2, 0, Attack , "Lair1", {998,1412}, 0, nil, P6, {CommandLeastAt(132, "Lair1"), Deaths(P10, AtLeast, LairTimeline[9] * SDspeed,6)})
+CSPlotOrder(LGU3, P7, 46, "Lair1", nil, 1, 20, LGU3, 0, Attack , "Lair1", {998,1412}, 0, nil, P7, {CommandLeastAt(132, "Lair1"), Deaths(P10, AtLeast, LairTimeline[9] * SDspeed,6)})
+CSPlotOrder(LSU, P6, 43, "Lair1", nil, 1, 20, LSU, 0, Attack , "Lair1", {998,1412}, 0, nil, P6, {CommandLeastAt(132, "Lair1"), Deaths(P10, AtLeast, LairTimeline[9] * SDspeed,6)})
+CSPlotOrderWithProperties(LSU3, P8, 62, "Lair1", nil, 1, 20, LSU3, 0, Attack , "Lair1", {998,1412}, 0, nil, P8, {CommandLeastAt(132, "Lair1"), Deaths(P10, AtLeast, LairTimeline[9] * SDspeed,6)},nil,0,TempProperties)
+
+----- effect with unit ------
+
+CSPlot(sixline, P6, 94, "Lair1", nil, 1, 20, P6, {CommandLeastAt(132, "Lair1"), Deaths(P10, AtLeast, LairTimeline[13] * SDspeed,6)})
+CSPlotOrderWithProperties(sixline, P6, 44, "Lair1", nil, 1, 20, sixline, 0, Attack , "Lair1", {998,1412}, 0, nil, P6, {CommandLeastAt(132, "Lair1"), Deaths(P10, AtLeast, LairTimeline[10] * SDspeed,6)},nil,0,TempProperties)
+
+CSPlot(LGU1, P6, 94, "Lair1", nil, 1, 20, P6, {CommandLeastAt(132, "Lair1"), Deaths(P10, AtLeast, LairTimeline[10] * SDspeed,6)})
+CSPlotOrderWithProperties(LGU1, P6, 43, "Lair1", nil, 1, 20, LGU1, 0, Attack , "Lair1", {998,1412}, 0, nil, P6, {CommandLeastAt(132, "Lair1"), Deaths(P10, AtLeast, LairTimeline[11] * SDspeed,6)},nil,0,TempProperties)
+
+CSPlot(LGU2, P6, 94, "Lair1", nil, 1, 20, P6, {CommandLeastAt(132, "Lair1"), Deaths(P10, AtLeast, LairTimeline[11] * SDspeed,6)})
+CSPlotOrderWithProperties(LGU2, P6, 44, "Lair1", nil, 1, 20, LGU2, 0, Attack , "Lair1", {998,1412}, 0, nil, P6, {CommandLeastAt(132, "Lair1"), Deaths(P10, AtLeast, LairTimeline[12] * SDspeed,6)},nil,0,TempProperties)
+
+CSPlot(LGU3, P6, 94, "Lair1", nil, 1, 20, P6, {CommandLeastAt(132, "Lair1"), Deaths(P10, AtLeast, LairTimeline[12] * SDspeed,6)})
+CSPlotOrderWithProperties(LGU3, P6, 43, "Lair1", nil, 1, 20, LGU3, 0, Attack , "Lair1", {998,1412}, 0, nil, P6, {CommandLeastAt(132, "Lair1"), Deaths(P10, AtLeast, LairTimeline[13] * SDspeed,6)},nil,0,TempProperties)
+
+CSPlot(Eftstar, P6, 94, "Lair1", nil, 1, 20, P6, {CommandLeastAt(132, "Lair1"), Deaths(P10, AtLeast, LairTimeline[14] * SDspeed,6)})
+CSPlotOrderWithProperties(Eftstar, P6, 62, "Lair1", nil, 1, 20, Eftstar, 0, Attack , "Lair1", {998,1412}, 0, nil, P6, {CommandLeastAt(132, "Lair1"), Deaths(P10, AtLeast, LairTimeline[14] * SDspeed,6)},nil,0,TempProperties)
+
+
+Trigger{
+	players = {P6},
+	conditions = {
+		CommandLeastAt(132, "Lair2");
+	},
+	actions = {
+		SetDeaths(P10,Add,1,7);
+		PreserveTrigger();
+	}
+}
+
+---- 1젠 ----
+CSPlotOrder(LGU1, P6, 39, "Lair2", nil, 1, 20, LGU1, 0, Attack , "Lair2", {998,1412}, 0, nil, P6, {CommandLeastAt(132, "Lair2"), Deaths(P10, AtLeast, LairTimeline[1] * SDspeed,7)})
+CSPlotOrder(LGU2, P6, 51, "Lair2", nil, 1, 20, LGU2, 0, Attack , "Lair2", {998,1412}, 0, nil, P6, {CommandLeastAt(132, "Lair2"), Deaths(P10, AtLeast, LairTimeline[1] * SDspeed,7)})
+CSPlotOrder(LGU3, P6, 46, "Lair2", nil, 1, 20, LGU3, 0, Attack , "Lair2", {998,1412}, 0, nil, P6, {CommandLeastAt(132, "Lair2"), Deaths(P10, AtLeast, LairTimeline[1] * SDspeed,7)})
+CSPlotOrder(LSU, P6, 43, "Lair2", nil, 1, 20, LSU, 0, Attack , "Lair2", {998,1412}, 0, nil, P6, {CommandLeastAt(132, "Lair2"), Deaths(P10, AtLeast, LairTimeline[1] * SDspeed,7)})
+CSPlotOrder(LSU2, P6, 44, "Lair2", nil, 1, 20, LSU2, 0, Attack , "Lair2", {998,1412}, 0, nil, P6, {CommandLeastAt(132, "Lair2"), Deaths(P10, AtLeast, LairTimeline[1] * SDspeed,7)})
+
+---2젠
+CSPlotOrder(LGU1, P6, 39, "Lair2", nil, 1, 20, LGU1, 0, Attack , "Lair2", {998,1412}, 0, nil, P6, {CommandLeastAt(132, "Lair2"), Deaths(P10, AtLeast, LairTimeline[2] * SDspeed,7)})
+CSPlotOrder(LGU2, P7, 51, "Lair2", nil, 1, 20, LGU2, 0, Attack , "Lair2", {998,1412}, 0, nil, P7, {CommandLeastAt(132, "Lair2"), Deaths(P10, AtLeast, LairTimeline[2] * SDspeed,7)})
+CSPlotOrder(LGU3, P6, 46, "Lair2", nil, 1, 20, LGU3, 0, Attack , "Lair2", {998,1412}, 0, nil, P6, {CommandLeastAt(132, "Lair2"), Deaths(P10, AtLeast, LairTimeline[2] * SDspeed,7)})
+CSPlotOrder(LSU, P7, 43, "Lair2", nil, 1, 20, LSU, 0, Attack , "Lair2", {998,1412}, 0, nil, P7, {CommandLeastAt(132, "Lair2"), Deaths(P10, AtLeast, LairTimeline[2] * SDspeed,7)})
+CSPlotOrder(LSU2, P6, 44, "Lair2", nil, 1, 20, LSU2, 0, Attack , "Lair2", {998,1412}, 0, nil, P6, {CommandLeastAt(132, "Lair2"), Deaths(P10, AtLeast, LairTimeline[2] * SDspeed,7)})
+--- 3젠
+CSPlotOrder(LGU1, P7, 16, "Lair2", nil, 1, 20, LGU1, 0, Attack , "Lair2", {998,1412}, 0, nil, P7, {CommandLeastAt(132, "Lair2"), Deaths(P10, AtLeast, LairTimeline[3] * SDspeed,7)})
+CSPlotOrder(LGU2, P6, 51, "Lair2", nil, 1, 20, LGU2, 0, Attack , "Lair2", {998,1412}, 0, nil, P6, {CommandLeastAt(132, "Lair2"), Deaths(P10, AtLeast, LairTimeline[3] * SDspeed,7)})
+CSPlotOrder(LGU3, P7, 46, "Lair2", nil, 1, 20, LGU3, 0, Attack , "Lair2", {998,1412}, 0, nil, P7, {CommandLeastAt(132, "Lair2"), Deaths(P10, AtLeast, LairTimeline[3] * SDspeed,7)})
+CSPlotOrder(LSU, P6, 43, "Lair2", nil, 1, 20, LSU, 0, Attack , "Lair2", {998,1412}, 0, nil, P6, {CommandLeastAt(132, "Lair2"), Deaths(P10, AtLeast, LairTimeline[3] * SDspeed,7)})
+CSPlotOrder(LSU2, P7, 16, "Lair2", nil, 1, 20, LSU2, 0, Attack , "Lair2", {998,1412}, 0, nil, P7, {CommandLeastAt(132, "Lair2"), Deaths(P10, AtLeast, LairTimeline[3] * SDspeed,7)})
+
+---이펙트
+
+CSPlot(LSU, P6, 94, "Lair2", nil, 1, 20, P6, {CommandLeastAt(132, "Lair2"), Deaths(P10, AtLeast, LairTimeline[4] * SDspeed,7)})
+CSPlot(LSU2, P6, 94, "Lair2", nil,1, 20, P6, {CommandLeastAt(132, "Lair2"), Deaths(P10, AtLeast, LairTimeline[5] * SDspeed,7)})
+CSPlot(LSU3, P6, 94, "Lair2", nil, 1, 20, P6, {CommandLeastAt(132, "Lair2"), Deaths(P10, AtLeast, LairTimeline[6] * SDspeed,7)})
+CSPlot(LSU4, P6, 94, "Lair2", nil, 1, 20, P6, {CommandLeastAt(132, "Lair2"), Deaths(P10, AtLeast, LairTimeline[7] * SDspeed,7)})
+CSPlot(LSU5, P6, 94, "Lair2", nil, 1, 20, P6, {CommandLeastAt(132, "Lair2"), Deaths(P10, AtLeast, LairTimeline[8] * SDspeed,7)})
+
+---- 4gen ---
+
+CSPlotOrder(LGU1, P7, 51, "Lair2", nil, 1, 20, LGU1, 0, Attack , "Lair2", {998,1412}, 0, nil, P7, {CommandLeastAt(132, "Lair2"), Deaths(P10, AtLeast, LairTimeline[9] * SDspeed,7)})
+CSPlotOrder(LGU2, P6, 16, "Lair2", nil, 1, 20, LGU2, 0, Attack , "Lair2", {998,1412}, 0, nil, P6, {CommandLeastAt(132, "Lair2"), Deaths(P10, AtLeast, LairTimeline[9] * SDspeed,7)})
+CSPlotOrder(LGU3, P7, 46, "Lair2", nil, 1, 20, LGU3, 0, Attack , "Lair2", {998,1412}, 0, nil, P7, {CommandLeastAt(132, "Lair2"), Deaths(P10, AtLeast, LairTimeline[9] * SDspeed,7)})
+CSPlotOrder(LSU, P6, 43, "Lair2", nil, 1, 20, LSU, 0, Attack , "Lair2", {998,1412}, 0, nil, P6, {CommandLeastAt(132, "Lair2"), Deaths(P10, AtLeast, LairTimeline[9] * SDspeed,7)})
+CSPlotOrderWithProperties(LSU3, P8, 62, "Lair2", nil, 1, 20, LSU3, 0, Attack , "Lair2", {998,1412}, 0, nil, P8, {CommandLeastAt(132, "Lair2"), Deaths(P10, AtLeast, LairTimeline[9] * SDspeed,7)},nil,0,TempProperties)
+
+----- effect with unit ------
+
+CSPlot(sixline, P6, 94, "Lair2", nil, 1, 20, P6, {CommandLeastAt(132, "Lair2"), Deaths(P10, AtLeast, LairTimeline[13] * SDspeed,7)})
+CSPlotOrderWithProperties(sixline, P6, 44, "Lair2", nil, 1, 20, sixline, 0, Attack , "Lair2", {998,1412}, 0, nil, P6, {CommandLeastAt(132, "Lair2"), Deaths(P10, AtLeast, LairTimeline[10] * SDspeed,7)},nil,0,TempProperties)
+
+CSPlot(LGU1, P6, 94, "Lair2", nil, 1, 20, P6, {CommandLeastAt(132, "Lair2"), Deaths(P10, AtLeast, LairTimeline[10] * SDspeed,7)})
+CSPlotOrderWithProperties(LGU1, P6, 43, "Lair2", nil, 1, 20, LGU1, 0, Attack , "Lair2", {998,1412}, 0, nil, P6, {CommandLeastAt(132, "Lair2"), Deaths(P10, AtLeast, LairTimeline[11] * SDspeed,7)},nil,0,TempProperties)
+
+CSPlot(LGU2, P6, 94, "Lair2", nil, 1, 20, P6, {CommandLeastAt(132, "Lair2"), Deaths(P10, AtLeast, LairTimeline[11] * SDspeed,7)})
+CSPlotOrderWithProperties(LGU2, P6, 44, "Lair2", nil, 1, 20, LGU2, 0, Attack , "Lair2", {998,1412}, 0, nil, P6, {CommandLeastAt(132, "Lair2"), Deaths(P10, AtLeast, LairTimeline[12] * SDspeed,7)},nil,0,TempProperties)
+
+CSPlot(LGU3, P6, 94, "Lair2", nil, 1, 20, P6, {CommandLeastAt(132, "Lair2"), Deaths(P10, AtLeast, LairTimeline[12] * SDspeed,7)})
+CSPlotOrderWithProperties(LGU3, P6, 43, "Lair2", nil, 1, 20, LGU3, 0, Attack , "Lair2", {998,1412}, 0, nil, P6, {CommandLeastAt(132, "Lair2"), Deaths(P10, AtLeast, LairTimeline[13] * SDspeed,7)},nil,0,TempProperties)
+
+CSPlot(Eftstar, P6, 94, "Lair2", nil, 1, 20, P6, {CommandLeastAt(132, "Lair2"), Deaths(P10, AtLeast, LairTimeline[14] * SDspeed,7)})
+CSPlotOrderWithProperties(Eftstar, P6, 62, "Lair2", nil, 1, 20, Eftstar, 0, Attack , "Lair2", {998,1412}, 0, nil, P6, {CommandLeastAt(132, "Lair2"), Deaths(P10, AtLeast, LairTimeline[14] * SDspeed,7)},nil,0,TempProperties)
+
+Trigger{
+	players = {P6},
+	conditions = {
+		CommandLeastAt(132, "Lair3");
+	},
+	actions = {
+		SetDeaths(P10,Add,1,8);
+		PreserveTrigger();
+	}
+}
+
+---- 1젠 ----
+CSPlotOrder(LGU1, P6, 39, "Lair3", nil, 1, 20, LGU1, 0, Attack , "Lair3", {998,1412}, 0, nil, P6, {CommandLeastAt(132, "Lair3"), Deaths(P10, AtLeast, LairTimeline[1] * SDspeed,8)})
+CSPlotOrder(LGU2, P6, 51, "Lair3", nil, 1, 20, LGU2, 0, Attack , "Lair3", {998,1412}, 0, nil, P6, {CommandLeastAt(132, "Lair3"), Deaths(P10, AtLeast, LairTimeline[1] * SDspeed,8)})
+CSPlotOrder(LGU3, P6, 46, "Lair3", nil, 1, 20, LGU3, 0, Attack , "Lair3", {998,1412}, 0, nil, P6, {CommandLeastAt(132, "Lair3"), Deaths(P10, AtLeast, LairTimeline[1] * SDspeed,8)})
+CSPlotOrder(LSU, P6, 43, "Lair3", nil, 1, 20, LSU, 0, Attack , "Lair3", {998,1412}, 0, nil, P6, {CommandLeastAt(132, "Lair3"), Deaths(P10, AtLeast, LairTimeline[1] * SDspeed,8)})
+CSPlotOrder(LSU2, P6, 44, "Lair3", nil, 1, 20, LSU2, 0, Attack , "Lair3", {998,1412}, 0, nil, P6, {CommandLeastAt(132, "Lair3"), Deaths(P10, AtLeast, LairTimeline[1] * SDspeed,8)})
+
+---2젠
+CSPlotOrder(LGU1, P6, 39, "Lair3", nil, 1, 20, LGU1, 0, Attack , "Lair3", {998,1412}, 0, nil, P6, {CommandLeastAt(132, "Lair3"), Deaths(P10, AtLeast, LairTimeline[2] * SDspeed,8)})
+CSPlotOrder(LGU2, P7, 51, "Lair3", nil, 1, 20, LGU2, 0, Attack , "Lair3", {998,1412}, 0, nil, P7, {CommandLeastAt(132, "Lair3"), Deaths(P10, AtLeast, LairTimeline[2] * SDspeed,8)})
+CSPlotOrder(LGU3, P6, 46, "Lair3", nil, 1, 20, LGU3, 0, Attack , "Lair3", {998,1412}, 0, nil, P6, {CommandLeastAt(132, "Lair3"), Deaths(P10, AtLeast, LairTimeline[2] * SDspeed,8)})
+CSPlotOrder(LSU, P7, 43, "Lair3", nil, 1, 20, LSU, 0, Attack , "Lair3", {998,1412}, 0, nil, P7, {CommandLeastAt(132, "Lair3"), Deaths(P10, AtLeast, LairTimeline[2] * SDspeed,8)})
+CSPlotOrder(LSU2, P6, 44, "Lair3", nil, 1, 20, LSU2, 0, Attack , "Lair3", {998,1412}, 0, nil, P6, {CommandLeastAt(132, "Lair3"), Deaths(P10, AtLeast, LairTimeline[2] * SDspeed,8)})
+--- 3젠
+CSPlotOrder(LGU1, P7, 16, "Lair3", nil, 1, 20, LGU1, 0, Attack , "Lair3", {998,1412}, 0, nil, P7, {CommandLeastAt(132, "Lair3"), Deaths(P10, AtLeast, LairTimeline[3] * SDspeed,8)})
+CSPlotOrder(LGU2, P6, 51, "Lair3", nil, 1, 20, LGU2, 0, Attack , "Lair3", {998,1412}, 0, nil, P6, {CommandLeastAt(132, "Lair3"), Deaths(P10, AtLeast, LairTimeline[3] * SDspeed,8)})
+CSPlotOrder(LGU3, P7, 46, "Lair3", nil, 1, 20, LGU3, 0, Attack , "Lair3", {998,1412}, 0, nil, P7, {CommandLeastAt(132, "Lair3"), Deaths(P10, AtLeast, LairTimeline[3] * SDspeed,8)})
+CSPlotOrder(LSU, P6, 43, "Lair3", nil, 1, 20, LSU, 0, Attack , "Lair3", {998,1412}, 0, nil, P6, {CommandLeastAt(132, "Lair3"), Deaths(P10, AtLeast, LairTimeline[3] * SDspeed,8)})
+CSPlotOrder(LSU2, P7, 16, "Lair3", nil, 1, 20, LSU2, 0, Attack , "Lair3", {998,1412}, 0, nil, P7, {CommandLeastAt(132, "Lair3"), Deaths(P10, AtLeast, LairTimeline[3] * SDspeed,8)})
+
+---이펙트
+
+CSPlot(LSU, P6, 94, "Lair3", nil, 1, 20, P6, {CommandLeastAt(132, "Lair3"), Deaths(P10, AtLeast, LairTimeline[4] * SDspeed,8)})
+CSPlot(LSU2, P6, 94, "Lair3", nil,1, 20, P6, {CommandLeastAt(132, "Lair3"), Deaths(P10, AtLeast, LairTimeline[5] * SDspeed,8)})
+CSPlot(LSU3, P6, 94, "Lair3", nil, 1, 20, P6, {CommandLeastAt(132, "Lair3"), Deaths(P10, AtLeast, LairTimeline[6] * SDspeed,8)})
+CSPlot(LSU4, P6, 94, "Lair3", nil, 1, 20, P6, {CommandLeastAt(132, "Lair3"), Deaths(P10, AtLeast, LairTimeline[7] * SDspeed,8)})
+CSPlot(LSU5, P6, 94, "Lair3", nil, 1, 20, P6, {CommandLeastAt(132, "Lair3"), Deaths(P10, AtLeast, LairTimeline[8] * SDspeed,8)})
+
+---- 4gen ---
+
+CSPlotOrder(LGU1, P7, 51, "Lair3", nil, 1, 20, LGU1, 0, Attack , "Lair3", {998,1412}, 0, nil, P7, {CommandLeastAt(132, "Lair3"), Deaths(P10, AtLeast, LairTimeline[9] * SDspeed,8)})
+CSPlotOrder(LGU2, P6, 16, "Lair3", nil, 1, 20, LGU2, 0, Attack , "Lair3", {998,1412}, 0, nil, P6, {CommandLeastAt(132, "Lair3"), Deaths(P10, AtLeast, LairTimeline[9] * SDspeed,8)})
+CSPlotOrder(LGU3, P7, 46, "Lair3", nil, 1, 20, LGU3, 0, Attack , "Lair3", {998,1412}, 0, nil, P7, {CommandLeastAt(132, "Lair3"), Deaths(P10, AtLeast, LairTimeline[9] * SDspeed,8)})
+CSPlotOrder(LSU, P6, 43, "Lair3", nil, 1, 20, LSU, 0, Attack , "Lair3", {998,1412}, 0, nil, P6, {CommandLeastAt(132, "Lair3"), Deaths(P10, AtLeast, LairTimeline[9] * SDspeed,8)})
+CSPlotOrderWithProperties(LSU3, P8, 62, "Lair3", nil, 1, 20, LSU3, 0, Attack , "Lair3", {998,1412}, 0, nil, P8, {CommandLeastAt(132, "Lair3"), Deaths(P10, AtLeast, LairTimeline[9] * SDspeed,8)},nil,0,TempProperties)
+
+----- effect with unit ------
+
+CSPlot(sixline, P6, 94, "Lair3", nil, 1, 20, P6, {CommandLeastAt(132, "Lair3"), Deaths(P10, AtLeast, LairTimeline[13] * SDspeed,8)})
+CSPlotOrderWithProperties(sixline, P6, 44, "Lair3", nil, 1, 20, sixline, 0, Attack , "Lair3", {998,1412}, 0, nil, P6, {CommandLeastAt(132, "Lair3"), Deaths(P10, AtLeast, LairTimeline[10] * SDspeed,6)},nil,0,TempProperties)
+
+CSPlot(LGU1, P6, 94, "Lair3", nil, 1, 20, P6, {CommandLeastAt(132, "Lair3"), Deaths(P10, AtLeast, LairTimeline[10] * SDspeed,8)})
+CSPlotOrderWithProperties(LGU1, P6, 43, "Lair3", nil, 1, 20, LGU1, 0, Attack , "Lair3", {998,1412}, 0, nil, P6, {CommandLeastAt(132, "Lair3"), Deaths(P10, AtLeast, LairTimeline[11] * SDspeed,6)},nil,0,TempProperties)
+
+CSPlot(LGU2, P6, 94, "Lair3", nil, 1, 20, P6, {CommandLeastAt(132, "Lair3"), Deaths(P10, AtLeast, LairTimeline[11] * SDspeed,8)})
+CSPlotOrderWithProperties(LGU2, P6, 44, "Lair3", nil, 1, 20, LGU2, 0, Attack , "Lair3", {998,1412}, 0, nil, P6, {CommandLeastAt(132, "Lair3"), Deaths(P10, AtLeast, LairTimeline[12] * SDspeed,6)},nil,0,TempProperties)
+
+CSPlot(LGU3, P6, 94, "Lair3", nil, 1, 20, P6, {CommandLeastAt(132, "Lair3"), Deaths(P10, AtLeast, LairTimeline[12] * SDspeed,8)})
+CSPlotOrderWithProperties(LGU3, P6, 43, "Lair3", nil, 1, 20, LGU3, 0, Attack , "Lair3", {998,1412}, 0, nil, P6, {CommandLeastAt(132, "Lair3"), Deaths(P10, AtLeast, LairTimeline[13] * SDspeed,6)},nil,0,TempProperties)
+
+CSPlot(Eftstar, P6, 94, "Lair3", nil, 1, 20, P6, {CommandLeastAt(132, "Lair3"), Deaths(P10, AtLeast, LairTimeline[14] * SDspeed,8)})
+CSPlotOrderWithProperties(Eftstar, P6, 62, "Lair3", nil, 1, 20, Eftstar, 0, Attack , "Lair3", {998,1412}, 0, nil, P6, {CommandLeastAt(132, "Lair3"), Deaths(P10, AtLeast, LairTimeline[14] * SDspeed,8)},nil,0,TempProperties)
+
+
+Trigger{
+	players = {P7},
+	conditions = {
+		Deaths(P7, AtLeast, 1, 151);
+	},
+	actions = {
+		SetDeaths(P9,Add,1,2);
+		PreserveTrigger();
+	}
+}
+
+Trigger{
+	players = {P7},
+	conditions = {
+		Deaths(P7, AtLeast, 1, 151);
+	},
+	actions = {
+		Order("Men", P7, "Anywhere", Attack, "bunkerHeal");
+	}
+}
+
+
+
+for i = 1, 24 do
+	GLi = CSMakeLineX(1,60,0+15*i,7,1) -- 원그리기 1
+	CSPlot(GLi,P6,88,"celebrate1",nil,1,32,P7,{Deaths(P7, AtLeast, 1, 151),Deaths(P9,Exactly,4*i,2)})
 	
--- 	CSPlot(GLi,P6,60,"Hat1",nil,1,32,P7,{CommandLeastAt(131, "Hat1"),Deaths(P9,Exactly,800+4*i,0)})
+	CSPlot(GLi,P6,60,"celebrate1",nil,1,32,P7,{Deaths(P7, AtLeast, 1, 151),Deaths(P9,Exactly,800+4*i,2)})
 	
--- 	end
+	end
 	
--- 	CSPlot(CX2,P6,76,"Hat1",nil,1,32,P7,{CommandLeastAt(131, "Hat1"),Deaths(P9,Exactly,96,0)}) --외접원
--- 	CSPlot(CX2,P6,63,"Hat1",nil,1,32,P7,{CommandLeastAt(131, "Hat1"),Deaths(P9,Exactly,896,0)}) --외접원
+	CSPlot(CX2,P6,76,"celebrate1",nil,1,32,P7,{Deaths(P7, AtLeast, 1, 151),Deaths(P9,Exactly,96,2)}) --외접원
+	CSPlot(CX2,P6,63,"celebrate1",nil,1,32,P7,{Deaths(P7, AtLeast, 1, 151),Deaths(P9,Exactly,896,2)}) --외접원
 	
 
--- Trigger { -- 6시 순대 오더 1
--- players = {P7},
--- conditions = {
--- 		CommandLeastAt(131, "Hat1");
--- 		Deaths(P9,Exactly,100,0);
--- 	},
--- actions = {
--- 		Order(88,P6,"Hat1",Attack,"HealZone");
--- 		Order(76,P6,"Hat1",Attack,"HealZone");
--- 	}
--- }
+Trigger { -- 6시 순대 오더 1
+players = {P7},
+conditions = {
+		Deaths(P7, AtLeast, 1, 151);
+		Deaths(P9,Exactly,100,2);
+	},
+actions = {
+		Order("Any unit",P6,"celebrate1",Attack,"HealZone");
+	}
+}
 
--- for j = 1, 24 do
--- GLj = CSMakeLineX(1,60,360-15*j,11,1) -- 원그리기 2
--- CSPlot(GLj,P6,89,"Hat1",nil,1,32,P7,{CommandLeastAt(131, "Hat1"),Deaths(P9,Exactly,400+4*j,0)})
+for j = 1, 24 do
+GLj = CSMakeLineX(1,60,360-15*j,11,1) -- 원그리기 2
+CSPlot(GLj,P6,89,"celebrate1",nil,1,32,P7,{Deaths(P7, AtLeast, 1, 151),Deaths(P9,Exactly,400+4*j,2)})
 
--- CSPlot(GLj,P6,64,"Hat1",nil,1,32,P7,{CommandLeastAt(131, "Hat1"),Deaths(P9,Exactly,1200+4*j,0)})
--- end
+CSPlot(GLj,P6,64,"celebrate1",nil,1,32,P7,{Deaths(P7, AtLeast, 1, 151),Deaths(P9,Exactly,1200+4*j,2)})
+end
 
--- Trigger { -- 6시 순대 오더 2
--- 	players = {P7},
--- 	conditions = {
--- 			CommandLeastAt(131, "Hat1");
--- 			Deaths(P9,Exactly,500,0);
--- 		},
--- 	actions = {
--- 			Order(89,P6,"Hat1",Attack,"HealZone");
--- 			Order(65,P6,"Hat1",Attack,"HealZone");
--- 		}
--- }
+Trigger { -- 6시 순대 오더 2
+	players = {P7},
+	conditions = {
+			Deaths(P7, AtLeast, 1, 151);
+			Deaths(P9,Exactly,500,2);
+		},
+	actions = {
+			Order("Any unit",P6,"celebrate1",Attack,"HealZone");
+		}
+}
 
--- Trigger { -- 6시 순대 오더 4
--- 	players = {P7},
--- 	conditions = {
--- 			CommandLeastAt(131, "Hat1");
--- 			Deaths(P9,Exactly,1300,0);
--- 		},
--- 	actions = {
--- 			Order(64,P6,"Hat1",Attack,"HealZone");
--- 			Order(5,P6,"Hat1",Attack,"HealZone");
--- 		}
--- }
--- function SHBF(Y) return Y end
--- GA1 = CS_MoveXY(CS_InvertXY(CS_FillGradA(0,{0,512},270,18,"SHBF",0),270),-500,0) --A그라데이션
--- GA1D = CS_RatioXY(CS_MoveXY(CS_InvertXY(CS_FillGradA(0,{0,512},270,18,"SHBF",0),270),-500,0),0.1,0.1) --도착지 도형
--- CSPlotOrder(GA1,P8,25,"Hat1",nil,1,64,GA1D,0,Attack,"HealZone",nil,64,nil,P7,{CommandLeastAt(131,"Hat1"),Deaths(P9,Exactly,1500,0)})
--- CSPlotOrder(GA1,P8,96,"Hat1",nil,1,64,GA1D,0,Attack,"HealZone",nil,64,nil,P7,{CommandLeastAt(131,"Hat1"),Deaths(P9,Exactly,1500,0)})
+Trigger { -- 6시 순대 오더 4
+	players = {P7},
+	conditions = {
+			Deaths(P7, AtLeast, 1, 151);
+			Deaths(P9,Exactly,1300,2);
+		},
+	actions = {
+			Order("Any unit",force2,"celebrate1",Attack,"HealZone");
+		}
+}
+function SHBF(Y) return Y end
+GA1 = CS_MoveXY(CS_InvertXY(CS_FillGradA(0,{0,512},270,18,"SHBF",0),270),-500,0) --A그라데이션
+GA1D = CS_RatioXY(CS_MoveXY(CS_InvertXY(CS_FillGradA(0,{0,512},270,18,"SHBF",0),270),-500,0),0.1,0.1) --도착지 도형
+CSPlotOrder(GA1,P6,25,"celebrate1",nil,1,64,GA1D,0,Attack,"HealZone",nil,64,nil,P7,{CommandLeastAt(131,"celebrate1"),Deaths(P9,Exactly,1500,2)})
+CSPlotOrder(GA1,P6,96,"celebrate1",nil,1,64,GA1D,0,Attack,"HealZone",nil,64,nil,P7,{CommandLeastAt(131,"celebrate1"),Deaths(P9,Exactly,1500,2)})
+
+
+
+
 
 
 CIfEnd()
