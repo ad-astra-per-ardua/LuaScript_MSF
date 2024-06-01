@@ -11,6 +11,8 @@ Include_DataTransfer()
 CJumpEnd(AllPlayers,0)
 
 Nextptrs = CreateVar(FP)
+CanWT = CreateCcode()
+CanCT = CreateCcode()
 NoAirCollisionX(FP)
 NoAirCollisionX(P7)
 NoAirCollisionX(P8)
@@ -19,7 +21,9 @@ function RotatePlayer(Print,Players,RecoverCP)
 	return CopyCpAction(Print,Players,RecoverCP)
 end
 -- 여기에 변수, 배열 및 Include류 함수 선언 --
-
+function StrDesignX(Str)
+	return "\x13\x07。\x18˙\x0F+\x1C˚ "..Str.." \x1C。\x0F+\x18.\x07˚"
+end
 
 
 Trigger{
@@ -103,6 +107,27 @@ Trigger { --
 	},
 	flag = {Preserved}
 }
+CanText1 = "\x13\x04\n\x0D\x0D\x13\x04● ● ● \x08ＤＡＮＧＥＲ\x04 ● ● ●\n\x14\n\x14\n"
+CanText2 = StrDesignX("\x04맵상의 유닛이 \x08１5００\x04기 이상 있습니다.").."\n"..StrDesignX("\x08캔낫\x04이 \x073회 이상\x04 걸릴 경우 \x10게임\x04에서 \x06패배\x04합니다.\x04\n")
+CanText3 = "\x13\x04\n\x0D\x0D\x13\x04● ● ● \x08ＤＡＮＧＥＲ\x04 ● ● ●\n\x14\n\x14\n"
+
+
+Trigger{
+	players = {Force1},
+	conditions = {
+		Memory(0x6283F0, AtLeast, 1500),
+	},
+	actions = {
+		DisplayText(CanText1, 4);
+		DisplayText(CanText2, 4);
+		DisplayText(CanText3, 4);
+		PlayWAV("sound\\Terran\\RAYNORM\\URaPss02.WAV");
+		PlayWAV("sound\\Terran\\RAYNORM\\URaPss02.WAV");
+		Wait(5000);
+		PreserveTrigger();
+	},
+}
+
 
 Trigger { -- 컴퓨터 리더보드 비활성화
 	players = {P6},
@@ -866,9 +891,9 @@ Trigger { -- 경우 3
 		Deaths(CurrentPlayer, Exactly, 0, 158);
 	},
 	actions = {
-		SetDeaths(CurrentPlayer, SetTo, 1734, "Unused Terran Bldg type   2");
-		PlayWAV("staredit\\wav\\L1.ogg");
-		PlayWAV("staredit\\wav\\L1.ogg");
+		SetDeaths(CurrentPlayer, SetTo, 1054, "Unused Terran Bldg type   2");
+		PlayWAV("staredit\\wav\\hive.ogg");
+		PlayWAV("staredit\\wav\\hive.ogg");
 		PreserveTrigger();
 	},
 }
@@ -917,6 +942,19 @@ Trigger { -- Link with variation with trigger
 		DisplayText("Lair Destroyed! + 50000 Points");
 		SetScore(CurrentPlayer, Add, 50000, Kills);
 		SetDeaths(CurrentPlayer, SetTo, 1, "Unused Zerg Bldg 5");
+		PreserveTrigger();
+	},
+}
+
+Trigger { -- Link with variation with trigger
+	players = {Force1},
+	conditions = {
+		Deaths(P6, AtLeast, 1, 133);
+	},
+	actions = {
+		DisplayText("Hive Destroyed! + 60000 Points");
+		SetScore(CurrentPlayer, Add, 60000, Kills);
+		SetDeaths(CurrentPlayer, SetTo, 1, "Unused Terran Bldg type   1");
 		PreserveTrigger();
 	},
 }
@@ -1724,24 +1762,24 @@ Trigger{
 	}
 }
 ---- 1젠 ----
-CSPlotOrder(LGU1, P6, 39, "Lair1", nil, 1, 20, LGU1, 0, Attack , "Lair1", {998,1412}, 0, nil, P6, {CommandLeastAt(132, "Lair1"), Deaths(P10, AtLeast, LairTimeline[1] * SDspeed,6)})
-CSPlotOrder(LGU2, P6, 51, "Lair1", nil, 1, 20, LGU2, 0, Attack , "Lair1", {998,1412}, 0, nil, P6, {CommandLeastAt(132, "Lair1"), Deaths(P10, AtLeast, LairTimeline[1] * SDspeed,6)})
-CSPlotOrder(LGU3, P6, 46, "Lair1", nil, 1, 20, LGU3, 0, Attack , "Lair1", {998,1412}, 0, nil, P6, {CommandLeastAt(132, "Lair1"), Deaths(P10, AtLeast, LairTimeline[1] * SDspeed,6)})
-CSPlotOrder(LSU, P6, 43, "Lair1", nil, 1, 20, LSU, 0, Attack , "Lair1", {998,1412}, 0, nil, P6, {CommandLeastAt(132, "Lair1"), Deaths(P10, AtLeast, LairTimeline[1] * SDspeed,6)})
-CSPlotOrder(LSU2, P6, 44, "Lair1", nil, 1, 20, LSU2, 0, Attack , "Lair1", {998,1412}, 0, nil, P6, {CommandLeastAt(132, "Lair1"), Deaths(P10, AtLeast, LairTimeline[1] * SDspeed,6)})
+CSPlotOrder(LGU1, P6, 39, "Lair1", nil, 1, 20, LGU1, 0, Attack , "bunkerHeal", nil, 0, nil, P6, {CommandLeastAt(132, "Lair1"), Deaths(P10, AtLeast, LairTimeline[1] * SDspeed,6)})
+CSPlotOrder(LGU2, P6, 51, "Lair1", nil, 1, 20, LGU2, 0, Attack , "bunkerHeal", nil, 0, nil, P6, {CommandLeastAt(132, "Lair1"), Deaths(P10, AtLeast, LairTimeline[1] * SDspeed,6)})
+CSPlotOrder(LGU3, P6, 46, "Lair1", nil, 1, 20, LGU3, 0, Attack , "bunkerHeal", nil, 0, nil, P6, {CommandLeastAt(132, "Lair1"), Deaths(P10, AtLeast, LairTimeline[1] * SDspeed,6)})
+CSPlotOrder(LSU, P6, 43, "Lair1", nil, 1, 20, LSU, 0, Attack , "bunkerHeal", nil, 0, nil, P6, {CommandLeastAt(132, "Lair1"), Deaths(P10, AtLeast, LairTimeline[1] * SDspeed,6)})
+CSPlotOrder(LSU2, P6, 44, "Lair1", nil, 1, 20, LSU2, 0, Attack , "bunkerHeal", nil, 0, nil, P6, {CommandLeastAt(132, "Lair1"), Deaths(P10, AtLeast, LairTimeline[1] * SDspeed,6)})
 
 ---2젠
-CSPlotOrder(LGU1, P6, 39, "Lair1", nil, 1, 20, LGU1, 0, Attack , "Lair1", {998,1412}, 0, nil, P6, {CommandLeastAt(132, "Lair1"), Deaths(P10, AtLeast, LairTimeline[2] * SDspeed,6)})
-CSPlotOrder(LGU2, P7, 51, "Lair1", nil, 1, 20, LGU2, 0, Attack , "Lair1", {998,1412}, 0, nil, P7, {CommandLeastAt(132, "Lair1"), Deaths(P10, AtLeast, LairTimeline[2] * SDspeed,6)})
-CSPlotOrder(LGU3, P6, 46, "Lair1", nil, 1, 20, LGU3, 0, Attack , "Lair1", {998,1412}, 0, nil, P6, {CommandLeastAt(132, "Lair1"), Deaths(P10, AtLeast, LairTimeline[2] * SDspeed,6)})
-CSPlotOrder(LSU, P7, 43, "Lair1", nil, 1, 20, LSU, 0, Attack , "Lair1", {998,1412}, 0, nil, P7, {CommandLeastAt(132, "Lair1"), Deaths(P10, AtLeast, LairTimeline[2] * SDspeed,6)})
-CSPlotOrder(LSU2, P6, 44, "Lair1", nil, 1, 20, LSU2, 0, Attack , "Lair1", {998,1412}, 0, nil, P6, {CommandLeastAt(132, "Lair1"), Deaths(P10, AtLeast, LairTimeline[2] * SDspeed,6)})
+CSPlotOrder(LGU1, P6, 39, "Lair1", nil, 1, 20, LGU1, 0, Attack , "bunkerHeal", nil, 0, nil, P6, {CommandLeastAt(132, "Lair1"), Deaths(P10, AtLeast, LairTimeline[2] * SDspeed,6)})
+CSPlotOrder(LGU2, P7, 51, "Lair1", nil, 1, 20, LGU2, 0, Attack , "bunkerHeal", nil, 0, nil, P7, {CommandLeastAt(132, "Lair1"), Deaths(P10, AtLeast, LairTimeline[2] * SDspeed,6)})
+CSPlotOrder(LGU3, P6, 46, "Lair1", nil, 1, 20, LGU3, 0, Attack , "bunkerHeal", nil, 0, nil, P6, {CommandLeastAt(132, "Lair1"), Deaths(P10, AtLeast, LairTimeline[2] * SDspeed,6)})
+CSPlotOrder(LSU, P7, 43, "Lair1", nil, 1, 20, LSU, 0, Attack , "bunkerHeal", nil, 0, nil, P7, {CommandLeastAt(132, "Lair1"), Deaths(P10, AtLeast, LairTimeline[2] * SDspeed,6)})
+CSPlotOrder(LSU2, P6, 44, "Lair1", nil, 1, 20, LSU2, 0, Attack , "bunkerHeal", nil, 0, nil, P6, {CommandLeastAt(132, "Lair1"), Deaths(P10, AtLeast, LairTimeline[2] * SDspeed,6)})
 --- 3젠
-CSPlotOrder(LGU1, P7, 16, "Lair1", nil, 1, 20, LGU1, 0, Attack , "Lair1", {998,1412}, 0, nil, P7, {CommandLeastAt(132, "Lair1"), Deaths(P10, AtLeast, LairTimeline[3] * SDspeed,6)})
-CSPlotOrder(LGU2, P6, 51, "Lair1", nil, 1, 20, LGU2, 0, Attack , "Lair1", {998,1412}, 0, nil, P6, {CommandLeastAt(132, "Lair1"), Deaths(P10, AtLeast, LairTimeline[3] * SDspeed,6)})
-CSPlotOrder(LGU3, P7, 46, "Lair1", nil, 1, 20, LGU3, 0, Attack , "Lair1", {998,1412}, 0, nil, P7, {CommandLeastAt(132, "Lair1"), Deaths(P10, AtLeast, LairTimeline[3] * SDspeed,6)})
-CSPlotOrder(LSU, P6, 43, "Lair1", nil, 1, 20, LSU, 0, Attack , "Lair1", {998,1412}, 0, nil, P6, {CommandLeastAt(132, "Lair1"), Deaths(P10, AtLeast, LairTimeline[3] * SDspeed,6)})
-CSPlotOrder(LSU2, P7, 16, "Lair1", nil, 1, 20, LSU2, 0, Attack , "Lair1", {998,1412}, 0, nil, P7, {CommandLeastAt(132, "Lair1"), Deaths(P10, AtLeast, LairTimeline[3] * SDspeed,6)})
+CSPlotOrder(LGU1, P7, 16, "Lair1", nil, 1, 20, LGU1, 0, Attack , "bunkerHeal", nil, 0, nil, P7, {CommandLeastAt(132, "Lair1"), Deaths(P10, AtLeast, LairTimeline[3] * SDspeed,6)})
+CSPlotOrder(LGU2, P6, 51, "Lair1", nil, 1, 20, LGU2, 0, Attack , "bunkerHeal", nil, 0, nil, P6, {CommandLeastAt(132, "Lair1"), Deaths(P10, AtLeast, LairTimeline[3] * SDspeed,6)})
+CSPlotOrder(LGU3, P7, 46, "Lair1", nil, 1, 20, LGU3, 0, Attack , "bunkerHeal", nil, 0, nil, P7, {CommandLeastAt(132, "Lair1"), Deaths(P10, AtLeast, LairTimeline[3] * SDspeed,6)})
+CSPlotOrder(LSU, P6, 43, "Lair1", nil, 1, 20, LSU, 0, Attack , "bunkerHeal", nil, 0, nil, P6, {CommandLeastAt(132, "Lair1"), Deaths(P10, AtLeast, LairTimeline[3] * SDspeed,6)})
+CSPlotOrder(LSU2, P7, 16, "Lair1", nil, 1, 20, LSU2, 0, Attack , "bunkerHeal", nil, 0, nil, P7, {CommandLeastAt(132, "Lair1"), Deaths(P10, AtLeast, LairTimeline[3] * SDspeed,6)})
 
 ---이펙트
 
@@ -1753,28 +1791,28 @@ CSPlot(LSU5, P6, 94, "Lair1", nil, 1, 20, P6, {CommandLeastAt(132, "Lair1"), Dea
 
 ---- 4gen ---
 
-CSPlotOrder(LGU1, P7, 51, "Lair1", nil, 1, 20, LGU1, 0, Attack , "Lair1", {998,1412}, 0, nil, P7, {CommandLeastAt(132, "Lair1"), Deaths(P10, AtLeast, LairTimeline[9] * SDspeed,6)})
-CSPlotOrder(LGU2, P6, 16, "Lair1", nil, 1, 20, LGU2, 0, Attack , "Lair1", {998,1412}, 0, nil, P6, {CommandLeastAt(132, "Lair1"), Deaths(P10, AtLeast, LairTimeline[9] * SDspeed,6)})
-CSPlotOrder(LGU3, P7, 46, "Lair1", nil, 1, 20, LGU3, 0, Attack , "Lair1", {998,1412}, 0, nil, P7, {CommandLeastAt(132, "Lair1"), Deaths(P10, AtLeast, LairTimeline[9] * SDspeed,6)})
-CSPlotOrder(LSU, P6, 43, "Lair1", nil, 1, 20, LSU, 0, Attack , "Lair1", {998,1412}, 0, nil, P6, {CommandLeastAt(132, "Lair1"), Deaths(P10, AtLeast, LairTimeline[9] * SDspeed,6)})
-CSPlotOrderWithProperties(LSU3, P8, 62, "Lair1", nil, 1, 20, LSU3, 0, Attack , "Lair1", {998,1412}, 0, nil, P8, {CommandLeastAt(132, "Lair1"), Deaths(P10, AtLeast, LairTimeline[9] * SDspeed,6)},nil,0,TempProperties)
+CSPlotOrder(LGU1, P7, 51, "Lair1", nil, 1, 20, LGU1, 0, Attack , "bunkerHeal", nil, 0, nil, P7, {CommandLeastAt(132, "Lair1"), Deaths(P10, AtLeast, LairTimeline[9] * SDspeed,6)})
+CSPlotOrder(LGU2, P6, 16, "Lair1", nil, 1, 20, LGU2, 0, Attack , "bunkerHeal", nil, 0, nil, P6, {CommandLeastAt(132, "Lair1"), Deaths(P10, AtLeast, LairTimeline[9] * SDspeed,6)})
+CSPlotOrder(LGU3, P7, 46, "Lair1", nil, 1, 20, LGU3, 0, Attack , "bunkerHeal", nil, 0, nil, P7, {CommandLeastAt(132, "Lair1"), Deaths(P10, AtLeast, LairTimeline[9] * SDspeed,6)})
+CSPlotOrder(LSU, P6, 43, "Lair1", nil, 1, 20, LSU, 0, Attack , "bunkerHeal", nil, 0, nil, P6, {CommandLeastAt(132, "Lair1"), Deaths(P10, AtLeast, LairTimeline[9] * SDspeed,6)})
+CSPlotOrderWithProperties(LSU3, P6, 62, "Lair1", nil, 1, 20, LSU3, 0, Attack , "Lair1", nil, 0, nil, P6, {CommandLeastAt(132, "Lair1"), Deaths(P10, AtLeast, LairTimeline[9] * SDspeed,6)},nil,0,TempProperties)
 
 ----- effect with unit ------
 
 CSPlot(sixline, P6, 94, "Lair1", nil, 1, 20, P6, {CommandLeastAt(132, "Lair1"), Deaths(P10, AtLeast, LairTimeline[13] * SDspeed,6)})
-CSPlotOrderWithProperties(sixline, P6, 44, "Lair1", nil, 1, 20, sixline, 0, Attack , "Lair1", {998,1412}, 0, nil, P6, {CommandLeastAt(132, "Lair1"), Deaths(P10, AtLeast, LairTimeline[10] * SDspeed,6)},nil,0,TempProperties)
+CSPlotOrderWithProperties(sixline, P6, 44, "Lair1", nil, 1, 20, sixline, 0, Attack , "bunkerHeal", nil, 0, nil, P6, {CommandLeastAt(132, "Lair1"), Deaths(P10, AtLeast, LairTimeline[10] * SDspeed,6)},nil,0,TempProperties)
 
 CSPlot(LGU1, P6, 94, "Lair1", nil, 1, 20, P6, {CommandLeastAt(132, "Lair1"), Deaths(P10, AtLeast, LairTimeline[10] * SDspeed,6)})
-CSPlotOrderWithProperties(LGU1, P6, 43, "Lair1", nil, 1, 20, LGU1, 0, Attack , "Lair1", {998,1412}, 0, nil, P6, {CommandLeastAt(132, "Lair1"), Deaths(P10, AtLeast, LairTimeline[11] * SDspeed,6)},nil,0,TempProperties)
+CSPlotOrderWithProperties(LGU1, P6, 43, "Lair1", nil, 1, 20, LGU1, 0, Attack , "bunkerHeal", nil, 0, nil, P6, {CommandLeastAt(132, "Lair1"), Deaths(P10, AtLeast, LairTimeline[11] * SDspeed,6)},nil,0,TempProperties)
 
 CSPlot(LGU2, P6, 94, "Lair1", nil, 1, 20, P6, {CommandLeastAt(132, "Lair1"), Deaths(P10, AtLeast, LairTimeline[11] * SDspeed,6)})
-CSPlotOrderWithProperties(LGU2, P6, 44, "Lair1", nil, 1, 20, LGU2, 0, Attack , "Lair1", {998,1412}, 0, nil, P6, {CommandLeastAt(132, "Lair1"), Deaths(P10, AtLeast, LairTimeline[12] * SDspeed,6)},nil,0,TempProperties)
+CSPlotOrderWithProperties(LGU2, P6, 44, "Lair1", nil, 1, 20, LGU2, 0, Attack , "bunkerHeal", nil, 0, nil, P6, {CommandLeastAt(132, "Lair1"), Deaths(P10, AtLeast, LairTimeline[12] * SDspeed,6)},nil,0,TempProperties)
 
 CSPlot(LGU3, P6, 94, "Lair1", nil, 1, 20, P6, {CommandLeastAt(132, "Lair1"), Deaths(P10, AtLeast, LairTimeline[12] * SDspeed,6)})
-CSPlotOrderWithProperties(LGU3, P6, 43, "Lair1", nil, 1, 20, LGU3, 0, Attack , "Lair1", {998,1412}, 0, nil, P6, {CommandLeastAt(132, "Lair1"), Deaths(P10, AtLeast, LairTimeline[13] * SDspeed,6)},nil,0,TempProperties)
+CSPlotOrderWithProperties(LGU3, P6, 62, "Lair1", nil, 1, 20, LGU3, 0, Attack , "bunkerHeal", nil, 0, nil, P6, {CommandLeastAt(132, "Lair1"), Deaths(P10, AtLeast, LairTimeline[13] * SDspeed,6)},nil,0,TempProperties)
 
 CSPlot(Eftstar, P6, 94, "Lair1", nil, 1, 20, P6, {CommandLeastAt(132, "Lair1"), Deaths(P10, AtLeast, LairTimeline[14] * SDspeed,6)})
-CSPlotOrderWithProperties(Eftstar, P6, 62, "Lair1", nil, 1, 20, Eftstar, 0, Attack , "Lair1", {998,1412}, 0, nil, P6, {CommandLeastAt(132, "Lair1"), Deaths(P10, AtLeast, LairTimeline[14] * SDspeed,6)},nil,0,TempProperties)
+CSPlotOrderWithProperties(Eftstar, P6, 43, "Lair1", nil, 1, 20, Eftstar, 0, Attack , "bunkerHeal", nil, 0, nil, P6, {CommandLeastAt(132, "Lair1"), Deaths(P10, AtLeast, LairTimeline[14] * SDspeed,6)},nil,0,TempProperties)
 
 
 Trigger{
@@ -1789,24 +1827,24 @@ Trigger{
 }
 
 ---- 1젠 ----
-CSPlotOrder(LGU1, P6, 39, "Lair2", nil, 1, 20, LGU1, 0, Attack , "Lair2", {998,1412}, 0, nil, P6, {CommandLeastAt(132, "Lair2"), Deaths(P10, AtLeast, LairTimeline[1] * SDspeed,7)})
-CSPlotOrder(LGU2, P6, 51, "Lair2", nil, 1, 20, LGU2, 0, Attack , "Lair2", {998,1412}, 0, nil, P6, {CommandLeastAt(132, "Lair2"), Deaths(P10, AtLeast, LairTimeline[1] * SDspeed,7)})
-CSPlotOrder(LGU3, P6, 46, "Lair2", nil, 1, 20, LGU3, 0, Attack , "Lair2", {998,1412}, 0, nil, P6, {CommandLeastAt(132, "Lair2"), Deaths(P10, AtLeast, LairTimeline[1] * SDspeed,7)})
-CSPlotOrder(LSU, P6, 43, "Lair2", nil, 1, 20, LSU, 0, Attack , "Lair2", {998,1412}, 0, nil, P6, {CommandLeastAt(132, "Lair2"), Deaths(P10, AtLeast, LairTimeline[1] * SDspeed,7)})
-CSPlotOrder(LSU2, P6, 44, "Lair2", nil, 1, 20, LSU2, 0, Attack , "Lair2", {998,1412}, 0, nil, P6, {CommandLeastAt(132, "Lair2"), Deaths(P10, AtLeast, LairTimeline[1] * SDspeed,7)})
+CSPlotOrder(LGU1, P6, 39, "Lair2", nil, 1, 20, LGU1, 0, Attack , "bunkerHeal", nil, 0, nil, P6, {CommandLeastAt(132, "Lair2"), Deaths(P10, AtLeast, LairTimeline[1] * SDspeed,7)})
+CSPlotOrder(LGU2, P6, 51, "Lair2", nil, 1, 20, LGU2, 0, Attack , "bunkerHeal", nil, 0, nil, P6, {CommandLeastAt(132, "Lair2"), Deaths(P10, AtLeast, LairTimeline[1] * SDspeed,7)})
+CSPlotOrder(LGU3, P6, 46, "Lair2", nil, 1, 20, LGU3, 0, Attack , "bunkerHeal", nil, 0, nil, P6, {CommandLeastAt(132, "Lair2"), Deaths(P10, AtLeast, LairTimeline[1] * SDspeed,7)})
+CSPlotOrder(LSU, P6, 43, "Lair2", nil, 1, 20, LSU, 0, Attack , "bunkerHeal", nil, 0, nil, P6, {CommandLeastAt(132, "Lair2"), Deaths(P10, AtLeast, LairTimeline[1] * SDspeed,7)})
+CSPlotOrder(LSU2, P6, 44, "Lair2", nil, 1, 20, LSU2, 0, Attack , "bunkerHeal", nil, 0, nil, P6, {CommandLeastAt(132, "Lair2"), Deaths(P10, AtLeast, LairTimeline[1] * SDspeed,7)})
 
 ---2젠
-CSPlotOrder(LGU1, P6, 39, "Lair2", nil, 1, 20, LGU1, 0, Attack , "Lair2", {998,1412}, 0, nil, P6, {CommandLeastAt(132, "Lair2"), Deaths(P10, AtLeast, LairTimeline[2] * SDspeed,7)})
-CSPlotOrder(LGU2, P7, 51, "Lair2", nil, 1, 20, LGU2, 0, Attack , "Lair2", {998,1412}, 0, nil, P7, {CommandLeastAt(132, "Lair2"), Deaths(P10, AtLeast, LairTimeline[2] * SDspeed,7)})
-CSPlotOrder(LGU3, P6, 46, "Lair2", nil, 1, 20, LGU3, 0, Attack , "Lair2", {998,1412}, 0, nil, P6, {CommandLeastAt(132, "Lair2"), Deaths(P10, AtLeast, LairTimeline[2] * SDspeed,7)})
-CSPlotOrder(LSU, P7, 43, "Lair2", nil, 1, 20, LSU, 0, Attack , "Lair2", {998,1412}, 0, nil, P7, {CommandLeastAt(132, "Lair2"), Deaths(P10, AtLeast, LairTimeline[2] * SDspeed,7)})
-CSPlotOrder(LSU2, P6, 44, "Lair2", nil, 1, 20, LSU2, 0, Attack , "Lair2", {998,1412}, 0, nil, P6, {CommandLeastAt(132, "Lair2"), Deaths(P10, AtLeast, LairTimeline[2] * SDspeed,7)})
+CSPlotOrder(LGU1, P6, 39, "Lair2", nil, 1, 20, LGU1, 0, Attack , "bunkerHeal", nil, 0, nil, P6, {CommandLeastAt(132, "Lair2"), Deaths(P10, AtLeast, LairTimeline[2] * SDspeed,7)})
+CSPlotOrder(LGU2, P7, 51, "Lair2", nil, 1, 20, LGU2, 0, Attack , "bunkerHeal", nil, 0, nil, P7, {CommandLeastAt(132, "Lair2"), Deaths(P10, AtLeast, LairTimeline[2] * SDspeed,7)})
+CSPlotOrder(LGU3, P6, 46, "Lair2", nil, 1, 20, LGU3, 0, Attack , "bunkerHeal", nil, 0, nil, P6, {CommandLeastAt(132, "Lair2"), Deaths(P10, AtLeast, LairTimeline[2] * SDspeed,7)})
+CSPlotOrder(LSU, P7, 43, "Lair2", nil, 1, 20, LSU, 0, Attack , "bunkerHeal", nil, 0, nil, P7, {CommandLeastAt(132, "Lair2"), Deaths(P10, AtLeast, LairTimeline[2] * SDspeed,7)})
+CSPlotOrder(LSU2, P6, 44, "Lair2", nil, 1, 20, LSU2, 0, Attack , "bunkerHeal", nil, 0, nil, P6, {CommandLeastAt(132, "Lair2"), Deaths(P10, AtLeast, LairTimeline[2] * SDspeed,7)})
 --- 3젠
-CSPlotOrder(LGU1, P7, 16, "Lair2", nil, 1, 20, LGU1, 0, Attack , "Lair2", {998,1412}, 0, nil, P7, {CommandLeastAt(132, "Lair2"), Deaths(P10, AtLeast, LairTimeline[3] * SDspeed,7)})
-CSPlotOrder(LGU2, P6, 51, "Lair2", nil, 1, 20, LGU2, 0, Attack , "Lair2", {998,1412}, 0, nil, P6, {CommandLeastAt(132, "Lair2"), Deaths(P10, AtLeast, LairTimeline[3] * SDspeed,7)})
-CSPlotOrder(LGU3, P7, 46, "Lair2", nil, 1, 20, LGU3, 0, Attack , "Lair2", {998,1412}, 0, nil, P7, {CommandLeastAt(132, "Lair2"), Deaths(P10, AtLeast, LairTimeline[3] * SDspeed,7)})
-CSPlotOrder(LSU, P6, 43, "Lair2", nil, 1, 20, LSU, 0, Attack , "Lair2", {998,1412}, 0, nil, P6, {CommandLeastAt(132, "Lair2"), Deaths(P10, AtLeast, LairTimeline[3] * SDspeed,7)})
-CSPlotOrder(LSU2, P7, 16, "Lair2", nil, 1, 20, LSU2, 0, Attack , "Lair2", {998,1412}, 0, nil, P7, {CommandLeastAt(132, "Lair2"), Deaths(P10, AtLeast, LairTimeline[3] * SDspeed,7)})
+CSPlotOrder(LGU1, P7, 16, "Lair2", nil, 1, 20, LGU1, 0, Attack , "bunkerHeal", nil, 0, nil, P7, {CommandLeastAt(132, "Lair2"), Deaths(P10, AtLeast, LairTimeline[3] * SDspeed,7)})
+CSPlotOrder(LGU2, P6, 51, "Lair2", nil, 1, 20, LGU2, 0, Attack , "bunkerHeal", nil, 0, nil, P6, {CommandLeastAt(132, "Lair2"), Deaths(P10, AtLeast, LairTimeline[3] * SDspeed,7)})
+CSPlotOrder(LGU3, P7, 46, "Lair2", nil, 1, 20, LGU3, 0, Attack , "bunkerHeal", nil, 0, nil, P7, {CommandLeastAt(132, "Lair2"), Deaths(P10, AtLeast, LairTimeline[3] * SDspeed,7)})
+CSPlotOrder(LSU, P6, 43, "Lair2", nil, 1, 20, LSU, 0, Attack , "bunkerHeal", nil, 0, nil, P6, {CommandLeastAt(132, "Lair2"), Deaths(P10, AtLeast, LairTimeline[3] * SDspeed,7)})
+CSPlotOrder(LSU2, P7, 16, "Lair2", nil, 1, 20, LSU2, 0, Attack , "bunkerHeal", nil, 0, nil, P7, {CommandLeastAt(132, "Lair2"), Deaths(P10, AtLeast, LairTimeline[3] * SDspeed,7)})
 
 ---이펙트
 
@@ -1818,28 +1856,28 @@ CSPlot(LSU5, P6, 94, "Lair2", nil, 1, 20, P6, {CommandLeastAt(132, "Lair2"), Dea
 
 ---- 4gen ---
 
-CSPlotOrder(LGU1, P7, 51, "Lair2", nil, 1, 20, LGU1, 0, Attack , "Lair2", {998,1412}, 0, nil, P7, {CommandLeastAt(132, "Lair2"), Deaths(P10, AtLeast, LairTimeline[9] * SDspeed,7)})
-CSPlotOrder(LGU2, P6, 16, "Lair2", nil, 1, 20, LGU2, 0, Attack , "Lair2", {998,1412}, 0, nil, P6, {CommandLeastAt(132, "Lair2"), Deaths(P10, AtLeast, LairTimeline[9] * SDspeed,7)})
-CSPlotOrder(LGU3, P7, 46, "Lair2", nil, 1, 20, LGU3, 0, Attack , "Lair2", {998,1412}, 0, nil, P7, {CommandLeastAt(132, "Lair2"), Deaths(P10, AtLeast, LairTimeline[9] * SDspeed,7)})
-CSPlotOrder(LSU, P6, 43, "Lair2", nil, 1, 20, LSU, 0, Attack , "Lair2", {998,1412}, 0, nil, P6, {CommandLeastAt(132, "Lair2"), Deaths(P10, AtLeast, LairTimeline[9] * SDspeed,7)})
-CSPlotOrderWithProperties(LSU3, P8, 62, "Lair2", nil, 1, 20, LSU3, 0, Attack , "Lair2", {998,1412}, 0, nil, P8, {CommandLeastAt(132, "Lair2"), Deaths(P10, AtLeast, LairTimeline[9] * SDspeed,7)},nil,0,TempProperties)
+CSPlotOrder(LGU1, P7, 51, "Lair2", nil, 1, 20, LGU1, 0, Attack , "bunkerHeal", nil, 0, nil, P7, {CommandLeastAt(132, "Lair2"), Deaths(P10, AtLeast, LairTimeline[9] * SDspeed,7)})
+CSPlotOrder(LGU2, P6, 16, "Lair2", nil, 1, 20, LGU2, 0, Attack , "bunkerHeal", nil, 0, nil, P6, {CommandLeastAt(132, "Lair2"), Deaths(P10, AtLeast, LairTimeline[9] * SDspeed,7)})
+CSPlotOrder(LGU3, P7, 46, "Lair2", nil, 1, 20, LGU3, 0, Attack , "bunkerHeal", nil, 0, nil, P7, {CommandLeastAt(132, "Lair2"), Deaths(P10, AtLeast, LairTimeline[9] * SDspeed,7)})
+CSPlotOrder(LSU, P6, 43, "Lair2", nil, 1, 20, LSU, 0, Attack , "bunkerHeal", nil, 0, nil, P6, {CommandLeastAt(132, "Lair2"), Deaths(P10, AtLeast, LairTimeline[9] * SDspeed,7)})
+CSPlotOrderWithProperties(LSU3, P6, 62, "Lair2", nil, 1, 20, LSU3, 0, Attack , "bunkerHeal", nil, 0, nil, P6, {CommandLeastAt(132, "Lair2"), Deaths(P10, AtLeast, LairTimeline[9] * SDspeed,7)},nil,0,TempProperties)
 
 ----- effect with unit ------
 
 CSPlot(sixline, P6, 94, "Lair2", nil, 1, 20, P6, {CommandLeastAt(132, "Lair2"), Deaths(P10, AtLeast, LairTimeline[13] * SDspeed,7)})
-CSPlotOrderWithProperties(sixline, P6, 44, "Lair2", nil, 1, 20, sixline, 0, Attack , "Lair2", {998,1412}, 0, nil, P6, {CommandLeastAt(132, "Lair2"), Deaths(P10, AtLeast, LairTimeline[10] * SDspeed,7)},nil,0,TempProperties)
+CSPlotOrderWithProperties(sixline, P6, 44, "Lair2", nil, 1, 20, sixline, 0, Attack , "bunkerHeal", nil, 0, nil, P6, {CommandLeastAt(132, "Lair2"), Deaths(P10, AtLeast, LairTimeline[10] * SDspeed,7)},nil,0,TempProperties)
 
 CSPlot(LGU1, P6, 94, "Lair2", nil, 1, 20, P6, {CommandLeastAt(132, "Lair2"), Deaths(P10, AtLeast, LairTimeline[10] * SDspeed,7)})
-CSPlotOrderWithProperties(LGU1, P6, 43, "Lair2", nil, 1, 20, LGU1, 0, Attack , "Lair2", {998,1412}, 0, nil, P6, {CommandLeastAt(132, "Lair2"), Deaths(P10, AtLeast, LairTimeline[11] * SDspeed,7)},nil,0,TempProperties)
+CSPlotOrderWithProperties(LGU1, P6, 43, "Lair2", nil, 1, 20, LGU1, 0, Attack , "bunkerHeal", nil, 0, nil, P6, {CommandLeastAt(132, "Lair2"), Deaths(P10, AtLeast, LairTimeline[11] * SDspeed,7)},nil,0,TempProperties)
 
 CSPlot(LGU2, P6, 94, "Lair2", nil, 1, 20, P6, {CommandLeastAt(132, "Lair2"), Deaths(P10, AtLeast, LairTimeline[11] * SDspeed,7)})
-CSPlotOrderWithProperties(LGU2, P6, 44, "Lair2", nil, 1, 20, LGU2, 0, Attack , "Lair2", {998,1412}, 0, nil, P6, {CommandLeastAt(132, "Lair2"), Deaths(P10, AtLeast, LairTimeline[12] * SDspeed,7)},nil,0,TempProperties)
+CSPlotOrderWithProperties(LGU2, P6, 44, "Lair2", nil, 1, 20, LGU2, 0, Attack , "bunkerHeal", nil, 0, nil, P6, {CommandLeastAt(132, "Lair2"), Deaths(P10, AtLeast, LairTimeline[12] * SDspeed,7)},nil,0,TempProperties)
 
 CSPlot(LGU3, P6, 94, "Lair2", nil, 1, 20, P6, {CommandLeastAt(132, "Lair2"), Deaths(P10, AtLeast, LairTimeline[12] * SDspeed,7)})
-CSPlotOrderWithProperties(LGU3, P6, 43, "Lair2", nil, 1, 20, LGU3, 0, Attack , "Lair2", {998,1412}, 0, nil, P6, {CommandLeastAt(132, "Lair2"), Deaths(P10, AtLeast, LairTimeline[13] * SDspeed,7)},nil,0,TempProperties)
+CSPlotOrderWithProperties(LGU3, P6, 62, "Lair2", nil, 1, 20, LGU3, 0, Attack , "bunkerHeal", nil, 0, nil, P6, {CommandLeastAt(132, "Lair2"), Deaths(P10, AtLeast, LairTimeline[13] * SDspeed,7)},nil,0,TempProperties)
 
 CSPlot(Eftstar, P6, 94, "Lair2", nil, 1, 20, P6, {CommandLeastAt(132, "Lair2"), Deaths(P10, AtLeast, LairTimeline[14] * SDspeed,7)})
-CSPlotOrderWithProperties(Eftstar, P6, 62, "Lair2", nil, 1, 20, Eftstar, 0, Attack , "Lair2", {998,1412}, 0, nil, P6, {CommandLeastAt(132, "Lair2"), Deaths(P10, AtLeast, LairTimeline[14] * SDspeed,7)},nil,0,TempProperties)
+CSPlotOrderWithProperties(Eftstar, P6, 43, "Lair2", nil, 1, 20, Eftstar, 0, Attack , "bunkerHeal", nil, 0, nil, P6, {CommandLeastAt(132, "Lair2"), Deaths(P10, AtLeast, LairTimeline[14] * SDspeed,7)},nil,0,TempProperties)
 
 Trigger{
 	players = {P6},
@@ -1853,24 +1891,24 @@ Trigger{
 }
 
 ---- 1젠 ----
-CSPlotOrder(LGU1, P6, 39, "Lair3", nil, 1, 20, LGU1, 0, Attack , "Lair3", {998,1412}, 0, nil, P6, {CommandLeastAt(132, "Lair3"), Deaths(P10, AtLeast, LairTimeline[1] * SDspeed,8)})
-CSPlotOrder(LGU2, P6, 51, "Lair3", nil, 1, 20, LGU2, 0, Attack , "Lair3", {998,1412}, 0, nil, P6, {CommandLeastAt(132, "Lair3"), Deaths(P10, AtLeast, LairTimeline[1] * SDspeed,8)})
-CSPlotOrder(LGU3, P6, 46, "Lair3", nil, 1, 20, LGU3, 0, Attack , "Lair3", {998,1412}, 0, nil, P6, {CommandLeastAt(132, "Lair3"), Deaths(P10, AtLeast, LairTimeline[1] * SDspeed,8)})
-CSPlotOrder(LSU, P6, 43, "Lair3", nil, 1, 20, LSU, 0, Attack , "Lair3", {998,1412}, 0, nil, P6, {CommandLeastAt(132, "Lair3"), Deaths(P10, AtLeast, LairTimeline[1] * SDspeed,8)})
-CSPlotOrder(LSU2, P6, 44, "Lair3", nil, 1, 20, LSU2, 0, Attack , "Lair3", {998,1412}, 0, nil, P6, {CommandLeastAt(132, "Lair3"), Deaths(P10, AtLeast, LairTimeline[1] * SDspeed,8)})
+CSPlotOrder(LGU1, P6, 39, "Lair3", nil, 1, 20, LGU1, 0, Attack , "bunkerHeal", nil, 0, nil, P6, {CommandLeastAt(132, "Lair3"), Deaths(P10, AtLeast, LairTimeline[1] * SDspeed,8)})
+CSPlotOrder(LGU2, P6, 51, "Lair3", nil, 1, 20, LGU2, 0, Attack , "bunkerHeal", nil, 0, nil, P6, {CommandLeastAt(132, "Lair3"), Deaths(P10, AtLeast, LairTimeline[1] * SDspeed,8)})
+CSPlotOrder(LGU3, P6, 46, "Lair3", nil, 1, 20, LGU3, 0, Attack , "bunkerHeal", nil, 0, nil, P6, {CommandLeastAt(132, "Lair3"), Deaths(P10, AtLeast, LairTimeline[1] * SDspeed,8)})
+CSPlotOrder(LSU, P6, 43, "Lair3", nil, 1, 20, LSU, 0, Attack , "bunkerHeal", nil, 0, nil, P6, {CommandLeastAt(132, "Lair3"), Deaths(P10, AtLeast, LairTimeline[1] * SDspeed,8)})
+CSPlotOrder(LSU2, P6, 44, "Lair3", nil, 1, 20, LSU2, 0, Attack , "bunkerHeal", nil, 0, nil, P6, {CommandLeastAt(132, "Lair3"), Deaths(P10, AtLeast, LairTimeline[1] * SDspeed,8)})
 
 ---2젠
-CSPlotOrder(LGU1, P6, 39, "Lair3", nil, 1, 20, LGU1, 0, Attack , "Lair3", {998,1412}, 0, nil, P6, {CommandLeastAt(132, "Lair3"), Deaths(P10, AtLeast, LairTimeline[2] * SDspeed,8)})
-CSPlotOrder(LGU2, P7, 51, "Lair3", nil, 1, 20, LGU2, 0, Attack , "Lair3", {998,1412}, 0, nil, P7, {CommandLeastAt(132, "Lair3"), Deaths(P10, AtLeast, LairTimeline[2] * SDspeed,8)})
-CSPlotOrder(LGU3, P6, 46, "Lair3", nil, 1, 20, LGU3, 0, Attack , "Lair3", {998,1412}, 0, nil, P6, {CommandLeastAt(132, "Lair3"), Deaths(P10, AtLeast, LairTimeline[2] * SDspeed,8)})
-CSPlotOrder(LSU, P7, 43, "Lair3", nil, 1, 20, LSU, 0, Attack , "Lair3", {998,1412}, 0, nil, P7, {CommandLeastAt(132, "Lair3"), Deaths(P10, AtLeast, LairTimeline[2] * SDspeed,8)})
-CSPlotOrder(LSU2, P6, 44, "Lair3", nil, 1, 20, LSU2, 0, Attack , "Lair3", {998,1412}, 0, nil, P6, {CommandLeastAt(132, "Lair3"), Deaths(P10, AtLeast, LairTimeline[2] * SDspeed,8)})
+CSPlotOrder(LGU1, P6, 39, "Lair3", nil, 1, 20, LGU1, 0, Attack , "bunkerHeal", nil, 0, nil, P6, {CommandLeastAt(132, "Lair3"), Deaths(P10, AtLeast, LairTimeline[2] * SDspeed,8)})
+CSPlotOrder(LGU2, P7, 51, "Lair3", nil, 1, 20, LGU2, 0, Attack , "bunkerHeal", nil, 0, nil, P7, {CommandLeastAt(132, "Lair3"), Deaths(P10, AtLeast, LairTimeline[2] * SDspeed,8)})
+CSPlotOrder(LGU3, P6, 46, "Lair3", nil, 1, 20, LGU3, 0, Attack , "bunkerHeal", nil, 0, nil, P6, {CommandLeastAt(132, "Lair3"), Deaths(P10, AtLeast, LairTimeline[2] * SDspeed,8)})
+CSPlotOrder(LSU, P7, 43, "Lair3", nil, 1, 20, LSU, 0, Attack , "bunkerHeal", nil, 0, nil, P7, {CommandLeastAt(132, "Lair3"), Deaths(P10, AtLeast, LairTimeline[2] * SDspeed,8)})
+CSPlotOrder(LSU2, P6, 44, "Lair3", nil, 1, 20, LSU2, 0, Attack , "bunkerHeal", nil, 0, nil, P6, {CommandLeastAt(132, "Lair3"), Deaths(P10, AtLeast, LairTimeline[2] * SDspeed,8)})
 --- 3젠
-CSPlotOrder(LGU1, P7, 16, "Lair3", nil, 1, 20, LGU1, 0, Attack , "Lair3", {998,1412}, 0, nil, P7, {CommandLeastAt(132, "Lair3"), Deaths(P10, AtLeast, LairTimeline[3] * SDspeed,8)})
-CSPlotOrder(LGU2, P6, 51, "Lair3", nil, 1, 20, LGU2, 0, Attack , "Lair3", {998,1412}, 0, nil, P6, {CommandLeastAt(132, "Lair3"), Deaths(P10, AtLeast, LairTimeline[3] * SDspeed,8)})
-CSPlotOrder(LGU3, P7, 46, "Lair3", nil, 1, 20, LGU3, 0, Attack , "Lair3", {998,1412}, 0, nil, P7, {CommandLeastAt(132, "Lair3"), Deaths(P10, AtLeast, LairTimeline[3] * SDspeed,8)})
-CSPlotOrder(LSU, P6, 43, "Lair3", nil, 1, 20, LSU, 0, Attack , "Lair3", {998,1412}, 0, nil, P6, {CommandLeastAt(132, "Lair3"), Deaths(P10, AtLeast, LairTimeline[3] * SDspeed,8)})
-CSPlotOrder(LSU2, P7, 16, "Lair3", nil, 1, 20, LSU2, 0, Attack , "Lair3", {998,1412}, 0, nil, P7, {CommandLeastAt(132, "Lair3"), Deaths(P10, AtLeast, LairTimeline[3] * SDspeed,8)})
+CSPlotOrder(LGU1, P7, 16, "Lair3", nil, 1, 20, LGU1, 0, Attack , "bunkerHeal", nil, 0, nil, P7, {CommandLeastAt(132, "Lair3"), Deaths(P10, AtLeast, LairTimeline[3] * SDspeed,8)})
+CSPlotOrder(LGU2, P6, 51, "Lair3", nil, 1, 20, LGU2, 0, Attack , "bunkerHeal", nil, 0, nil, P6, {CommandLeastAt(132, "Lair3"), Deaths(P10, AtLeast, LairTimeline[3] * SDspeed,8)})
+CSPlotOrder(LGU3, P7, 46, "Lair3", nil, 1, 20, LGU3, 0, Attack , "bunkerHeal", nil, 0, nil, P7, {CommandLeastAt(132, "Lair3"), Deaths(P10, AtLeast, LairTimeline[3] * SDspeed,8)})
+CSPlotOrder(LSU, P6, 43, "Lair3", nil, 1, 20, LSU, 0, Attack , "bunkerHeal", nil, 0, nil, P6, {CommandLeastAt(132, "Lair3"), Deaths(P10, AtLeast, LairTimeline[3] * SDspeed,8)})
+CSPlotOrder(LSU2, P7, 16, "Lair3", nil, 1, 20, LSU2, 0, Attack , "bunkerHeal", nil, 0, nil, P7, {CommandLeastAt(132, "Lair3"), Deaths(P10, AtLeast, LairTimeline[3] * SDspeed,8)})
 
 ---이펙트
 
@@ -1882,28 +1920,180 @@ CSPlot(LSU5, P6, 94, "Lair3", nil, 1, 20, P6, {CommandLeastAt(132, "Lair3"), Dea
 
 ---- 4gen ---
 
-CSPlotOrder(LGU1, P7, 51, "Lair3", nil, 1, 20, LGU1, 0, Attack , "Lair3", {998,1412}, 0, nil, P7, {CommandLeastAt(132, "Lair3"), Deaths(P10, AtLeast, LairTimeline[9] * SDspeed,8)})
-CSPlotOrder(LGU2, P6, 16, "Lair3", nil, 1, 20, LGU2, 0, Attack , "Lair3", {998,1412}, 0, nil, P6, {CommandLeastAt(132, "Lair3"), Deaths(P10, AtLeast, LairTimeline[9] * SDspeed,8)})
-CSPlotOrder(LGU3, P7, 46, "Lair3", nil, 1, 20, LGU3, 0, Attack , "Lair3", {998,1412}, 0, nil, P7, {CommandLeastAt(132, "Lair3"), Deaths(P10, AtLeast, LairTimeline[9] * SDspeed,8)})
-CSPlotOrder(LSU, P6, 43, "Lair3", nil, 1, 20, LSU, 0, Attack , "Lair3", {998,1412}, 0, nil, P6, {CommandLeastAt(132, "Lair3"), Deaths(P10, AtLeast, LairTimeline[9] * SDspeed,8)})
-CSPlotOrderWithProperties(LSU3, P8, 62, "Lair3", nil, 1, 20, LSU3, 0, Attack , "Lair3", {998,1412}, 0, nil, P8, {CommandLeastAt(132, "Lair3"), Deaths(P10, AtLeast, LairTimeline[9] * SDspeed,8)},nil,0,TempProperties)
+CSPlotOrder(LGU1, P7, 51, "Lair3", nil, 1, 20, LGU1, 0, Attack , "bunkerHeal", nil, 0, nil, P7, {CommandLeastAt(132, "Lair3"), Deaths(P10, AtLeast, LairTimeline[9] * SDspeed,8)})
+CSPlotOrder(LGU2, P6, 16, "Lair3", nil, 1, 20, LGU2, 0, Attack , "bunkerHeal", nil, 0, nil, P6, {CommandLeastAt(132, "Lair3"), Deaths(P10, AtLeast, LairTimeline[9] * SDspeed,8)})
+CSPlotOrder(LGU3, P7, 46, "Lair3", nil, 1, 20, LGU3, 0, Attack , "bunkerHeal", nil, 0, nil, P7, {CommandLeastAt(132, "Lair3"), Deaths(P10, AtLeast, LairTimeline[9] * SDspeed,8)})
+CSPlotOrder(LSU, P6, 43, "Lair3", nil, 1, 20, LSU, 0, Attack , "bunkerHeal", nil, 0, nil, P6, {CommandLeastAt(132, "Lair3"), Deaths(P10, AtLeast, LairTimeline[9] * SDspeed,8)})
+CSPlotOrderWithProperties(LSU3, P6, 62, "Lair3", nil, 1, 20, LSU3, 0, Attack , "bunkerHeal", nil, 0, nil, P6, {CommandLeastAt(132, "Lair3"), Deaths(P10, AtLeast, LairTimeline[9] * SDspeed,8)},nil,0,TempProperties)
 
 ----- effect with unit ------
 
 CSPlot(sixline, P6, 94, "Lair3", nil, 1, 20, P6, {CommandLeastAt(132, "Lair3"), Deaths(P10, AtLeast, LairTimeline[13] * SDspeed,8)})
-CSPlotOrderWithProperties(sixline, P6, 44, "Lair3", nil, 1, 20, sixline, 0, Attack , "Lair3", {998,1412}, 0, nil, P6, {CommandLeastAt(132, "Lair3"), Deaths(P10, AtLeast, LairTimeline[10] * SDspeed,6)},nil,0,TempProperties)
+CSPlotOrderWithProperties(sixline, P6, 44, "Lair3", nil, 1, 20, sixline, 0, Attack , "bunkerHeal", nil, 0, nil, P6, {CommandLeastAt(132, "Lair3"), Deaths(P10, AtLeast, LairTimeline[10] * SDspeed,6)},nil,0,TempProperties)
 
 CSPlot(LGU1, P6, 94, "Lair3", nil, 1, 20, P6, {CommandLeastAt(132, "Lair3"), Deaths(P10, AtLeast, LairTimeline[10] * SDspeed,8)})
-CSPlotOrderWithProperties(LGU1, P6, 43, "Lair3", nil, 1, 20, LGU1, 0, Attack , "Lair3", {998,1412}, 0, nil, P6, {CommandLeastAt(132, "Lair3"), Deaths(P10, AtLeast, LairTimeline[11] * SDspeed,6)},nil,0,TempProperties)
+CSPlotOrderWithProperties(LGU1, P6, 43, "Lair3", nil, 1, 20, LGU1, 0, Attack , "bunkerHeal", nil, 0, nil, P6, {CommandLeastAt(132, "Lair3"), Deaths(P10, AtLeast, LairTimeline[11] * SDspeed,6)},nil,0,TempProperties)
 
 CSPlot(LGU2, P6, 94, "Lair3", nil, 1, 20, P6, {CommandLeastAt(132, "Lair3"), Deaths(P10, AtLeast, LairTimeline[11] * SDspeed,8)})
-CSPlotOrderWithProperties(LGU2, P6, 44, "Lair3", nil, 1, 20, LGU2, 0, Attack , "Lair3", {998,1412}, 0, nil, P6, {CommandLeastAt(132, "Lair3"), Deaths(P10, AtLeast, LairTimeline[12] * SDspeed,6)},nil,0,TempProperties)
+CSPlotOrderWithProperties(LGU2, P6, 44, "Lair3", nil, 1, 20, LGU2, 0, Attack , "bunkerHeal", nil, 0, nil, P6, {CommandLeastAt(132, "Lair3"), Deaths(P10, AtLeast, LairTimeline[12] * SDspeed,6)},nil,0,TempProperties)
 
 CSPlot(LGU3, P6, 94, "Lair3", nil, 1, 20, P6, {CommandLeastAt(132, "Lair3"), Deaths(P10, AtLeast, LairTimeline[12] * SDspeed,8)})
-CSPlotOrderWithProperties(LGU3, P6, 43, "Lair3", nil, 1, 20, LGU3, 0, Attack , "Lair3", {998,1412}, 0, nil, P6, {CommandLeastAt(132, "Lair3"), Deaths(P10, AtLeast, LairTimeline[13] * SDspeed,6)},nil,0,TempProperties)
+CSPlotOrderWithProperties(LGU3, P6, 62, "Lair3", nil, 1, 20, LGU3, 0, Attack , "bunkerHeal", nil, 0, nil, P6, {CommandLeastAt(132, "Lair3"), Deaths(P10, AtLeast, LairTimeline[13] * SDspeed,6)},nil,0,TempProperties)
 
 CSPlot(Eftstar, P6, 94, "Lair3", nil, 1, 20, P6, {CommandLeastAt(132, "Lair3"), Deaths(P10, AtLeast, LairTimeline[14] * SDspeed,8)})
-CSPlotOrderWithProperties(Eftstar, P6, 62, "Lair3", nil, 1, 20, Eftstar, 0, Attack , "Lair3", {998,1412}, 0, nil, P6, {CommandLeastAt(132, "Lair3"), Deaths(P10, AtLeast, LairTimeline[14] * SDspeed,8)},nil,0,TempProperties)
+CSPlotOrderWithProperties(Eftstar, P6, 43, "Lair3", nil, 1, 20, Eftstar, 0, Attack , "bunkerHeal", nil, 0, nil, P6, {CommandLeastAt(132, "Lair3"), Deaths(P10, AtLeast, LairTimeline[14] * SDspeed,8)},nil,0,TempProperties)
+
+Trigger{
+	players = {P6},
+	conditions = {
+		CommandLeastAt(132, "Lair4");
+	},
+	actions = {
+		SetDeaths(P10,Add,1,9);
+		PreserveTrigger();
+	}
+}
+
+---- 1젠 ----
+CSPlotOrder(LGU1, P6, 39, "Lair4", nil, 1, 20, LGU1, 0, Attack , "bunkerHeal", nil, 0, nil, P6, {CommandLeastAt(132, "Lair4"), Deaths(P10, AtLeast, LairTimeline[1] * SDspeed,9)})
+CSPlotOrder(LGU2, P6, 51, "Lair4", nil, 1, 20, LGU2, 0, Attack , "bunkerHeal", nil, 0, nil, P6, {CommandLeastAt(132, "Lair4"), Deaths(P10, AtLeast, LairTimeline[1] * SDspeed,9)})
+CSPlotOrder(LGU3, P6, 46, "Lair4", nil, 1, 20, LGU3, 0, Attack , "bunkerHeal", nil, 0, nil, P6, {CommandLeastAt(132, "Lair4"), Deaths(P10, AtLeast, LairTimeline[1] * SDspeed,9)})
+CSPlotOrder(LSU, P6, 43, "Lair4", nil, 1, 20, LSU, 0, Attack , "bunkerHeal", nil, 0, nil, P6, {CommandLeastAt(132, "Lair4"), Deaths(P10, AtLeast, LairTimeline[1] * SDspeed,9)})
+CSPlotOrder(LSU2, P6, 44, "Lair4", nil, 1, 20, LSU2, 0, Attack , "bunkerHeal", nil, 0, nil, P6, {CommandLeastAt(132, "Lair4"), Deaths(P10, AtLeast, LairTimeline[1] * SDspeed,9)})
+
+---2젠
+CSPlotOrder(LGU1, P6, 39, "Lair4", nil, 1, 20, LGU1, 0, Attack , "bunkerHeal", nil, 0, nil, P6, {CommandLeastAt(132, "Lair4"), Deaths(P10, AtLeast, LairTimeline[2] * SDspeed,9)})
+CSPlotOrder(LGU2, P7, 51, "Lair4", nil, 1, 20, LGU2, 0, Attack , "bunkerHeal", nil, 0, nil, P7, {CommandLeastAt(132, "Lair4"), Deaths(P10, AtLeast, LairTimeline[2] * SDspeed,9)})
+CSPlotOrder(LGU3, P6, 46, "Lair4", nil, 1, 20, LGU3, 0, Attack , "bunkerHeal", nil, 0, nil, P6, {CommandLeastAt(132, "Lair4"), Deaths(P10, AtLeast, LairTimeline[2] * SDspeed,9)})
+CSPlotOrder(LSU, P7, 43, "Lair4", nil, 1, 20, LSU, 0, Attack , "bunkerHeal", nil, 0, nil, P7, {CommandLeastAt(132, "Lair4"), Deaths(P10, AtLeast, LairTimeline[2] * SDspeed,9)})
+CSPlotOrder(LSU2, P6, 44, "Lair4", nil, 1, 20, LSU2, 0, Attack , "bunkerHeal", nil, 0, nil, P6, {CommandLeastAt(132, "Lair4"), Deaths(P10, AtLeast, LairTimeline[2] * SDspeed,9)})
+--- 3젠
+CSPlotOrder(LGU1, P7, 16, "Lair4", nil, 1, 20, LGU1, 0, Attack , "bunkerHeal", nil, 0, nil, P7, {CommandLeastAt(132, "Lair4"), Deaths(P10, AtLeast, LairTimeline[3] * SDspeed,9)})
+CSPlotOrder(LGU2, P6, 51, "Lair4", nil, 1, 20, LGU2, 0, Attack , "bunkerHeal", nil, 0, nil, P6, {CommandLeastAt(132, "Lair4"), Deaths(P10, AtLeast, LairTimeline[3] * SDspeed,9)})
+CSPlotOrder(LGU3, P7, 46, "Lair4", nil, 1, 20, LGU3, 0, Attack , "bunkerHeal", nil, 0, nil, P7, {CommandLeastAt(132, "Lair4"), Deaths(P10, AtLeast, LairTimeline[3] * SDspeed,9)})
+CSPlotOrder(LSU, P6, 43, "Lair4", nil, 1, 20, LSU, 0, Attack , "bunkerHeal", nil, 0, nil, P6, {CommandLeastAt(132, "Lair4"), Deaths(P10, AtLeast, LairTimeline[3] * SDspeed,9)})
+CSPlotOrder(LSU2, P7, 16, "Lair4", nil, 1, 20, LSU2, 0, Attack , "bunkerHeal", nil, 0, nil, P7, {CommandLeastAt(132, "Lair4"), Deaths(P10, AtLeast, LairTimeline[3] * SDspeed,9)})
+
+---이펙트
+
+CSPlot(LSU, P6, 94, "Lair4", nil, 1, 20, P6, {CommandLeastAt(132, "Lair4"), Deaths(P10, AtLeast, LairTimeline[4] * SDspeed,8)})
+CSPlot(LSU2, P6, 94, "Lair4", nil,1, 20, P6, {CommandLeastAt(132, "Lair4"), Deaths(P10, AtLeast, LairTimeline[5] * SDspeed,8)})
+CSPlot(LSU3, P6, 94, "Lair4", nil, 1, 20, P6, {CommandLeastAt(132, "Lair4"), Deaths(P10, AtLeast, LairTimeline[6] * SDspeed,8)})
+CSPlot(LSU4, P6, 94, "Lair4", nil, 1, 20, P6, {CommandLeastAt(132, "Lair4"), Deaths(P10, AtLeast, LairTimeline[7] * SDspeed,8)})
+CSPlot(LSU5, P6, 94, "Lair4", nil, 1, 20, P6, {CommandLeastAt(132, "Lair4"), Deaths(P10, AtLeast, LairTimeline[8] * SDspeed,8)})
+
+---- 4gen ---
+
+CSPlotOrder(LGU1, P7, 51, "Lair4", nil, 1, 20, LGU1, 0, Attack , "bunkerHeal", nil, 0, nil, P7, {CommandLeastAt(132, "Lair4"), Deaths(P10, AtLeast, LairTimeline[9] * SDspeed,9)})
+CSPlotOrder(LGU2, P6, 16, "Lair4", nil, 1, 20, LGU2, 0, Attack , "bunkerHeal", nil, 0, nil, P6, {CommandLeastAt(132, "Lair4"), Deaths(P10, AtLeast, LairTimeline[9] * SDspeed,9)})
+CSPlotOrder(LGU3, P7, 46, "Lair4", nil, 1, 20, LGU3, 0, Attack , "bunkerHeal", nil, 0, nil, P7, {CommandLeastAt(132, "Lair4"), Deaths(P10, AtLeast, LairTimeline[9] * SDspeed,9)})
+CSPlotOrder(LSU, P6, 43, "Lair4", nil, 1, 20, LSU, 0, Attack , "bunkerHeal", nil, 0, nil, P6, {CommandLeastAt(132, "Lair4"), Deaths(P10, AtLeast, LairTimeline[9] * SDspeed,9)})
+CSPlotOrderWithProperties(LSU3, P6, 62, "Lair4", nil, 1, 20, LSU3, 0, Attack , "bunkerHeal", nil, 0, nil, P6, {CommandLeastAt(132, "Lair4"), Deaths(P10, AtLeast, LairTimeline[9] * SDspeed,9)},nil,0,TempProperties)
+
+----- effect with unit ------
+
+CSPlot(sixline, P6, 94, "Lair4", nil, 1, 20, P6, {CommandLeastAt(132, "Lair4"), Deaths(P10, AtLeast, LairTimeline[13] * SDspeed,8)})
+CSPlotOrderWithProperties(sixline, P6, 44, "Lair4", nil, 1, 20, sixline, 0, Attack , "bunkerHeal", nil, 0, nil, P6, {CommandLeastAt(132, "Lair4"), Deaths(P10, AtLeast, LairTimeline[10] * SDspeed,9)},nil,0,TempProperties)
+
+CSPlot(LGU1, P6, 94, "Lair4", nil, 1, 20, P6, {CommandLeastAt(132, "Lair4"), Deaths(P10, AtLeast, LairTimeline[10] * SDspeed,8)})
+CSPlotOrderWithProperties(LGU1, P6, 43, "Lair4", nil, 1, 20, LGU1, 0, Attack , "bunkerHeal", nil, 0, nil, P6, {CommandLeastAt(132, "Lair4"), Deaths(P10, AtLeast, LairTimeline[11] * SDspeed,9)},nil,0,TempProperties)
+
+CSPlot(LGU2, P6, 94, "Lair4", nil, 1, 20, P6, {CommandLeastAt(132, "Lair4"), Deaths(P10, AtLeast, LairTimeline[11] * SDspeed,8)})
+CSPlotOrderWithProperties(LGU2, P6, 44, "Lair4", nil, 1, 20, LGU2, 0, Attack , "bunkerHeal", nil, 0, nil, P6, {CommandLeastAt(132, "Lair4"), Deaths(P10, AtLeast, LairTimeline[12] * SDspeed,9)},nil,0,TempProperties)
+
+CSPlot(LGU3, P6, 94, "Lair4", nil, 1, 20, P6, {CommandLeastAt(132, "Lair4"), Deaths(P10, AtLeast, LairTimeline[12] * SDspeed,8)})
+CSPlotOrderWithProperties(LGU3, P6, 62, "Lair4", nil, 1, 20, LGU3, 0, Attack , "bunkerHeal", nil, 0, nil, P6, {CommandLeastAt(132, "Lair4"), Deaths(P10, AtLeast, LairTimeline[13] * SDspeed,9)},nil,0,TempProperties)
+
+CSPlot(Eftstar, P6, 94, "Lair4", nil, 1, 20, P6, {CommandLeastAt(132, "Lair4"), Deaths(P10, AtLeast, LairTimeline[14] * SDspeed,8)})
+CSPlotOrderWithProperties(Eftstar, P6, 43, "Lair4", nil, 1, 20, Eftstar, 0, Attack , "bunkerHeal", nil, 0, nil, P6, {CommandLeastAt(132, "Lair4"), Deaths(P10, AtLeast, LairTimeline[14] * SDspeed,9)},nil,0,TempProperties)
+
+--- Hive -----
+HiveGenTime = { 1.79, 2.7, 3.60, 4.57, 5.5, 6.5, 7.5, 8.4, 9.3, 10.2, 11.1, 12, 12.9, 13.8, 14.7, 15.8, 16.8, 18.7, 20.5, 22.4, 24.3, 26.1, 28, 29.9}
+HiveEftTime = {2.22, 3.18, 4.15, 5.07, 6, 7, 7.9 ,8.8 ,9.7,10.6, 11.5, 12.4, 13.3, 14.2, 15.1}
+HiveGenTime2 = {16.8, 18.7, 20.5, 22.4, 24.3, 26.1, 28, 29.9}
+--- SDspeed * pharse timeline ----- 
+HiveProperties = {
+	clocked = false,
+	burrowed = false,
+	intransit = false,
+	hallucinated = false,
+	invincible = false,
+	hitpoint = 70,
+	shield = 50,
+	energy = 0,
+	resource = 0,
+	hanger = 0,
+}
+EftProperties = {
+	clocked = false,
+	burrowed = false,
+	intransit = false,
+	hallucinated = false,
+	invincible = false,
+	hitpoint = 100,
+	shield = 100,
+	energy = 0,
+	resource = 0,
+	hanger = 0,
+}
+
+
+Line1 = CSMakeLineX(2,64,0,23,1)
+Trdline = CSMakeLineX(3,64,0,28,1)
+Trdline2 = CSMakeLineX(3,64,60,28,1)
+Triangle1 = CSMakePolygonX(3, 64, 0, 18, 0)
+Triangle2 = CSMakePolygonX(3, 64, 0, 61, 18)
+Triangle3 = CSMakePolygonX(3, 64, 0, 61, 0)
+
+Trigger {
+	players = {P6},
+	conditions = {
+		CommandLeastAt(133, "Hive1");
+	},
+	actions = {
+		SetDeaths(P10, Add, 1, 10);
+		PreserveTrigger()
+	}
+}
+
+for i = 1 ,16 do
+	Line1 = CSMakeLineX(2,64,0+11*i,21,1)
+	CSPlotOrder(Line1,P6,56,"Hive1",{992,1872},1,32,Line1,0,Attack, "Hive1", {992,1872},0,nil,P6,{CommandLeastAt(133, "Hive1"), Deaths(P10, Exactly, HiveGenTime[i] * SDspeed, 10)} )
+end
+
+for i = 1 ,15 do
+	Line2 = CSMakeLineX(2,64,11+11*i,21,1)
+	CSPlotWithProperties(Line2, P6, 84, "Hive1", {992,1872}, 1, 32, P6, {CommandLeastAt(133, "Hive1"), Deaths(P10, AtLeast, HiveEftTime[i] * SDspeed, 10)},nil,0,EftProperties)
+end
+
+CSPlotOrder(Triangle2, P6, 38, "Hive1", {992,1872}, 1, 20, Triangle2, 0, Attack, "bunkerHeal", nil,0 , nil, P6, {CommandLeastAt(133, "Hive1"), Deaths(P10, AtLeast, HiveGenTime[1] * SDspeed, 10)})
+CSPlotOrder(Triangle1, P6, 51, "Hive1", {992,1872}, 1, 20, Triangle1, 0, Attack, "bunkerHeal", nil,0 , nil, P6, {CommandLeastAt(133, "Hive1"), Deaths(P10, AtLeast, HiveGenTime[1] * SDspeed, 10)})
+CSPlotOrderWithProperties(Trdline2, P6, 56, "Hive1", nil, 1, 20, Trdline2, 0, Attack, "bunkerHeal", nil,0 , nil, P6, {CommandLeastAt(133, "Hive1"), Deaths(P10, AtLeast, HiveGenTime[1] * SDspeed, 10)},nil,0,HiveProperties)
+
+CSPlot(CS_Overlap(LGU1, LGU2, LGU3), P6, 94, "Hive1", {992,1872}, 1, 20, P6, {CommandLeastAt(133, "Hive1"), Deaths(P10, AtLeast, HiveEftTime[1] * SDspeed, 10)})
+
+CSPlotOrder(LGU3, P6, 16, "Hive1", {992,1872}, 1, 20, LGU3, 0, Attack, "bunkerHeal", nil,0 , nil, P6, {CommandLeastAt(133, "Hive1"), Deaths(P10, AtLeast, HiveGenTime[2] * SDspeed, 10)})
+CSPlotOrder(LGU2, P6, 38, "Hive1", {992,1872}, 1, 20, LGU2, 0, Attack, "bunkerHeal", nil,0 , nil, P6, {CommandLeastAt(133, "Hive1"), Deaths(P10, AtLeast, HiveGenTime[3] * SDspeed, 10)})
+CSPlotOrder(LGU1, P6, 48, "Hive1", {992,1872}, 1, 20, LGU1, 0, Attack, "bunkerHeal", nil,0 , nil, P6, {CommandLeastAt(133, "Hive1"), Deaths(P10, AtLeast, HiveGenTime[4] * SDspeed, 10)})
+CSPlotOrderWithProperties(Trdline, P6, 69, "Hive1", nil, 1, 20, Trdline, 0, Attack, "bunkerHeal", nil,0 , nil, P6, {CommandLeastAt(133, "Hive1"), Deaths(P10, AtLeast, HiveGenTime[5] * SDspeed, 10)},nil,0,HiveProperties)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 Trigger{
