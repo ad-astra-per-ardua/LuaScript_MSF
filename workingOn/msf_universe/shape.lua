@@ -35,9 +35,32 @@ spiral2 = CSMakeSpiral(4, 16, 1/1.2, 40, 45, 37, 5)
 Line1 = CSMakeLineX(2,64,0,23,1)
 CSPlotOrder(CS_MoveRA(Line1,0,10),P6,54,"Hive1",nil,1,32,CS_MoveRA(Line1,0,10),0,Attack, "Hive1", {992,1872},0,nil,P6,{CommandLeastAt(133, "Hive1"), Deaths(P10, AtLeast, HiveGenTime[i] * SDspeed, 10)} )
 
+------ this is it --------
+C5X = CAPlotForward()
+CAPlot(CS_SortR(S1,0),P1,84,"Location 6",nil,1,32,{1,0,0,0,S1[1]/36,0},nil,P1,nil,nil,{SetCVar("X",C5X[2],SetTo,36)})
+TriggerX(P1,CVar("X",C5X[2],Exactly,2),{RemoveUnit(84,P1)},{Preserved})
+
+C6X = CAPlotForward()
+CAPlot(CS_SortR(S1,1),P1,84,"Location 7",nil,1,32,{1,0,0,0,S1[1]/36,0},nil,P1,nil,nil,{SetCVar("X",C6X[2],SetTo,36)})
+TriggerX(P1,CVar("X",C6X[2],Exactly,2),{RemoveUnit(84,P1)},{Preserved})
+------ this is it --------
 
 CX2 = CSMakeCircleX(6,80,30,30,0)
 
 HiveGenTime = { 1.79, 2.7, 3.60, 4.57, 5.5, 6.5, 7.5, 8.4, 9.3, 10.2, 11.1, 12, 12.9, 13.8, 14.7, 15.8}
 HiveEftTime = {2.22, 3.18, 4.15, 5.07, 6, 7, 7.9 ,8.8 ,9.7,10.6, 11.5, 12.4, 13.3, 14.2, 15.1}
 HiveGenTime2 = {16.8, 18.7, 20.5, 22.4, 24.3, 26.1, 28, 29.9}
+
+
+[2. a10] CheezeNacho: 그니까 그런건이제
+[2. a10] CheezeNacho: 도형정렬을
+[2. a10] CheezeNacho: 하고
+[2. a10] CheezeNacho: 해야됨
+[2. a10] CheezeNacho: 극좌표에서
+[2. a10] CheezeNacho: R이 젤 큰거기준으로
+[2. a10] CheezeNacho: 내림차순정렬해야
+[2. a10] CheezeNacho: 이제 나선도형이
+[2. a10] CheezeNacho: 바깥부터 ㅎ로로로로록찍힘
+[2. a10] CheezeNacho: CS_SortRA
+[2. a10] CheezeNacho: 이걸
+[2. a10] CheezeNacho: 쓰십쇼
