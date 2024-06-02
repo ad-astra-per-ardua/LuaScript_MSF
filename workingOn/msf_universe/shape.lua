@@ -40,9 +40,12 @@ C5X = CAPlotForward()
 CAPlot(CS_SortR(S1,0),P1,84,"Location 6",nil,1,32,{1,0,0,0,S1[1]/36,0},nil,P1,nil,nil,{SetCVar("X",C5X[2],SetTo,36)})
 TriggerX(P1,CVar("X",C5X[2],Exactly,2),{RemoveUnit(84,P1)},{Preserved})
 
+S1 = CSMakeSpiral(6, 16, 1/2, 40, 0, 37, 5)
+S1 = CS_CropXY(CS_Rotate(CS_FillXY(1,384,384,32,32),45),{0,0},{0,0})
+
 C6X = CAPlotForward()
-CAPlot(CS_SortR(S1,1),P1,84,"Location 7",nil,1,32,{1,0,0,0,S1[1]/36,0},nil,P1,nil,nil,{SetCVar("X",C6X[2],SetTo,36)})
-TriggerX(P1,CVar("X",C6X[2],Exactly,2),{RemoveUnit(84,P1)},{Preserved})
+CAPlot(CS_SortR(S1,1),P1,78,"Location 7",nil,1,32,{1,0,0,0,S1[1]/36,0},nil,P1,nil,nil,{SetCVar("X",C6X[2],SetTo,36)})
+TriggerX(P1,CVar("X",C6X[2],Exactly,2),{RemoveUnit(78,P1)},{Preserved})
 ------ this is it --------
 
 CX2 = CSMakeCircleX(6,80,30,30,0)
