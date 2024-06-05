@@ -840,6 +840,10 @@ Trigger { -- 경우 1
 		Deaths(CurrentPlayer, Exactly, 0, "Zerg Flag Beacon");
 		Deaths(CurrentPlayer, Exactly, 0, "Unused Zerg Bldg");
 		Deaths(CurrentPlayer, Exactly, 0, "Unused Terran Bldg type   2");
+		Deaths(CurrentPlayer, Exactly, 0, 219);
+		Deaths(CurrentPlayer, Exactly, 0, 220);
+		Deaths(CurrentPlayer, Exactly, 0, 221);
+		Deaths(CurrentPlayer, Exactly, 0, 222);
 		Deaths(CurrentPlayer, Exactly, 0, 158);
 	},
 	actions = {
@@ -879,6 +883,10 @@ Trigger { -- 경우 2
 		Deaths(CurrentPlayer, Exactly, 0, "Zerg Flag Beacon");
 		Deaths(CurrentPlayer, Exactly, 0, "Unused Zerg Bldg");
 		Deaths(CurrentPlayer, Exactly, 0, "Unused Terran Bldg type   2");
+		Deaths(CurrentPlayer, Exactly, 0, 219);
+		Deaths(CurrentPlayer, Exactly, 0, 220);
+		Deaths(CurrentPlayer, Exactly, 0, 221);
+		Deaths(CurrentPlayer, Exactly, 0, 222);
 		Deaths(CurrentPlayer, Exactly, 0, 158);
 	},
 	actions = {
@@ -918,6 +926,10 @@ Trigger { -- 경우 3
 		Deaths(CurrentPlayer, Exactly, 0, "Zerg Flag Beacon");
 		Deaths(CurrentPlayer, Exactly, 0, "Unused Terran Bldg type   2");
 		Deaths(CurrentPlayer, Exactly, 0, "Unused Zerg Bldg");
+		Deaths(CurrentPlayer, Exactly, 0, 219);
+		Deaths(CurrentPlayer, Exactly, 0, 220);
+		Deaths(CurrentPlayer, Exactly, 0, 221);
+		Deaths(CurrentPlayer, Exactly, 0, 222);
 		Deaths(CurrentPlayer, Exactly, 0, 158);
 	},
 	actions = {
@@ -959,10 +971,13 @@ Trigger { -- 경우 4
 		Deaths(CurrentPlayer, Exactly, 0, "Unused Terran Bldg type   2");
 		Deaths(CurrentPlayer, Exactly, 0, "Unused Zerg Bldg");
 		Deaths(CurrentPlayer, Exactly, 1, 219);
+		Deaths(CurrentPlayer, Exactly, 0, 220);
+		Deaths(CurrentPlayer, Exactly, 0, 221);
+		Deaths(CurrentPlayer, Exactly, 0, 222);
 		Deaths(CurrentPlayer, Exactly, 0, 158);
 	},
 	actions = {
-		SetDeaths(CurrentPlayer, SetTo, 1190, "Zerg Flag Beacon");
+		SetDeaths(CurrentPlayer, SetTo, 1190, 222);
 		PlayWAV("staredit\\wav\\terran1.ogg");
 		PlayWAV("staredit\\wav\\terran1.ogg");
 		PreserveTrigger();
@@ -975,7 +990,7 @@ Trigger { -- 노래시간 감소
 		Always();
 	},
 	actions = {
-		SetDeaths(Force1, Subtract, 1, "Zerg Flag Beacon");
+		SetDeaths(Force1, Subtract, 1, 222);
 		PreserveTrigger();
 	},
 }
@@ -983,10 +998,51 @@ Trigger { -- 노래시간 감소
 Trigger { -- 변수 초기화
 	players = {Force1},
 	conditions = {
-		Deaths(CurrentPlayer, AtLeast, 1, "Unused Zerg Bldg");
+		Deaths(CurrentPlayer, AtLeast, 1, 219);
 	},
 	actions = {
-		SetDeaths(CurrentPlayer, SetTo, 0, "Unused Zerg Bldg");
+		SetDeaths(CurrentPlayer, SetTo, 0, 219);
+		PreserveTrigger();
+	},
+}
+
+Trigger { -- 경우 5
+	players = {Force1},
+	conditions = {
+		Deaths(CurrentPlayer, Exactly, 0, "Unused Terran Bldg type   1");
+		Deaths(CurrentPlayer, Exactly, 0, "Zerg Flag Beacon");
+		Deaths(CurrentPlayer, Exactly, 0, "Unused Terran Bldg type   2");
+		Deaths(CurrentPlayer, Exactly, 0, "Unused Zerg Bldg");
+		Deaths(CurrentPlayer, Exactly, 0, 219);
+		Deaths(CurrentPlayer, Exactly, 0, 220);
+		Deaths(CurrentPlayer, Exactly, 0, 221);
+		Deaths(CurrentPlayer, Exactly, 1, 222);
+		Deaths(CurrentPlayer, Exactly, 0, 158);
+	},
+	actions = {
+		SetDeaths(CurrentPlayer, SetTo, 1190, 221);
+		PreserveTrigger();
+	},
+}
+
+Trigger { -- 노래시간 감소
+	players = {P6},
+	conditions = {
+		Always();
+	},
+	actions = {
+		SetDeaths(Force1, Subtract, 1, 221);
+		PreserveTrigger();
+	},
+}
+
+Trigger { -- 변수 초기화
+	players = {Force1},
+	conditions = {
+		Deaths(CurrentPlayer, AtLeast, 1, 222);
+	},
+	actions = {
+		SetDeaths(CurrentPlayer, SetTo, 0, 222);
 		PreserveTrigger();
 	},
 }
@@ -1042,6 +1098,20 @@ Trigger { -- Link with variation with trigger
 		PreserveTrigger();
 	},
 }
+
+-- Trigger{
+-- 	players = {Force1},
+-- 	conditions = {
+-- 		Deaths(P6, AtLeast, 1, 113)
+-- 	},
+-- 	actions = {
+-- 		DisplayText("Factory Destroyed! + 85000 Points");
+-- 		SetScore(CurrentPlayer, Add, 85000, Kills);
+-- 		SetDeaths(CurrentPlayer, SetTo, 1, 222);
+-- 		PreserveTrigger()
+-- 	}
+-- }
+
 
 
 function SetMemoryBA(Offset,Type,Value)
@@ -2280,50 +2350,50 @@ Trigger {
 	}
 }
 
-CAPlot(CS_SortR(HiveEtf1,1),P6,84,"Hive3",{1472,2704},1,32,{1,0,0,0,HiveEtf1[1]/36,0},nil,P6,{CommandLeastAt(133,"Hive3")})
+CAPlot(CS_SortR(HiveEtf1,1),P6,84,"Hive3",{1388,2612},1,32,{1,0,0,0,HiveEtf1[1]/36,0},nil,P6,{CommandLeastAt(133,"Hive3")})
 for i = 1 ,16 do
 	Line1 = CSMakeLineX(2,64,90+11*i,17,1)
-	CSPlotOrder(Line1,P6,56,"Hive3",{1472,2704},1,32,Line1,0,Attack, "bunkerHeal",nil,0,nil,P6,{CommandLeastAt(133, "Hive3"), Deaths(P10, Exactly, HiveGenTime[i] * SDspeed, 12)} )
+	CSPlotOrder(Line1,P6,56,"Hive3",{1388,2612},1,32,Line1,0,Attack, "bunkerHeal",nil,0,nil,P6,{CommandLeastAt(133, "Hive3"), Deaths(P10, Exactly, HiveGenTime[i] * SDspeed, 12)} )
 end
 
 for i = 1 ,15 do
 	Line2 = CSMakeLineX(2,64,101+11*i,17,1)
-	CSPlotWithProperties(Line2, P6, 84, "Hive3", {1472,2704}, 1, 32, P6, {CommandLeastAt(133, "Hive3"), Deaths(P10, AtLeast, HiveEftTime[i] * SDspeed, 12)},nil,0,EftProperties)
+	CSPlotWithProperties(Line2, P6, 84, "Hive3", {1388,2612}, 1, 32, P6, {CommandLeastAt(133, "Hive3"), Deaths(P10, AtLeast, HiveEftTime[i] * SDspeed, 12)},nil,0,EftProperties)
 end
 
-CSPlotOrder(Triangle2, P6, 38, "Hive3", {1472,2704}, 1, 20, Triangle2, 0, Attack, "bunkerHeal", nil,0 , nil, P6, {CommandLeastAt(133, "Hive3"), Deaths(P10, AtLeast, HiveGenTime[1] * SDspeed, 12)})
-CSPlotOrder(Triangle1, P6, 51, "Hive3", {1472,2704}, 1, 20, Triangle1, 0, Attack, "bunkerHeal", nil,0 , nil, P6, {CommandLeastAt(133, "Hive3"), Deaths(P10, AtLeast, HiveGenTime[1] * SDspeed, 12)})
+CSPlotOrder(Triangle2, P6, 38, "Hive3", {1388,2612}, 1, 20, Triangle2, 0, Attack, "bunkerHeal", nil,0 , nil, P6, {CommandLeastAt(133, "Hive3"), Deaths(P10, AtLeast, HiveGenTime[1] * SDspeed, 12)})
+CSPlotOrder(Triangle1, P6, 51, "Hive3", {1388,2612}, 1, 20, Triangle1, 0, Attack, "bunkerHeal", nil,0 , nil, P6, {CommandLeastAt(133, "Hive3"), Deaths(P10, AtLeast, HiveGenTime[1] * SDspeed, 12)})
 
 
-CSPlotOrder(LGU3, P6, 16, "Hive3", {1472,2704}, 1, 20, LGU3, 0, Attack, "bunkerHeal", nil,0 , nil, P6, {CommandLeastAt(133, "Hive3"), Deaths(P10, AtLeast, HiveGenTime[5] * SDspeed, 12)})
-CSPlotOrder(LGU2, P6, 38, "Hive3", {1472,2704}, 1, 20, LGU2, 0, Attack, "bunkerHeal", nil,0 , nil, P6, {CommandLeastAt(133, "Hive3"), Deaths(P10, AtLeast, HiveGenTime[5] * SDspeed, 12)})
-CSPlotOrder(LGU1, P6, 48, "Hive3", {1472,2704}, 1, 20, LGU1, 0, Attack, "bunkerHeal", nil,0 , nil, P6, {CommandLeastAt(133, "Hive3"), Deaths(P10, AtLeast, HiveGenTime[5] * SDspeed, 12)})
+CSPlotOrder(LGU3, P6, 16, "Hive3", {1388,2612}, 1, 20, LGU3, 0, Attack, "bunkerHeal", nil,0 , nil, P6, {CommandLeastAt(133, "Hive3"), Deaths(P10, AtLeast, HiveGenTime[5] * SDspeed, 12)})
+CSPlotOrder(LGU2, P6, 38, "Hive3", {1388,2612}, 1, 20, LGU2, 0, Attack, "bunkerHeal", nil,0 , nil, P6, {CommandLeastAt(133, "Hive3"), Deaths(P10, AtLeast, HiveGenTime[5] * SDspeed, 12)})
+CSPlotOrder(LGU1, P6, 48, "Hive3", {1388,2612}, 1, 20, LGU1, 0, Attack, "bunkerHeal", nil,0 , nil, P6, {CommandLeastAt(133, "Hive3"), Deaths(P10, AtLeast, HiveGenTime[5] * SDspeed, 12)})
 
 
-CSPlotOrderWithProperties(Trdline, P6, 69, "Hive3", {1472,2704}, 1, 20, Trdline, 0, Attack, "bunkerHeal", nil,0 , nil, P6, {CommandLeastAt(133, "Hive3"), Deaths(P10, AtLeast, HiveGenTime[5] * SDspeed, 12)},nil,0,HiveProperties)
-CSPlotOrder(LGU3, P6, 16, "Hive3", {1472,2704}, 1, 20, LGU3, 0, Attack, "bunkerHeal", nil,0 , nil, P6, {CommandLeastAt(133, "Hive3"), Deaths(P10, AtLeast, HiveGenTime[9] * SDspeed, 12)})
-CSPlotOrder(LGU2, P6, 38, "Hive3", {1472,2704}, 1, 20, LGU2, 0, Attack, "bunkerHeal", nil,0 , nil, P6, {CommandLeastAt(133, "Hive3"), Deaths(P10, AtLeast, HiveGenTime[9] * SDspeed, 12)})
-CSPlotOrder(LGU1, P6, 51, "Hive3", {1472,2704}, 1, 20, LGU1, 0, Attack, "bunkerHeal", nil,0 , nil, P6, {CommandLeastAt(133, "Hive3"), Deaths(P10, AtLeast, HiveGenTime[9] * SDspeed, 12)})
+CSPlotOrderWithProperties(Trdline, P6, 69, "Hive3", {1388,2612}, 1, 20, Trdline, 0, Attack, "bunkerHeal", nil,0 , nil, P6, {CommandLeastAt(133, "Hive3"), Deaths(P10, AtLeast, HiveGenTime[5] * SDspeed, 12)},nil,0,HiveProperties)
+CSPlotOrder(LGU3, P6, 16, "Hive3", {1388,2612}, 1, 20, LGU3, 0, Attack, "bunkerHeal", nil,0 , nil, P6, {CommandLeastAt(133, "Hive3"), Deaths(P10, AtLeast, HiveGenTime[9] * SDspeed, 12)})
+CSPlotOrder(LGU2, P6, 38, "Hive3", {1388,2612}, 1, 20, LGU2, 0, Attack, "bunkerHeal", nil,0 , nil, P6, {CommandLeastAt(133, "Hive3"), Deaths(P10, AtLeast, HiveGenTime[9] * SDspeed, 12)})
+CSPlotOrder(LGU1, P6, 51, "Hive3", {1388,2612}, 1, 20, LGU1, 0, Attack, "bunkerHeal", nil,0 , nil, P6, {CommandLeastAt(133, "Hive3"), Deaths(P10, AtLeast, HiveGenTime[9] * SDspeed, 12)})
 
-CSPlotOrderWithProperties(Trdline2, P6, 62, "Hive3", {1472,2704}, 1, 20, Trdline2, 0, Attack, "bunkerHeal", nil,0 , nil, P6, {CommandLeastAt(133, "Hive3"), Deaths(P10, AtLeast, HiveGenTime[9] * SDspeed, 12)},nil,0,HiveProperties)
+CSPlotOrderWithProperties(Trdline2, P6, 62, "Hive3", {1388,2612}, 1, 20, Trdline2, 0, Attack, "bunkerHeal", nil,0 , nil, P6, {CommandLeastAt(133, "Hive3"), Deaths(P10, AtLeast, HiveGenTime[9] * SDspeed, 12)},nil,0,HiveProperties)
 
-CSPlotOrderWithProperties(Trdline, P6, 62, "Hive3", {1472,2704}, 1, 20, Trdline2, 0, Attack, "bunkerHeal", nil,0 , nil, P6, {CommandLeastAt(133, "Hive3"), Deaths(P10, AtLeast, HiveGenTime[13] * SDspeed, 12)},nil,0,HiveProperties)
+CSPlotOrderWithProperties(Trdline, P6, 62, "Hive3", {1388,2612}, 1, 20, Trdline2, 0, Attack, "bunkerHeal", nil,0 , nil, P6, {CommandLeastAt(133, "Hive3"), Deaths(P10, AtLeast, HiveGenTime[13] * SDspeed, 12)},nil,0,HiveProperties)
 
-CSPlotOrder(LGU3, P6, 16, "Hive3", {1472,2704}, 1, 20, LGU3, 0, Attack, "bunkerHeal", nil,0 , nil, P6, {CommandLeastAt(133, "Hive3"), Deaths(P10, AtLeast, HiveGenTime[13] * SDspeed, 12)})
-CSPlotOrder(LGU2, P6, 38, "Hive3", {1472,2704}, 1, 20, LGU2, 0, Attack, "bunkerHeal", nil,0 , nil, P6, {CommandLeastAt(133, "Hive3"), Deaths(P10, AtLeast, HiveGenTime[13] * SDspeed, 12)})
-CSPlotOrder(LGU1, P6, 51, "Hive3", {1472,2704}, 1, 20, LGU1, 0, Attack, "bunkerHeal", nil,0 , nil, P6, {CommandLeastAt(133, "Hive3"), Deaths(P10, AtLeast, HiveGenTime[13] * SDspeed, 12)})
+CSPlotOrder(LGU3, P6, 16, "Hive3", {1388,2612}, 1, 20, LGU3, 0, Attack, "bunkerHeal", nil,0 , nil, P6, {CommandLeastAt(133, "Hive3"), Deaths(P10, AtLeast, HiveGenTime[13] * SDspeed, 12)})
+CSPlotOrder(LGU2, P6, 38, "Hive3", {1388,2612}, 1, 20, LGU2, 0, Attack, "bunkerHeal", nil,0 , nil, P6, {CommandLeastAt(133, "Hive3"), Deaths(P10, AtLeast, HiveGenTime[13] * SDspeed, 12)})
+CSPlotOrder(LGU1, P6, 51, "Hive3", {1388,2612}, 1, 20, LGU1, 0, Attack, "bunkerHeal", nil,0 , nil, P6, {CommandLeastAt(133, "Hive3"), Deaths(P10, AtLeast, HiveGenTime[13] * SDspeed, 12)})
 
-CSPlotOrder(Triangle2, P6, 38, "Hive3", {1472,2704}, 1, 20, Triangle2, 0, Attack, "bunkerHeal", nil,0 , nil, P6, {CommandLeastAt(133, "Hive3"), Deaths(P10, AtLeast, HiveGenTime[16] * SDspeed, 12)})
-CSPlotOrder(Triangle1, P6, 51, "Hive3", {1472,2704}, 1, 20, Triangle1, 0, Attack, "bunkerHeal", nil,0 , nil, P6, {CommandLeastAt(133, "Hive3"), Deaths(P10, AtLeast, HiveGenTime[16] * SDspeed, 12)})
+CSPlotOrder(Triangle2, P6, 38, "Hive3", {1388,2612}, 1, 20, Triangle2, 0, Attack, "bunkerHeal", nil,0 , nil, P6, {CommandLeastAt(133, "Hive3"), Deaths(P10, AtLeast, HiveGenTime[16] * SDspeed, 12)})
+CSPlotOrder(Triangle1, P6, 51, "Hive3", {1388,2612}, 1, 20, Triangle1, 0, Attack, "bunkerHeal", nil,0 , nil, P6, {CommandLeastAt(133, "Hive3"), Deaths(P10, AtLeast, HiveGenTime[16] * SDspeed, 12)})
 
 for e = 2,8 do
-	CSPlotOrder(CS_Rotate(LGU1,10*(e-1)), P7, 84, "Hive3", {1472,2704}, 1, 20, CS_Rotate(LGU1,10*(e-1)), 0, Attack , "bunkerHeal", nil, 0, nil, P7, {CommandLeastAt(133, "Hive3"), Deaths(P10, AtLeast, HiveGenTime2[e] * SDspeed,12)})
-	CSPlotOrder(CS_Rotate(LGU2,10*(e-1)), P6, 84, "Hive3", {1472,2704}, 1, 20, CS_Rotate(LGU2,10*(e-1)), 0, Attack , "bunkerHeal", nil, 0, nil, P6, {CommandLeastAt(133, "Hive3"), Deaths(P10, AtLeast, HiveGenTime2[e] * SDspeed,12)})
-	CSPlotOrder(CS_Rotate(LGU3,10*(e-1)), P7, 84, "Hive3", {1472,2704}, 1, 20, CS_Rotate(LGU3,10*(e-1)), 0, Attack , "bunkerHeal", nil, 0, nil, P7, {CommandLeastAt(133, "Hive3"), Deaths(P10, AtLeast, HiveGenTime2[e] * SDspeed,12)})
+	CSPlotOrder(CS_Rotate(LGU1,10*(e-1)), P7, 84, "Hive3", {1388,2612}, 1, 20, CS_Rotate(LGU1,10*(e-1)), 0, Attack , "bunkerHeal", nil, 0, nil, P7, {CommandLeastAt(133, "Hive3"), Deaths(P10, AtLeast, HiveGenTime2[e] * SDspeed,12)})
+	CSPlotOrder(CS_Rotate(LGU2,10*(e-1)), P6, 84, "Hive3", {1388,2612}, 1, 20, CS_Rotate(LGU2,10*(e-1)), 0, Attack , "bunkerHeal", nil, 0, nil, P6, {CommandLeastAt(133, "Hive3"), Deaths(P10, AtLeast, HiveGenTime2[e] * SDspeed,12)})
+	CSPlotOrder(CS_Rotate(LGU3,10*(e-1)), P7, 84, "Hive3", {1388,2612}, 1, 20, CS_Rotate(LGU3,10*(e-1)), 0, Attack , "bunkerHeal", nil, 0, nil, P7, {CommandLeastAt(133, "Hive3"), Deaths(P10, AtLeast, HiveGenTime2[e] * SDspeed,12)})
 
-	CSPlotOrder(CS_Rotate(LGU1,10*(e-1)), P7, 51, "Hive3", {1472,2704}, 1, 20, CS_Rotate(LGU1,10*(e-1)), 0, Attack , "bunkerHeal", nil, 0, nil, P7, {CommandLeastAt(133, "Hive3"), Deaths(P10, AtLeast, HiveGenTime2[e] * SDspeed,12)})
-	CSPlotOrder(CS_Rotate(LGU2,10*(e-1)), P6, 16, "Hive3", {1472,2704}, 1, 20, CS_Rotate(LGU2,10*(e-1)), 0, Attack , "bunkerHeal", nil, 0, nil, P6, {CommandLeastAt(133, "Hive3"), Deaths(P10, AtLeast, HiveGenTime2[e] * SDspeed,12)})
-	CSPlotOrder(CS_Rotate(LGU3,10*(e-1)), P7, 46, "Hive3", {1472,2704}, 1, 20, CS_Rotate(LGU3,10*(e-1)), 0, Attack , "bunkerHeal", nil, 0, nil, P7, {CommandLeastAt(133, "Hive3"), Deaths(P10, AtLeast, HiveGenTime2[e] * SDspeed,12)})
+	CSPlotOrder(CS_Rotate(LGU1,10*(e-1)), P7, 51, "Hive3", {1388,2612}, 1, 20, CS_Rotate(LGU1,10*(e-1)), 0, Attack , "bunkerHeal", nil, 0, nil, P7, {CommandLeastAt(133, "Hive3"), Deaths(P10, AtLeast, HiveGenTime2[e] * SDspeed,12)})
+	CSPlotOrder(CS_Rotate(LGU2,10*(e-1)), P6, 16, "Hive3", {1388,2612}, 1, 20, CS_Rotate(LGU2,10*(e-1)), 0, Attack , "bunkerHeal", nil, 0, nil, P6, {CommandLeastAt(133, "Hive3"), Deaths(P10, AtLeast, HiveGenTime2[e] * SDspeed,12)})
+	CSPlotOrder(CS_Rotate(LGU3,10*(e-1)), P7, 46, "Hive3", {1388,2612}, 1, 20, CS_Rotate(LGU3,10*(e-1)), 0, Attack , "bunkerHeal", nil, 0, nil, P7, {CommandLeastAt(133, "Hive3"), Deaths(P10, AtLeast, HiveGenTime2[e] * SDspeed,12)})
 end
 
 
@@ -2333,7 +2403,7 @@ Trigger {
 		CommandLeastAt(133, "Hive4");
 	},
 	actions = {
-		SetDeaths(P10, Add, 1, 13);
+		SetDeaths(P10, Add, 1, 14);
 		PreserveTrigger()
 	}
 }
@@ -2341,47 +2411,47 @@ Trigger {
 CAPlot(CS_SortR(HiveEtf1,1),P6,84,"Hive4",{1760,2544},1,32,{1,0,0,0,HiveEtf1[1]/36,0},nil,P6,{CommandLeastAt(133,"Hive4")})
 for i = 1 ,16 do
 	Line1 = CSMakeLineX(2,64,90+11*i,17,1)
-	CSPlotOrder(Line1,P6,56,"Hive4",{1760,2544},1,32,Line1,0,Attack, "bunkerHeal",nil,0,nil,P6,{CommandLeastAt(133, "Hive4"), Deaths(P10, Exactly, HiveGenTime[i] * SDspeed, 13)} )
+	CSPlotOrder(Line1,P6,56,"Hive4",{1760,2544},1,32,Line1,0,Attack, "bunkerHeal",nil,0,nil,P6,{CommandLeastAt(133, "Hive4"), Deaths(P10, Exactly, HiveGenTime[i] * SDspeed, 14)} )
 end
 
 for i = 1 ,15 do
 	Line2 = CSMakeLineX(2,64,101+11*i,17,1)
-	CSPlotWithProperties(Line2, P6, 84, "Hive4", {1760,2544}, 1, 32, P6, {CommandLeastAt(133, "Hive4"), Deaths(P10, AtLeast, HiveEftTime[i] * SDspeed, 13)},nil,0,EftProperties)
+	CSPlotWithProperties(Line2, P6, 84, "Hive4", {1760,2544}, 1, 32, P6, {CommandLeastAt(133, "Hive4"), Deaths(P10, AtLeast, HiveEftTime[i] * SDspeed, 14)},nil,0,EftProperties)
 end
 
-CSPlotOrder(Triangle2, P6, 38, "Hive4", {1760,2544}, 1, 20, Triangle2, 0, Attack, "bunkerHeal", nil,0 , nil, P6, {CommandLeastAt(133, "Hive4"), Deaths(P10, AtLeast, HiveGenTime[1] * SDspeed, 13)})
-CSPlotOrder(Triangle1, P6, 51, "Hive4", {1760,2544}, 1, 20, Triangle1, 0, Attack, "bunkerHeal", nil,0 , nil, P6, {CommandLeastAt(133, "Hive4"), Deaths(P10, AtLeast, HiveGenTime[1] * SDspeed, 13)})
+CSPlotOrder(Triangle2, P6, 38, "Hive4", {1760,2544}, 1, 20, Triangle2, 0, Attack, "bunkerHeal", nil,0 , nil, P6, {CommandLeastAt(133, "Hive4"), Deaths(P10, AtLeast, HiveGenTime[1] * SDspeed, 14)})
+CSPlotOrder(Triangle1, P6, 51, "Hive4", {1760,2544}, 1, 20, Triangle1, 0, Attack, "bunkerHeal", nil,0 , nil, P6, {CommandLeastAt(133, "Hive4"), Deaths(P10, AtLeast, HiveGenTime[1] * SDspeed, 14)})
 
 
-CSPlotOrder(LGU3, P6, 16, "Hive4", {1760,2544}, 1, 20, LGU3, 0, Attack, "bunkerHeal", nil,0 , nil, P6, {CommandLeastAt(133, "Hive4"), Deaths(P10, AtLeast, HiveGenTime[5] * SDspeed, 13)})
-CSPlotOrder(LGU2, P6, 38, "Hive4", {1760,2544}, 1, 20, LGU2, 0, Attack, "bunkerHeal", nil,0 , nil, P6, {CommandLeastAt(133, "Hive4"), Deaths(P10, AtLeast, HiveGenTime[5] * SDspeed, 13)})
-CSPlotOrder(LGU1, P6, 48, "Hive4", {1760,2544}, 1, 20, LGU1, 0, Attack, "bunkerHeal", nil,0 , nil, P6, {CommandLeastAt(133, "Hive4"), Deaths(P10, AtLeast, HiveGenTime[5] * SDspeed, 13)})
+CSPlotOrder(LGU3, P6, 16, "Hive4", {1760,2544}, 1, 20, LGU3, 0, Attack, "bunkerHeal", nil,0 , nil, P6, {CommandLeastAt(133, "Hive4"), Deaths(P10, AtLeast, HiveGenTime[5] * SDspeed, 14)})
+CSPlotOrder(LGU2, P6, 38, "Hive4", {1760,2544}, 1, 20, LGU2, 0, Attack, "bunkerHeal", nil,0 , nil, P6, {CommandLeastAt(133, "Hive4"), Deaths(P10, AtLeast, HiveGenTime[5] * SDspeed, 14)})
+CSPlotOrder(LGU1, P6, 48, "Hive4", {1760,2544}, 1, 20, LGU1, 0, Attack, "bunkerHeal", nil,0 , nil, P6, {CommandLeastAt(133, "Hive4"), Deaths(P10, AtLeast, HiveGenTime[5] * SDspeed, 14)})
 
 
-CSPlotOrderWithProperties(Trdline, P6, 69, "Hive4", {1760,2544}, 1, 20, Trdline, 0, Attack, "bunkerHeal", nil,0 , nil, P6, {CommandLeastAt(133, "Hive4"), Deaths(P10, AtLeast, HiveGenTime[5] * SDspeed, 13)},nil,0,HiveProperties)
-CSPlotOrder(LGU3, P6, 16, "Hive4", {1760,2544}, 1, 20, LGU3, 0, Attack, "bunkerHeal", nil,0 , nil, P6, {CommandLeastAt(133, "Hive4"), Deaths(P10, AtLeast, HiveGenTime[9] * SDspeed, 13)})
-CSPlotOrder(LGU2, P6, 38, "Hive4", {1760,2544}, 1, 20, LGU2, 0, Attack, "bunkerHeal", nil,0 , nil, P6, {CommandLeastAt(133, "Hive4"), Deaths(P10, AtLeast, HiveGenTime[9] * SDspeed, 13)})
-CSPlotOrder(LGU1, P6, 51, "Hive4", {1760,2544}, 1, 20, LGU1, 0, Attack, "bunkerHeal", nil,0 , nil, P6, {CommandLeastAt(133, "Hive4"), Deaths(P10, AtLeast, HiveGenTime[9] * SDspeed, 13)})
+CSPlotOrderWithProperties(Trdline, P6, 69, "Hive4", {1760,2544}, 1, 20, Trdline, 0, Attack, "bunkerHeal", nil,0 , nil, P6, {CommandLeastAt(133, "Hive4"), Deaths(P10, AtLeast, HiveGenTime[5] * SDspeed, 14)},nil,0,HiveProperties)
+CSPlotOrder(LGU3, P6, 16, "Hive4", {1760,2544}, 1, 20, LGU3, 0, Attack, "bunkerHeal", nil,0 , nil, P6, {CommandLeastAt(133, "Hive4"), Deaths(P10, AtLeast, HiveGenTime[9] * SDspeed, 14)})
+CSPlotOrder(LGU2, P6, 38, "Hive4", {1760,2544}, 1, 20, LGU2, 0, Attack, "bunkerHeal", nil,0 , nil, P6, {CommandLeastAt(133, "Hive4"), Deaths(P10, AtLeast, HiveGenTime[9] * SDspeed, 14)})
+CSPlotOrder(LGU1, P6, 51, "Hive4", {1760,2544}, 1, 20, LGU1, 0, Attack, "bunkerHeal", nil,0 , nil, P6, {CommandLeastAt(133, "Hive4"), Deaths(P10, AtLeast, HiveGenTime[9] * SDspeed, 14)})
 
-CSPlotOrderWithProperties(Trdline2, P6, 62, "Hive4", {1760,2544}, 1, 20, Trdline2, 0, Attack, "bunkerHeal", nil,0 , nil, P6, {CommandLeastAt(133, "Hive4"), Deaths(P10, AtLeast, HiveGenTime[9] * SDspeed, 13)},nil,0,HiveProperties)
+CSPlotOrderWithProperties(Trdline2, P6, 62, "Hive4", {1760,2544}, 1, 20, Trdline2, 0, Attack, "bunkerHeal", nil,0 , nil, P6, {CommandLeastAt(133, "Hive4"), Deaths(P10, AtLeast, HiveGenTime[9] * SDspeed, 14)},nil,0,HiveProperties)
 
-CSPlotOrderWithProperties(Trdline, P6, 62, "Hive4", {1760,2544}, 1, 20, Trdline2, 0, Attack, "bunkerHeal", nil,0 , nil, P6, {CommandLeastAt(133, "Hive4"), Deaths(P10, AtLeast, HiveGenTime[13] * SDspeed, 13)},nil,0,HiveProperties)
+CSPlotOrderWithProperties(Trdline, P6, 62, "Hive4", {1760,2544}, 1, 20, Trdline2, 0, Attack, "bunkerHeal", nil,0 , nil, P6, {CommandLeastAt(133, "Hive4"), Deaths(P10, AtLeast, HiveGenTime[13] * SDspeed, 14)},nil,0,HiveProperties)
 
-CSPlotOrder(LGU3, P6, 16, "Hive4", {1760,2544}, 1, 20, LGU3, 0, Attack, "bunkerHeal", nil,0 , nil, P6, {CommandLeastAt(133, "Hive4"), Deaths(P10, AtLeast, HiveGenTime[13] * SDspeed, 13)})
-CSPlotOrder(LGU2, P6, 38, "Hive4", {1760,2544}, 1, 20, LGU2, 0, Attack, "bunkerHeal", nil,0 , nil, P6, {CommandLeastAt(133, "Hive4"), Deaths(P10, AtLeast, HiveGenTime[13] * SDspeed, 13)})
-CSPlotOrder(LGU1, P6, 51, "Hive4", {1760,2544}, 1, 20, LGU1, 0, Attack, "bunkerHeal", nil,0 , nil, P6, {CommandLeastAt(133, "Hive4"), Deaths(P10, AtLeast, HiveGenTime[13] * SDspeed, 13)})
+CSPlotOrder(LGU3, P6, 16, "Hive4", {1760,2544}, 1, 20, LGU3, 0, Attack, "bunkerHeal", nil,0 , nil, P6, {CommandLeastAt(133, "Hive4"), Deaths(P10, AtLeast, HiveGenTime[13] * SDspeed, 14)})
+CSPlotOrder(LGU2, P6, 38, "Hive4", {1760,2544}, 1, 20, LGU2, 0, Attack, "bunkerHeal", nil,0 , nil, P6, {CommandLeastAt(133, "Hive4"), Deaths(P10, AtLeast, HiveGenTime[13] * SDspeed, 14)})
+CSPlotOrder(LGU1, P6, 51, "Hive4", {1760,2544}, 1, 20, LGU1, 0, Attack, "bunkerHeal", nil,0 , nil, P6, {CommandLeastAt(133, "Hive4"), Deaths(P10, AtLeast, HiveGenTime[13] * SDspeed, 14)})
 
-CSPlotOrder(Triangle2, P6, 38, "Hive4", {1760,2544}, 1, 20, Triangle2, 0, Attack, "bunkerHeal", nil,0 , nil, P6, {CommandLeastAt(133, "Hive4"), Deaths(P10, AtLeast, HiveGenTime[16] * SDspeed, 13)})
-CSPlotOrder(Triangle1, P6, 51, "Hive4", {1760,2544}, 1, 20, Triangle1, 0, Attack, "bunkerHeal", nil,0 , nil, P6, {CommandLeastAt(133, "Hive4"), Deaths(P10, AtLeast, HiveGenTime[16] * SDspeed, 13)})
+CSPlotOrder(Triangle2, P6, 38, "Hive4", {1760,2544}, 1, 20, Triangle2, 0, Attack, "bunkerHeal", nil,0 , nil, P6, {CommandLeastAt(133, "Hive4"), Deaths(P10, AtLeast, HiveGenTime[16] * SDspeed, 14)})
+CSPlotOrder(Triangle1, P6, 51, "Hive4", {1760,2544}, 1, 20, Triangle1, 0, Attack, "bunkerHeal", nil,0 , nil, P6, {CommandLeastAt(133, "Hive4"), Deaths(P10, AtLeast, HiveGenTime[16] * SDspeed, 14)})
 
 for e = 2,8 do
-	CSPlotOrder(CS_Rotate(LGU1,10*(e-1)), P5, 84, "Hive4", {1760,2544}, 1, 20, CS_Rotate(LGU1,10*(e-1)), 0, Attack , "bunkerHeal", nil, 0, nil, P5, {CommandLeastAt(133, "Hive4"), Deaths(P10, AtLeast, HiveGenTime2[e] * SDspeed,13)})
-	CSPlotOrder(CS_Rotate(LGU2,10*(e-1)), P6, 84, "Hive4", {1760,2544}, 1, 20, CS_Rotate(LGU2,10*(e-1)), 0, Attack , "bunkerHeal", nil, 0, nil, P6, {CommandLeastAt(133, "Hive4"), Deaths(P10, AtLeast, HiveGenTime2[e] * SDspeed,13)})
-	CSPlotOrder(CS_Rotate(LGU3,10*(e-1)), P5, 84, "Hive4", {1760,2544}, 1, 20, CS_Rotate(LGU3,10*(e-1)), 0, Attack , "bunkerHeal", nil, 0, nil, P5, {CommandLeastAt(133, "Hive4"), Deaths(P10, AtLeast, HiveGenTime2[e] * SDspeed,13)})
+	CSPlotOrder(CS_Rotate(LGU1,10*(e-1)), P5, 84, "Hive4", {1760,2544}, 1, 20, CS_Rotate(LGU1,10*(e-1)), 0, Attack , "bunkerHeal", nil, 0, nil, P5, {CommandLeastAt(133, "Hive4"), Deaths(P10, AtLeast, HiveGenTime2[e] * SDspeed,14)})
+	CSPlotOrder(CS_Rotate(LGU2,10*(e-1)), P6, 84, "Hive4", {1760,2544}, 1, 20, CS_Rotate(LGU2,10*(e-1)), 0, Attack , "bunkerHeal", nil, 0, nil, P6, {CommandLeastAt(133, "Hive4"), Deaths(P10, AtLeast, HiveGenTime2[e] * SDspeed,14)})
+	CSPlotOrder(CS_Rotate(LGU3,10*(e-1)), P5, 84, "Hive4", {1760,2544}, 1, 20, CS_Rotate(LGU3,10*(e-1)), 0, Attack , "bunkerHeal", nil, 0, nil, P5, {CommandLeastAt(133, "Hive4"), Deaths(P10, AtLeast, HiveGenTime2[e] * SDspeed,14)})
 
-	CSPlotOrder(CS_Rotate(LGU1,10*(e-1)), P5, 65, "Hive4", {1760,2544}, 1, 20, CS_Rotate(LGU1,10*(e-1)), 0, Attack , "bunkerHeal", nil, 0, nil, P5, {CommandLeastAt(133, "Hive4"), Deaths(P10, AtLeast, HiveGenTime2[e] * SDspeed,13)})
-	CSPlotOrder(CS_Rotate(LGU2,10*(e-1)), P6, 16, "Hive4", {1760,2544}, 1, 20, CS_Rotate(LGU2,10*(e-1)), 0, Attack , "bunkerHeal", nil, 0, nil, P6, {CommandLeastAt(133, "Hive4"), Deaths(P10, AtLeast, HiveGenTime2[e] * SDspeed,13)})
-	CSPlotOrder(CS_Rotate(LGU3,10*(e-1)), P5, 46, "Hive4", {1760,2544}, 1, 20, CS_Rotate(LGU3,10*(e-1)), 0, Attack , "bunkerHeal", nil, 0, nil, P5, {CommandLeastAt(133, "Hive4"), Deaths(P10, AtLeast, HiveGenTime2[e] * SDspeed,13)})
+	CSPlotOrder(CS_Rotate(LGU1,10*(e-1)), P5, 65, "Hive4", {1760,2544}, 1, 20, CS_Rotate(LGU1,10*(e-1)), 0, Attack , "bunkerHeal", nil, 0, nil, P5, {CommandLeastAt(133, "Hive4"), Deaths(P10, AtLeast, HiveGenTime2[e] * SDspeed,14)})
+	CSPlotOrder(CS_Rotate(LGU2,10*(e-1)), P6, 16, "Hive4", {1760,2544}, 1, 20, CS_Rotate(LGU2,10*(e-1)), 0, Attack , "bunkerHeal", nil, 0, nil, P6, {CommandLeastAt(133, "Hive4"), Deaths(P10, AtLeast, HiveGenTime2[e] * SDspeed,14)})
+	CSPlotOrder(CS_Rotate(LGU3,10*(e-1)), P5, 46, "Hive4", {1760,2544}, 1, 20, CS_Rotate(LGU3,10*(e-1)), 0, Attack , "bunkerHeal", nil, 0, nil, P5, {CommandLeastAt(133, "Hive4"), Deaths(P10, AtLeast, HiveGenTime2[e] * SDspeed,14)})
 end
 
 
@@ -2437,10 +2507,50 @@ for e = 2,8 do
 	CSPlotOrder(CS_Rotate(LGU2,10*(e-1)), P6, 84, "Hive5", {2381,2767}, 1, 20, CS_Rotate(LGU2,10*(e-1)), 0, Attack , "bunkerHeal", nil, 0, nil, P6, {CommandLeastAt(133, "Hive5"), Deaths(P10, AtLeast, HiveGenTime2[e] * SDspeed,15)})
 	CSPlotOrder(CS_Rotate(LGU3,10*(e-1)), P5, 84, "Hive5", {2381,2767}, 1, 20, CS_Rotate(LGU3,10*(e-1)), 0, Attack , "bunkerHeal", nil, 0, nil, P5, {CommandLeastAt(133, "Hive5"), Deaths(P10, AtLeast, HiveGenTime2[e] * SDspeed,15)})
 
-	CSPlotOrder(CS_Rotate(LGU1,10*(e-1)), P5, 65, "Hive5", {2381,2767}, 1, 20, CS_Rotate(LGU1,10*(e-1)), 0, Attack , "bunkerHeal", nil, 0, nil, P5, {CommandLeastAt(133, "Hive5"), Deaths(P10, AtLeast, HiveGenTime2[e] * SDspeed,15)})
+	CSPlotOrder(CS_Rotate(LGU1,10*(e-1)), P5, 65, "Hive5", {2381,2767}, 1, 20, CS_Rotate(LGU1,10*(e-1)), 0, Patrol , "bunkerHeal", nil, 0, nil, P5, {CommandLeastAt(133, "Hive5"), Deaths(P10, AtLeast, HiveGenTime2[e] * SDspeed,15)})
 	CSPlotOrder(CS_Rotate(LGU2,10*(e-1)), P6, 16, "Hive5", {2381,2767}, 1, 20, CS_Rotate(LGU2,10*(e-1)), 0, Attack , "bunkerHeal", nil, 0, nil, P6, {CommandLeastAt(133, "Hive5"), Deaths(P10, AtLeast, HiveGenTime2[e] * SDspeed,15)})
-	CSPlotOrder(CS_Rotate(LGU3,10*(e-1)), P5, 78, "Hive5", {2381,2767}, 1, 20, CS_Rotate(LGU3,10*(e-1)), 0, Attack , "bunkerHeal", nil, 0, nil, P5, {CommandLeastAt(133, "Hive5"), Deaths(P10, AtLeast, HiveGenTime2[e] * SDspeed,15)})
+	CSPlotOrder(CS_Rotate(LGU3,10*(e-1)), P5, 66, "Hive5", {2381,2767}, 1, 20, CS_Rotate(LGU3,10*(e-1)), 0, Patrol , "bunkerHeal", nil, 0, nil, P5, {CommandLeastAt(133, "Hive5"), Deaths(P10, AtLeast, HiveGenTime2[e] * SDspeed,15)})
 end
+
+Trigger {
+	players = {P6},
+	conditions = {
+		CommandLeastAt(114, "Starport4");
+	},
+	actions = {
+		SetDeaths(P10, Add, 1, 16);
+		PreserveTrigger();
+	}
+}
+
+Starport_gen = {4.1, 6, 8, 12, 14, 16, 19.8, 21.8, 23.8, 27.7, 29.7, 31.7}
+
+PA = CSMakePolygon(6,80,0,61,1)
+PB = CSMakePolygon(6,80,0,37,1)
+PC = CSMakePolygon(6,80,0,19,1)
+PD = CSMakePolygon(6,80,0,7,0)
+PE = CSMakePolygon(6,80,0,91,1)
+
+arrival = CSMakePolygon(6,1,0,7,0)
+
+
+
+CSPlotOrder(PA, P6, 16, "Starport4", nil, 1, 64, PA, 0, Attack, "Starport4",{2135,2555} , 0, nil, P6, {CommandLeastAt(114, "Starport4"),Deaths(P10, AtLeast, Starport_gen[1] * SDspeed, 16)})
+CSPlotOrder(PB, P6, 66, "Starport4", nil, 1, 64, PB, 0, Attack, "Starport4",{2135,2555} , 0, nil, P6, {CommandLeastAt(114, "Starport4"),Deaths(P10, AtLeast, Starport_gen[1] * SDspeed, 16)})
+CSPlotOrder(PC, P6, 65, "Starport4", nil, 1, 64, PC, 0, Attack, "Starport4",{2135,2555} , 0, nil, P6, {CommandLeastAt(114, "Starport4"),Deaths(P10, AtLeast, Starport_gen[1] * SDspeed, 16)})
+-- CSPlotOrder(PE, P6, 27, "Starport4", nil, 1, 32, CSMakePolygon(6,1,0,91,1), 0, Attack, "Starport4",{2135,2555} , 0, nil, P6, {CommandLeastAt(114, "Starport4"),Deaths(P10, AtLeast, Starport_gen[1] * SDspeed, 16)})
+
+CSPlotOrder(PA, P6, 16, "Starport4", nil, 1, 64, PA, 0, Attack, "Starport4",{2135,2555} , 0, nil, P6, {CommandLeastAt(114, "Starport4"),Deaths(P10, AtLeast, Starport_gen[2] * SDspeed, 16)})
+CSPlotOrder(PB, P6, 66, "Starport4", nil, 1, 64, PB, 0, Attack, "Starport4",{2135,2555} , 0, nil, P6, {CommandLeastAt(114, "Starport4"),Deaths(P10, AtLeast, Starport_gen[2] * SDspeed, 16)})
+CSPlotOrder(PC, P6, 65, "Starport4", nil, 1, 64, PC, 0, Attack, "Starport4",{2135,2555} , 0, nil, P6, {CommandLeastAt(114, "Starport4"),Deaths(P10, AtLeast, Starport_gen[2] * SDspeed, 16)})
+-- CSPlotOrder(PE, P6, 27, "Starport4", nil, 1, 32, CSMakePolygon(6,1,0,91,1), 0, Attack, "Starport4",{2135,2555} , 0, nil, P6, {CommandLeastAt(114, "Starport4"),Deaths(P10, AtLeast, Starport_gen[2] * SDspeed, 16)})
+
+CSPlotOrder(PA, P6, 16, "Starport4", nil, 1, 64, PA, 0, Attack, "Starport4",{2135,2555} , 0, nil, P6, {CommandLeastAt(114, "Starport4"),Deaths(P10, AtLeast, Starport_gen[3] * SDspeed, 16)})
+CSPlotOrder(PB, P6, 66, "Starport4", nil, 1, 64, PB, 0, Attack, "Starport4",{2135,2555} , 0, nil, P6, {CommandLeastAt(114, "Starport4"),Deaths(P10, AtLeast, Starport_gen[3] * SDspeed, 16)})
+CSPlotOrder(PC, P6, 65, "Starport4", nil, 1, 64, PC, 0, Attack, "Starport4",{2135,2555} , 0, nil, P6, {CommandLeastAt(114, "Starport4"),Deaths(P10, AtLeast, Starport_gen[3] * SDspeed, 16)})
+-- CSPlotOrder(PE, P6, 27, "Starport4", nil, 1, 32, CSMakePolygon(6,1,0,91,1), 0, Attack, "Starport4",{2135,2555} , 0, nil, P6, {CommandLeastAt(114, "Starport4"),Deaths(P10, AtLeast, Starport_gen[3] * SDspeed, 16)})
+
+
 
 
 Trigger{
