@@ -4,9 +4,10 @@ LSU3 = CSMakeLineX(6,64,20,30,0)
 LSU4 = CSMakeLineX(6,64,30,30,0)
 LSU5 = CSMakeLineX(6,64,40,30,0)
 
-LGU1 = CSMakePolygonX(6,64,30,6,0)
-LGU2 = CSMakePolygonX(6,64,30,24,6)
-LGU3 = CSMakePolygonX(6,64,30,54,24)
+LGU1 = CSMakePolygon(6,64,30,6,0)
+LGU2 = CSMakePolygon(6,64,30,24,6)
+LGU3 = CSMakePolygon(6,64,30,54,24)
+LGU4 = CSMakePolygon(6,64,30,78,24)
 
 Eft1 = CSMakeLineX(6,64,10,24,0)
 Eft2 = CSMakeLineX(6,64,20,24,0)
@@ -35,18 +36,15 @@ spiral2 = CSMakeSpiral(4, 16, 1/1.2, 40, 45, 37, 5)
 Line1 = CSMakeLineX(2,64,0,23,1)
 CSPlotOrder(CS_MoveRA(Line1,0,10),P6,54,"Hive1",nil,1,32,CS_MoveRA(Line1,0,10),0,Attack, "Hive1", {992,1872},0,nil,P6,{CommandLeastAt(133, "Hive1"), Deaths(P10, AtLeast, HiveGenTime[i] * SDspeed, 10)} )
 
------- this is it --------
+-------------
 C5X = CAPlotForward()
 CAPlot(CS_SortR(S1,0),P1,84,"Location 6",nil,1,32,{1,0,0,0,S1[1]/36,0},nil,P1,nil,nil,{SetCVar("X",C5X[2],SetTo,36)})
 TriggerX(P1,CVar("X",C5X[2],Exactly,2),{RemoveUnit(84,P1)},{Preserved})
 
-S1 = CSMakeSpiral(6, 16, 1/2, 40, 0, 37, 5)
-S1 = CS_CropXY(CS_Rotate(CS_FillXY(1,384,384,32,32),45),{0,0},{0,0})
-
 C6X = CAPlotForward()
-CAPlot(CS_SortR(S1,1),P1,78,"Location 7",nil,1,32,{1,0,0,0,S1[1]/36,0},nil,P1,nil,nil,{SetCVar("X",C6X[2],SetTo,36)})
-TriggerX(P1,CVar("X",C6X[2],Exactly,2),{RemoveUnit(78,P1)},{Preserved})
------- this is it --------
+CAPlot(CS_SortR(S1,1),P1,84,"Location 7",nil,1,32,{1,0,0,0,S1[1]/36,0},nil,P1,nil,nil,{SetCVar("X",C6X[2],SetTo,36)})
+TriggerX(P1,CVar("X",C6X[2],Exactly,2),{RemoveUnit(84,P1)},{Preserved})
+------------
 
 CX2 = CSMakeCircleX(6,80,30,30,0)
 
@@ -67,3 +65,35 @@ HiveGenTime2 = {16.8, 18.7, 20.5, 22.4, 24.3, 26.1, 28, 29.9}
 [2. a10] CheezeNacho: CS_SortRA
 [2. a10] CheezeNacho: 이걸
 [2. a10] CheezeNacho: 쓰십쇼
+
+
+젠 : {4.1, 6, 8, 12, 14, 16, 19.8, 21.8, 23.8, 27.7, 29.7, 31.7}
+effect : 
+count(31.7, 32.7, 33.7, 35.1)
+
+CSPlot(CSMakePolygon(6,80,0,61,1), P1, 1, "Location 1", nil, 1, 32, P1, Always())
+CSPlot(CSMakePolygon(6,80,0,37,1), P1, 1, "Location 2", nil, 1, 32, P1, Always())
+CSPlot(CSMakePolygon(6,80,0,19,1), P1, 1, "Location 3", nil, 1, 32, P1, Always())
+CSPlot(CSMakePolygon(6,80,0,7,0), P1, 1, "Location 4", nil, 1, 32, P1, Always())
+CSPlot(CSMakePolygon(6,80,0,91,1), P1, 1, "Location 5", nil, 1, 32, P1, Always())
+
+CSPlot(CSMakePolygon(6,1,0,61,1), P1, 1, "Location 6", nil, 1, 32, P1, Always())
+CSPlot(CSMakePolygon(6,1,0,37,1), P1, 1, "Location 7", nil, 1, 32, P1, Always())
+CSPlot(CSMakePolygon(6,1,0,19,1), P1, 1, "Location 8", nil, 1, 32, P1, Always())
+CSPlot(CSMakePolygon(6,1,0,7,0), P1, 1, "Location 9", nil, 1, 32, P1, Always())
+CSPlot(CSMakePolygon(6,1,0,91,1), P1, 1, "Location 10", nil, 1, 32, P1, Always())
+
+CSPlot(CSMakeLine(6,180,0,13,0), P1, 1, "Location 11", nil, 1, 32, P1, Always())
+CSPlot(CSMakeCircleX(6,80,30,54,0), P1, 1, "Location 12", nil, 1, 32, P1, Always())
+CSPlot(CSMakeCircleX(6,80,30,54,24), P1, 1, "Location 13", nil, 1, 32, P1, Always()) -- circle
+CSPlot(CSMakeCircleX(6,80,30,30,0), P1, 1, "Location 14", nil, 1, 32, P1, Always())
+
+
+LGU1 = CSMakePolygonX(6,64,30,6,0)
+LGU2 = CSMakePolygonX(6,64,30,24,6)
+LGU3 = CSMakePolygonX(6,64,30,54,24)
+LGU4 = CSMakePolygonX(6,64,30,96,54)
+
+SShape1 = CSMakeCircle(6,64,0,6,1)
+SShape2 = CSMakeCircle(6,64,0,19,7)
+SShape3 = CSMakeCircle(6,64,0,37,19)
