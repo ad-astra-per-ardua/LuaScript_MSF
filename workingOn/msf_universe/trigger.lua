@@ -1015,26 +1015,26 @@ Trigger { -- 변수 초기화
 	},
 }
 
--- Trigger { -- 경우 5
--- 	players = {Force1},
--- 	conditions = {
--- 		Deaths(CurrentPlayer, Exactly, 0, "Unused Terran Bldg type   1");
--- 		Deaths(CurrentPlayer, Exactly, 0, "Zerg Flag Beacon");
--- 		Deaths(CurrentPlayer, Exactly, 0, "Unused Terran Bldg type   2");
--- 		Deaths(CurrentPlayer, Exactly, 0, "Unused Zerg Bldg");
--- 		Deaths(CurrentPlayer, Exactly, 0, "Independent Starport");
--- 		Deaths(CurrentPlayer, Exactly, 0, 220);
--- 		Deaths(CurrentPlayer, Exactly, 0, 221);
--- 		Deaths(CurrentPlayer, Exactly, 1, 218);
--- 		Deaths(CurrentPlayer, Exactly, 0, 158);
--- 	},
--- 	actions = {
--- 		SetDeaths(CurrentPlayer, SetTo, 2074, 221);
--- 		PlayWAV("staredit\\wav\\stargate.ogg");
--- 		PlayWAV("staredit\\wav\\stargate.ogg");
--- 		PreserveTrigger();
--- 	},
--- }
+Trigger { -- 경우 5
+	players = {Force1},
+	conditions = {
+		Deaths(CurrentPlayer, Exactly, 0, "Unused Terran Bldg type   1");
+		Deaths(CurrentPlayer, Exactly, 0, "Zerg Flag Beacon");
+		Deaths(CurrentPlayer, Exactly, 0, "Unused Terran Bldg type   2");
+		Deaths(CurrentPlayer, Exactly, 0, "Unused Zerg Bldg");
+		Deaths(CurrentPlayer, Exactly, 0, "Independent Starport");
+		Deaths(CurrentPlayer, Exactly, 0, 220);
+		Deaths(CurrentPlayer, Exactly, 0, 221);
+		Deaths(CurrentPlayer, Exactly, 1, 218);
+		Deaths(CurrentPlayer, Exactly, 0, 158);
+	},
+	actions = {
+		SetDeaths(CurrentPlayer, SetTo, 2074, 221);
+		PlayWAV("staredit\\wav\\stargate.ogg");
+		PlayWAV("staredit\\wav\\stargate.ogg");
+		PreserveTrigger();
+	},
+}
 
 Trigger { -- 노래시간 감소
 	players = {P6},
@@ -1123,18 +1123,18 @@ Trigger { -- Link with variation with trigger
 -- 	}
 -- }
 
--- Trigger{
--- 	players = {Force1},
--- 	conditions = {
--- 		Deaths(P6, AtLeast, 1, 167);
--- 	},
--- 	actions = {
--- 		DisplayText("Stargate Destroyed! + 100000 Points");
--- 		SetScore(CurrentPlayer, Add, 100000, Kills);
--- 		SetDeaths(CurrentPlayer, SetTo, 1, 218);
--- 		PreserveTrigger();
--- 	},
--- }
+Trigger{
+	players = {Force1},
+	conditions = {
+		Deaths(P6, AtLeast, 1, 167);
+	},
+	actions = {
+		DisplayText("Stargate Destroyed! + 100000 Points");
+		SetScore(CurrentPlayer, Add, 100000, Kills);
+		SetDeaths(CurrentPlayer, SetTo, 1, 218);
+		PreserveTrigger();
+	},
+}
 
 
 
@@ -1673,7 +1673,7 @@ Trigger{
 	}
 }
 
-TriggerX(P6, {Deaths(P8, Exactly, 1021, 131)}, SetDeaths(P8, SetTo, 0, 131),{preserved})
+Trigger2(P6, {Deaths(P8, Exactly, 1021, 131)}, SetDeaths(P8, SetTo, 0, 131),{preserved})
 
 
 CSPlotOrder(WAVE1, P5, 40, "smallWave", nil, 1, 32, WAVE1, 0, Patrol, "bunkerHeal", nil, 64, nil, P6,{Deaths(P8, Exactly, 1020, 131)},nil,1)
@@ -1700,7 +1700,7 @@ Trigger{
 Gentime = SDspeed * 251
 
 for i = 1 , 10 do
-	TriggerX(Force1, Deaths(P8, Exactly, Gentime * i, 132), {PlayWAV("staredit\\wav\\bigwave.ogg"),PlayWAV("staredit\\wav\\bigwave.ogg"),PlayWAV("staredit\\wav\\bigwave.ogg"),MinimapPing("celebrate1")})
+	Trigger2(Force1, Deaths(P8, Exactly, Gentime * i, 132), {PlayWAV("staredit\\wav\\bigwave.ogg"),PlayWAV("staredit\\wav\\bigwave.ogg"),PlayWAV("staredit\\wav\\bigwave.ogg"),MinimapPing("celebrate1")})
 	CSPlotOrder(Bigwave1, P5, 54, "celebrate1", nil, 1, 32, CSMakePolygon(6,1,0,91,1), 0, Attack, "bunkerHeal", nil, 64, nil, P6,{Deaths(P8, Exactly, Gentime * i, 132)},nil,1)
 	CSPlotOrder(Bigwave1, P5, 53, "celebrate1", nil, 1, 32, CSMakePolygon(6,1,0,91,1), 0, Attack, "bunkerHeal", nil, 64, nil, P6,{Deaths(P8, Exactly, Gentime * i, 132)},nil,1)
 	CSPlotOrder(Bigwave1, P5, 55, "celebrate1", nil, 1, 32, CSMakePolygon(6,1,0,91,1), 0, Attack, "bunkerHeal", nil, 64, nil, P6,{Deaths(P8, Exactly, Gentime * i, 132)},nil,1)
@@ -1709,7 +1709,7 @@ for i = 1 , 10 do
 end
 
 for i = 10, 15 do
-	TriggerX(Force1, Deaths(P8, Exactly, Gentime * i + 120, 132), {PlayWAV("staredit\\wav\\bigwave.ogg"),PlayWAV("staredit\\wav\\bigwave.ogg"),PlayWAV("staredit\\wav\\bigwave.ogg"),MinimapPing("celebrate1")})
+	Trigger2(Force1, Deaths(P8, Exactly, Gentime * i + 120, 132), {PlayWAV("staredit\\wav\\bigwave.ogg"),PlayWAV("staredit\\wav\\bigwave.ogg"),PlayWAV("staredit\\wav\\bigwave.ogg"),MinimapPing("celebrate1")})
 	CSPlotOrder(Bigwave1, P5, 65, "celebrate1", nil, 1, 32, CSMakePolygon(6,1,0,91,1), 0, Attack, "bunkerHeal", nil, 64, nil, P6,{Deaths(P8, Exactly, Gentime * i + 120, 132)},nil,1)
 	CSPlotOrder(Bigwave1, P5, 66, "celebrate1", nil, 1, 32, CSMakePolygon(6,1,0,91,1), 0, Attack, "bunkerHeal", nil, 64, nil, P6,{Deaths(P8, Exactly, Gentime * i + 120, 132)},nil,1)
 	CSPlotOrder(Bigwave1, P5, 51, "celebrate1", nil, 1, 32, CSMakePolygon(6,1,0,91,1), 0, Attack, "bunkerHeal", nil, 64, nil, P6,{Deaths(P8, Exactly, Gentime * i + 120, 132)},nil,1)
@@ -1718,7 +1718,7 @@ for i = 10, 15 do
 end
 
 for i = 16, 20 do
-	TriggerX(Force1, Deaths(P8, Exactly, Gentime * i + 180, 132), {PlayWAV("staredit\\wav\\bigwave.ogg"),PlayWAV("staredit\\wav\\bigwave.ogg"),PlayWAV("staredit\\wav\\bigwave.ogg"),MinimapPing("celebrate1")})
+	Trigger2(Force1, Deaths(P8, Exactly, Gentime * i + 180, 132), {PlayWAV("staredit\\wav\\bigwave.ogg"),PlayWAV("staredit\\wav\\bigwave.ogg"),PlayWAV("staredit\\wav\\bigwave.ogg"),MinimapPing("celebrate1")})
 	CSPlotOrder(Bigwave1, P5, 77, "celebrate1", nil, 1, 32, CSMakePolygon(6,1,0,91,1), 0, Attack, "bunkerHeal", nil, 64, nil, P6,{Deaths(P8, Exactly, Gentime * i + 180, 132)},nil,1)
 	CSPlotOrder(Bigwave1, P5, 78, "celebrate1", nil, 1, 32, CSMakePolygon(6,1,0,91,1), 0, Attack, "bunkerHeal", nil, 64, nil, P6,{Deaths(P8, Exactly, Gentime * i + 180, 132)},nil,1)
 	CSPlotOrder(Bigwave1, P5, 104, "celebrate1", nil, 1, 32, CSMakePolygon(6,1,0,91,1), 0, Attack, "bunkerHeal", nil, 64, nil, P6,{Deaths(P8, Exactly, Gentime * i + 180, 132)},nil,1)
@@ -2614,7 +2614,7 @@ Trigger {
 }
 
 for i = 1 , 31 do
-	TriggerX(P6, {CommandLeastAt(114, "Starport4"), Deaths(P10, AtLeast, i, 16)} , {SetMemoryBA(0x657A9C, SetTo, i)})
+	Trigger2(P6, {CommandLeastAt(114, "Starport4"), Deaths(P10, AtLeast, i, 16)} , {SetMemoryBA(0x657A9C, SetTo, i)})
 end
 
 
@@ -2646,7 +2646,7 @@ Trigger {
 }
 
 for i = 1 , 31 do
-	TriggerX(P6, {CommandLeastAt(114, "Starport1"), Deaths(P10, AtLeast, i, 17)} , {SetMemoryBA(0x657A9C, SetTo, i)})
+	Trigger2(P6, {CommandLeastAt(114, "Starport1"), Deaths(P10, AtLeast, i, 17)} , {SetMemoryBA(0x657A9C, SetTo, i)})
 end
 
 for i = 1, 12, 2 do
@@ -2678,7 +2678,7 @@ Trigger {
 }
 
 for i = 1 , 31 do
-	TriggerX(P6, {CommandLeastAt(114, "Starport2"), Deaths(P10, AtLeast, i, 18)} , {SetMemoryBA(0x657A9C, SetTo, i)})
+	Trigger2(P6, {CommandLeastAt(114, "Starport2"), Deaths(P10, AtLeast, i, 18)} , {SetMemoryBA(0x657A9C, SetTo, i)})
 end
 
 for i = 1, 12, 2 do
@@ -2710,7 +2710,7 @@ Trigger {
 }
 
 for i = 1 , 31 do
-	TriggerX(P6, {CommandLeastAt(114, "Starport3"), Deaths(P10, AtLeast, i, 19)} , {SetMemoryBA(0x657A9C, SetTo, i)})
+	Trigger2(P6, {CommandLeastAt(114, "Starport3"), Deaths(P10, AtLeast, i, 19)} , {SetMemoryBA(0x657A9C, SetTo, i)})
 end
 
 for i = 1, 12, 2 do
@@ -2744,23 +2744,22 @@ resource = 0,
 hanger = 0,
 }
 
--- TriggerX(P8, {Always()}, SetAllianceStatus(Force1, AlliedVictory))
--- TriggerX(P6, {CommandLeastAt(167, "Stargate1")}, {SetDeaths(P10, Add, 1, 20)},preserved)
--- StargateGenTime = {1.9, 2.4, 2.9, 3.4, 3.8, 4.3, 4.8, 5.2}
+Trigger2(P8, {Always()}, SetAllianceStatus(Force1, Ally),preserved)
+Trigger2(P6, {CommandLeastAt(167, "Stargate1")}, {SetDeaths(P10, Add, 1, 20)},preserved)
+StargateGenTime = {1.9, 2.4, 2.9, 3.4, 3.8, 4.3, 4.8, 5.2}
 
 
--- CSPlotWithProperties(LGU1, P8, 65, "Stargate1", nil, 1, 64, P8, {CommandLeastAt(167, "Stargate1"), Deaths(P10, AtLeast, StargateGenTime[1] * SDspeed, 20)},nil,nil,StargateProperties)
--- CSPlotWithProperties(LGU2, P8, 65, "Stargate1", nil, 1, 64, P8, {CommandLeastAt(167, "Stargate1"), Deaths(P10, AtLeast, StargateGenTime[2] * SDspeed, 20)},nil,nil,StargateProperties)
--- CSPlotWithProperties(LGU3, P8, 65, "Stargate1", nil, 1, 64, P8, {CommandLeastAt(167, "Stargate1"), Deaths(P10, AtLeast, StargateGenTime[3] * SDspeed, 20)},nil,nil,StargateProperties)
--- CSPlotWithProperties(LGU4, P8, 65, "Stargate1", nil, 1, 64, P8, {CommandLeastAt(167, "Stargate1"), Deaths(P10, AtLeast, StargateGenTime[4] * SDspeed, 20)},nil,nil,StargateProperties)
+CSPlotWithProperties(LGU1, P8, 65, "Stargate1", nil, 1, 64, P8, {CommandLeastAt(167, "Stargate1"), Deaths(P10, AtLeast, StargateGenTime[1] * SDspeed, 20)},nil,nil,StargateProperties)
+CSPlotWithProperties(LGU2, P8, 93, "Stargate1", nil, 1, 64, P8, {CommandLeastAt(167, "Stargate1"), Deaths(P10, AtLeast, StargateGenTime[2] * SDspeed, 20)},nil,nil,StargateProperties)
+CSPlotWithProperties(LGU3, P8, 66, "Stargate1", nil, 1, 64, P8, {CommandLeastAt(167, "Stargate1"), Deaths(P10, AtLeast, StargateGenTime[3] * SDspeed, 20)},nil,nil,StargateProperties)
+CSPlotWithProperties(LGU4, P8, 16, "Stargate1", nil, 1, 64, P8, {CommandLeastAt(167, "Stargate1"), Deaths(P10, AtLeast, StargateGenTime[4] * SDspeed, 20)},nil,nil,StargateProperties)
 
--- CSPlotWithProperties(SShape1, P8, 65, "Stargate1", nil, 1, 64, P8, {CommandLeastAt(167, "Stargate1"), Deaths(P10, AtLeast, StargateGenTime[5] * SDspeed, 20)},nil,nil,StargateProperties)
--- CSPlotWithProperties(SShape2, P8, 65, "Stargate1", nil, 1, 64, P8, {CommandLeastAt(167, "Stargate1"), Deaths(P10, AtLeast, StargateGenTime[6] * SDspeed, 20)},nil,nil,StargateProperties)
--- CSPlotWithProperties(SShape3, P8, 65, "Stargate1", nil, 1, 64, P8, {CommandLeastAt(167, "Stargate1"), Deaths(P10, AtLeast, StargateGenTime[7] * SDspeed, 20)},nil,nil,StargateProperties)
--- CSPlotWithProperties(CS_Overlap(LGU1,LGU2,LGU3,LGU4,SShape1,SShape2,SShape3), P8, 84, "Stargate1", nil, 1, 64, P8, {CommandLeastAt(167, "Stargate1"), Deaths(P10, AtLeast, StargateGenTime[8] * SDspeed, 20)},nil,nil,StargateProperties)
+CSPlotWithProperties(SShape1, P8, 89, "Stargate1", nil, 1, 64, P8, {CommandLeastAt(167, "Stargate1"), Deaths(P10, AtLeast, StargateGenTime[5] * SDspeed, 20)},nil,nil,StargateProperties)
+CSPlotWithProperties(SShape2, P8, 88, "Stargate1", nil, 1, 64, P8, {CommandLeastAt(167, "Stargate1"), Deaths(P10, AtLeast, StargateGenTime[6] * SDspeed, 20)},nil,nil,StargateProperties)
+CSPlotWithProperties(SShape3, P8, 65, "Stargate1", nil, 1, 64, P8, {CommandLeastAt(167, "Stargate1"), Deaths(P10, AtLeast, StargateGenTime[7] * SDspeed, 20)},nil,nil,StargateProperties)
+CSPlotWithProperties(CS_Overlap(LGU1,LGU2,LGU3,LGU4,SShape1,SShape2,SShape3), P8, 84, "Stargate1", nil, 1, 64, P8, {CommandLeastAt(167, "Stargate1"), Deaths(P10, AtLeast, StargateGenTime[8] * SDspeed, 20)},nil,nil,StargateProperties)
 
--- TriggerX(P6,{CommandLeastAt(167, "Stargate1"),Deaths(P10, Exactly, StargateGenTime[8] * SDspeed, 20) }, {GiveUnits(All,"Men" , P8, "Anywhere", P6),SetInvincibility(Disable, "Men", P6, "Anywhere")})
-
+Trigger2(P6,{CommandLeastAt(167, "Stargate1"),Deaths(P10, Exactly, StargateGenTime[8] * SDspeed, 20) }, {GiveUnits(All,"Men" , P8, "Anywhere", P6),SetInvincibility(Disable, "Men", P6, "Anywhere")})
 
 
 
