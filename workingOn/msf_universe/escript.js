@@ -8,7 +8,9 @@ function beforeTriggerExec() {
        {
        	if (IsPName(temp,"AwakenSense"))
        	{
-       		DisplayText("테스터없음");
+       		
+       	}
+       	else{
        		SetMemory(0x968B968B,SetTo,1);
        	}
        		
