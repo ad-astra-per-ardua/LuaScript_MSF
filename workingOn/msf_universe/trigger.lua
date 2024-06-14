@@ -116,7 +116,7 @@ Trigger {
 		KillUnit(84,AllPlayers);
 		KillUnit(72,AllPlayers);
 		KillUnit(67,AllPlayers);
-		KillUnit(33,AllPlayers);
+		KillUnit(94,AllPlayers);
 		PreserveTrigger()
 	}
 }
@@ -2020,7 +2020,7 @@ CSPlotOrder(LSU, P6, 43, "Lair1", nil, 1, 20, LSU, 0, Patrol , "bunkerHeal", nil
 CSPlotOrder(LSU2, P7, 16, "Lair1", nil, 1, 20, LSU2, 0, Attack , "bunkerHeal", nil, 0, nil, P7, {CommandLeastAt(132, "Lair1"), Deaths(P10, AtLeast, LairTimeline[3] * SDspeed,6)})
 
 ---이펙트
-Trigger2(P6, {Deaths(P10, AtLeast, (LairTimeline[4] * SDspeed)-5, 6)}, {SetScanImage(978)})
+Trigger2(P6, {Deaths(P10, AtLeast, (LairTimeline[4] * SDspeed)-5, 6)}, {SetScanImage(3),SetImageScript(3, 17)})
 CSPlot(LSU, P6, 33, "Lair1", nil, 1, 20, P6, {CommandLeastAt(132, "Lair1"), Deaths(P10, AtLeast, LairTimeline[4] * SDspeed,6)})
 CSPlot(LSU2, P6, 33, "Lair1", nil,1, 20, P6, {CommandLeastAt(132, "Lair1"), Deaths(P10, AtLeast, LairTimeline[5] * SDspeed,6)})
 CSPlot(LSU3, P6, 33, "Lair1", nil, 1, 20, P6, {CommandLeastAt(132, "Lair1"), Deaths(P10, AtLeast, LairTimeline[6] * SDspeed,6)})
@@ -2216,7 +2216,6 @@ CSPlotOrder(LSU, P6, 43, "Lair4", nil, 1, 20, LSU, 0, Attack , "bunkerHeal", nil
 CSPlotOrder(LSU2, P7, 16, "Lair4", nil, 1, 20, LSU2, 0, Attack , "bunkerHeal", nil, 0, nil, P7, {CommandLeastAt(132, "Lair4"), Deaths(P10, AtLeast, LairTimeline[3] * SDspeed,9)})
 
 ---이펙트
-Trigger2(P6, {Deaths(P10, AtLeast, (LairTimeline[4] * SDspeed)-5, 9)}, {ScanInitSetting(P6, 0)})
 Trigger2(P6, {Deaths(P10, AtLeast, (LairTimeline[4] * SDspeed)-5, 9)}, {SetScanImage(3)})
 CSPlot(LSU, P6, 33, "Lair4", nil, 1, 20, P6, {CommandLeastAt(132, "Lair4"), Deaths(P10, AtLeast, LairTimeline[4] * SDspeed,9)})
 CSPlot(LSU2, P6, 33, "Lair4", nil,1, 20, P6, {CommandLeastAt(132, "Lair4"), Deaths(P10, AtLeast, LairTimeline[5] * SDspeed,9)})
@@ -2250,7 +2249,7 @@ CSPlotOrderWithProperties(LGU3, P6, 62, "Lair4", nil, 1, 20, LGU3, 0, Attack , "
 CSPlot(Eftstar, P6, 33, "Lair4", nil, 1, 20, P6, {CommandLeastAt(132, "Lair4"), Deaths(P10, AtLeast, LairTimeline[14] * SDspeed,9)})
 CSPlotOrderWithProperties(Eftstar, P6, 43, "Lair4", nil, 1, 20, Eftstar, 0, Attack , "bunkerHeal", nil, 0, nil, P6, {CommandLeastAt(132, "Lair4"), Deaths(P10, AtLeast, LairTimeline[14] * SDspeed,9)},nil,0,TempProperties)
 
-Trigger2(P6, {Deaths(P10, AtLeast, (LairTimeline[14] * SDspeed) + 5, 9)}, {SetScanImage(546)})
+Trigger2(P6, {Deaths(P10, AtLeast, (LairTimeline[14] * SDspeed) + 5, 9)}, {SetScanImage(546),SetImageScript(3, 0)})
 --- Hive -----
 HiveGenTime = { 1.79, 2.7, 3.60, 4.57, 5.5, 6.5, 7.5, 8.4, 9.3, 10.2, 11.1, 12, 12.9, 13.8, 14.7, 15.8}
 HiveEftTime = {2.22, 3.18, 4.15, 5.07, 6, 7, 7.9 ,8.8 ,9.7,10.6, 11.5, 12.4, 13.3, 14.2, 15.1}
@@ -2302,7 +2301,8 @@ Trigger {
 	}
 }
 
-Trigger2(P6, {Deaths(P10, AtLeast, 1, 10)}, {SetScanImage(391)})
+Trigger2(P6, {Deaths(P10, AtLeast, 1, 10)}, {SetScanImage(142)})
+Trigger2(P6, {Deaths(P10, AtLeast, 2, 10)}, {SetImageScript(142, 17)})
 CAPlot(CS_SortR(HiveEtf1,1),P6,33,"Hive1",nil,1,32,{1,0,0,0,HiveEtf1[1]/36,0},nil,P6,{CommandLeastAt(133,"Hive1")})
 for i = 1 ,16 do
 	Line1 = CSMakeLineX(2,64,90+11*i,17,1)
@@ -2350,6 +2350,7 @@ for e = 2,8 do
 	CSPlotOrder(CS_Rotate(LGU2,10*(e-1)), P6, 16, "Hive1", nil, 1, 20, CS_Rotate(LGU2,10*(e-1)), 0, Attack , "bunkerHeal", nil, 0, nil, P6, {CommandLeastAt(133, "Hive1"), Deaths(P10, AtLeast, HiveGenTime2[e] * SDspeed,10)})
 	CSPlotOrder(CS_Rotate(LGU3,10*(e-1)), P7, 46, "Hive1", nil, 1, 20, CS_Rotate(LGU3,10*(e-1)), 0, Patrol , "bunkerHeal", nil, 0, nil, P7, {CommandLeastAt(133, "Hive1"), Deaths(P10, AtLeast, HiveGenTime2[e] * SDspeed,10)})
 end
+Trigger2(P6, {Deaths(P10, AtLeast, (HiveGenTime2[8] * SDspeed) + 5, 10)}, {SetImageScript(142, 9)})
 Trigger2(P6, {Deaths(P10, AtLeast, (HiveGenTime2[8] * SDspeed) + 5, 10)}, {SetScanImage(546)})
 
 
@@ -2363,7 +2364,8 @@ Trigger {
 		PreserveTrigger()
 	}
 }
-Trigger2(P6, {Deaths(P10, AtLeast, 1, 11)}, {SetScanImage(391)})
+Trigger2(P6, {Deaths(P10, AtLeast, 1, 11)}, {SetScanImage(142)})
+Trigger2(P6, {Deaths(P10, AtLeast, 2, 11)}, {SetImageScript(142, 17)})
 CAPlot(CS_SortR(HiveEtf1,1),P6,33,"Hive2",nil,1,32,{1,0,0,0,HiveEtf1[1]/36,0},nil,P6,{CommandLeastAt(133,"Hive2")})
 for i = 1 ,16 do
 	Line1 = CSMakeLineX(2,64,90+11*i,17,1)
@@ -2409,6 +2411,7 @@ for e = 2,8 do
 	CSPlotOrder(CS_Rotate(LGU2,10*(e-1)), P6, 16, "Hive2", nil, 1, 20, CS_Rotate(LGU2,10*(e-1)), 0, Attack , "bunkerHeal", nil, 0, nil, P6, {CommandLeastAt(133, "Hive2"), Deaths(P10, AtLeast, HiveGenTime2[e] * SDspeed,11)})
 	CSPlotOrder(CS_Rotate(LGU3,10*(e-1)), P7, 46, "Hive2", nil, 1, 20, CS_Rotate(LGU3,10*(e-1)), 0, Patrol , "bunkerHeal", nil, 0, nil, P7, {CommandLeastAt(133, "Hive2"), Deaths(P10, AtLeast, HiveGenTime2[e] * SDspeed,11)})
 end
+Trigger2(P6, {Deaths(P10, AtLeast, (HiveGenTime2[8] * SDspeed) + 5, 11)}, {SetImageScript(142, 9)})
 Trigger2(P6, {Deaths(P10, AtLeast, (HiveGenTime2[8] * SDspeed) + 5, 11)}, {SetScanImage(546)})
 
 Trigger {
@@ -2422,7 +2425,8 @@ Trigger {
 	}
 }
 
-Trigger2(P6, {Deaths(P10, AtLeast, 1, 12)}, {SetScanImage(391)})
+Trigger2(P6, {Deaths(P10, AtLeast, 1, 12)}, {SetScanImage(142)})
+Trigger2(P6, {Deaths(P10, AtLeast, 2, 12)}, {SetImageScript(142, 17)})
 CAPlot(CS_SortR(HiveEtf1,1),P6,33,"Hive3",nil,1,32,{1,0,0,0,HiveEtf1[1]/36,0},nil,P6,{CommandLeastAt(133,"Hive3")})
 for i = 1 ,16 do
 	Line1 = CSMakeLineX(2,64,90+11*i,17,1)
@@ -2468,6 +2472,7 @@ for e = 2,8 do
 	CSPlotOrder(CS_Rotate(LGU2,10*(e-1)), P6, 16, "Hive3", nil, 1, 20, CS_Rotate(LGU2,10*(e-1)), 0, Attack , "bunkerHeal", nil, 0, nil, P6, {CommandLeastAt(133, "Hive3"), Deaths(P10, AtLeast, HiveGenTime2[e] * SDspeed,12)})
 	CSPlotOrder(CS_Rotate(LGU3,10*(e-1)), P7, 46, "Hive3", nil, 1, 20, CS_Rotate(LGU3,10*(e-1)), 0, Patrol , "bunkerHeal", nil, 0, nil, P7, {CommandLeastAt(133, "Hive3"), Deaths(P10, AtLeast, HiveGenTime2[e] * SDspeed,12)})
 end
+Trigger2(P6, {Deaths(P10, AtLeast, (HiveGenTime2[8] * SDspeed) + 5, 12)}, {SetImageScript(142, 9)})
 Trigger2(P6, {Deaths(P10, AtLeast, (HiveGenTime2[8] * SDspeed) + 5, 12)}, {SetScanImage(546)})
 
 
@@ -2482,7 +2487,9 @@ Trigger {
 	}
 }
 
-Trigger2(P6, {Deaths(P10, AtLeast, 1, 14)}, {SetScanImage(391)})
+Trigger2(P6, {Deaths(P10, AtLeast, 1, 14)}, {SetScanImage(142)})
+Trigger2(P6, {Deaths(P10, AtLeast, 2, 14)}, {SetImageScript(142, 17)})
+
 CAPlot(CS_SortR(HiveEtf1,1),P6,33,"Hive4",nil,1,32,{1,0,0,0,HiveEtf1[1]/36,0},nil,P6,{CommandLeastAt(133,"Hive4")})
 for i = 1 ,16 do
 	Line1 = CSMakeLineX(2,64,90+11*i,17,1)
@@ -2528,6 +2535,7 @@ for e = 2,8 do
 	CSPlotOrder(CS_Rotate(LGU2,10*(e-1)), P6, 16, "Hive4", nil, 1, 20, CS_Rotate(LGU2,10*(e-1)), 0, Attack , "bunkerHeal", nil, 0, nil, P6, {CommandLeastAt(133, "Hive4"), Deaths(P10, AtLeast, HiveGenTime2[e] * SDspeed,14)})
 	CSPlotOrder(CS_Rotate(LGU3,10*(e-1)), P5, 46, "Hive4", nil, 1, 20, CS_Rotate(LGU3,10*(e-1)), 0, Patrol , "bunkerHeal", nil, 0, nil, P5, {CommandLeastAt(133, "Hive4"), Deaths(P10, AtLeast, HiveGenTime2[e] * SDspeed,14)})
 end
+Trigger2(P6, {Deaths(P10, AtLeast, (HiveGenTime2[8] * SDspeed) + 5, 14)}, {SetImageScript(142, 9)})
 Trigger2(P6, {Deaths(P10, AtLeast, (HiveGenTime2[8] * SDspeed) + 5, 14)}, {SetScanImage(546)})
 
 
@@ -2542,7 +2550,8 @@ Trigger {
 	}
 }
 
-Trigger2(P6, {Deaths(P10, AtLeast, 1, 15)}, {SetScanImage(391)})
+Trigger2(P6, {Deaths(P10, AtLeast, 1, 15)}, {SetScanImage(142)})
+Trigger2(P6, {Deaths(P10, AtLeast, 2, 15)}, {SetImageScript(142, 17)})
 CAPlot(CS_SortR(HiveEtf1,1),P6,33,"Hive5",nil,1,32,{1,0,0,0,HiveEtf1[1]/36,0},nil,P6,{CommandLeastAt(133,"Hive5")})
 for i = 1 ,16 do
 	Line1 = CSMakeLineX(2,64,90+11*i,17,1)
@@ -2588,6 +2597,7 @@ for e = 2,8 do
 	CSPlotOrder(CS_Rotate(LGU2,10*(e-1)), P6, 16, "Hive5", nil, 1, 20, CS_Rotate(LGU2,10*(e-1)), 0, Patrol , "bunkerHeal", nil, 0, nil, P6, {CommandLeastAt(133, "Hive5"), Deaths(P10, AtLeast, HiveGenTime2[e] * SDspeed,15)})
 	CSPlotOrder(CS_Rotate(LGU3,10*(e-1)), P5, 66, "Hive5", nil, 1, 20, CS_Rotate(LGU3,10*(e-1)), 0, Patrol , "bunkerHeal", nil, 0, nil, P5, {CommandLeastAt(133, "Hive5"), Deaths(P10, AtLeast, HiveGenTime2[e] * SDspeed,15)})
 end
+Trigger2(P6, {Deaths(P10, AtLeast, (HiveGenTime2[8] * SDspeed) + 5, 15)}, {SetImageScript(142, 9)})
 Trigger2(P6, {Deaths(P10, AtLeast, (HiveGenTime2[8] * SDspeed) + 5, 15)}, {SetScanImage(546)})
 
 
@@ -2622,7 +2632,7 @@ for i = 1 , 31 do
 	Trigger2(P6, {CommandLeastAt(114, "Starport4"), Deaths(P10, AtLeast, i, 16)} , {SetMemoryBA(0x657A9C, SetTo, i)})
 end
 
-Trigger2(P6, {Deaths(P10, AtLeast, 1, 16)}, {SetScanImage(981)})
+Trigger2(P6, {Deaths(P10, AtLeast, 1, 16)}, {SetScanImage(981),SetImageScript(981, 16)})
 
 for i = 1, 12, 2 do
 	CSPlot(CS_Rotate(PE,23*i), P6, 33, "Starport4", nil, 1, 64, P5, {CommandLeastAt(114, "Starport4"), Deaths(P10, Exactly, 2, 16)})
@@ -2737,13 +2747,14 @@ end
 for r = 4, 12, 4 do
 	CSPlotOrder(PE, P6, 89, "Starport3", nil, 1, 32, CSMakePolygon(6,1,0,91,1), 0, Attack, "bunkerHeal",nil , 0, nil, P6, {CommandLeastAt(114, "Starport3"),Deaths(P10, AtLeast, Starport_gen[r] * SDspeed, 19)})	
 end
-Trigger2(P6, {Deaths(P10, AtLeast, (Starport_gen[12] * SDspeed) + 1, 19)}, {SetScanImage(546)})
+Trigger2(P6, {Deaths(P10, AtLeast, (Starport_gen[12] * SDspeed) + 1, 19)}, {SetScanImage(546),SetImageScript(981, 16)})
 
 
 SShape1 = CSMakeCircle(6,64,0,7,1)
 SShape2 = CSMakeCircle(6,64,0,19,7)
 SShape3 = CSMakeCircle(6,64,0,37,19)
 Overlapped = CS_OverlapX(LGU1, LGU2, LGU3, LGU4)
+Overlapped2 = CS_OverlapX(LGU1, LGU2, LGU3, LGU4, SShape1,SShape2,SShape3)
 
 Shape3 = CSMakeCircleX(6,120,30,54,24)
 Cross = CSMakeLineX(2,32,0, 46,0)
@@ -2864,9 +2875,51 @@ CSPlotOrder(Cross1, P5, 66, "Stargate1", nil, 1, 32, CSMakePolygon(6,1,0,46,0), 
 CSPlotOrder(Cross, P5, 65, "Stargate1", nil, 1, 32, CSMakePolygon(6,1,0,46,0), 0, Attack, "etcAcademy1",nil , 0, nil, P5, {CommandLeastAt(167, "Stargate1"),Deaths(P10, AtLeast, StargateGenTime[23] * SDspeed, 20)})	
 CSPlotOrder(Shape3, P5, 88, "Stargate1", nil, 1, 32, CSMakePolygon(6,1,0,54,24), 0, Attack, "etcAcademy1",nil , 0, nil, P5, {CommandLeastAt(167, "Stargate1"),Deaths(P10, AtLeast, StargateGenTime[23] * SDspeed, 20)})	
 CSPlotOrder(SShape3, P5, 89, "Stargate1", nil, 1, 32, CSMakePolygon(6,1,0,37,19), 0, Attack, "etcAcademy1",nil , 0, nil, P5, {CommandLeastAt(167, "Stargate1"),Deaths(P10, AtLeast, StargateGenTime[23] * SDspeed, 20)})	
-
-
 Trigger2(P6, {Deaths(P10, AtLeast, (StargateGenTime[23] * SDspeed) + 5, 20)}, {SetScanImage(546)})
+
+CSPlotOrder(PA, P6, 88, "Stargate1", nil, 1, 64, PAA, 0, Attack, "bunkerHeal",nil , 0, nil, P6, {CommandLeastAt(114, "Starport3"),Deaths(P10, AtLeast, StargateGenTime[24] * SDspeed, 19)})
+
+---- after effects ---
+
+Trigger2(P6, {Deaths(P10, AtLeast, (StargateGenTime[25] * SDspeed) - 2, 20)}, {SetScanImage(972)})
+CSPlotWithProperties(LGU1, P8, 65, "Stargate1", nil, 1, 64, P8, {CommandLeastAt(167, "Stargate1"), Deaths(P10, AtLeast, StargateGenTime[25] * SDspeed-1, 20)},nil,nil,StargateProperties)
+CSPlotWithProperties(LGU2, P8, 93, "Stargate1", nil, 1, 64, P8, {CommandLeastAt(167, "Stargate1"), Deaths(P10, AtLeast, StargateGenTime[25] * SDspeed-1, 20)},nil,nil,StargateProperties)
+CSPlotWithProperties(LGU3, P8, 66, "Stargate1", nil, 1, 64, P8, {CommandLeastAt(167, "Stargate1"), Deaths(P10, AtLeast, StargateGenTime[25] * SDspeed-1, 20)},nil,nil,StargateProperties)
+CSPlotWithProperties(LGU4, P8, 16, "Stargate1", nil, 1, 64, P8, {CommandLeastAt(167, "Stargate1"), Deaths(P10, AtLeast, StargateGenTime[25] * SDspeed-1, 20)},nil,nil,StargateProperties)
+
+CSPlotWithProperties(SShape1, P8, 89, "Stargate1", nil, 1, 64, P8, {CommandLeastAt(167, "Stargate1"), Deaths(P10, AtLeast, StargateGenTime[25] * SDspeed-1, 20)},nil,nil,StargateProperties)
+CSPlotWithProperties(SShape2, P8, 88, "Stargate1", nil, 1, 64, P8, {CommandLeastAt(167, "Stargate1"), Deaths(P10, AtLeast, StargateGenTime[25] * SDspeed-1, 20)},nil,nil,StargateProperties)
+CSPlotWithProperties(SShape3, P8, 60, "Stargate1", nil, 1, 64, P8, {CommandLeastAt(167, "Stargate1"), Deaths(P10, AtLeast, StargateGenTime[25] * SDspeed-1, 20)},nil,nil,StargatePropertiesHero)
+CSPlotOrder(PB, P5, 89, "Stargate1", nil, 1, 32, CSMakePolygon(6,1,0,37,1), 0, Patrol, "bunkerHeal",nil , 0, nil, P5, {CommandLeastAt(167, "Stargate1"),Deaths(P10, AtLeast, StargateGenTime[25] * SDspeed, 20)})	
+CSPlotWithProperties(PB, P8, 33, "Stargate1", nil, 1, 64, P8, {CommandLeastAt(167, "Stargate1"), Deaths(P10, AtLeast, StargateGenTime[25] * SDspeed, 20)},nil,nil,StargateProperties)
+Trigger2(P6,{CommandLeastAt(167, "Stargate1"),Deaths(P10, Exactly, StargateGenTime[25] * SDspeed,20) }, {GiveUnits(All,"Men" , P8, "Anywhere", P5),SetInvincibility(Disable, "Men", P5, "Anywhere"),Order("Men", P5, "Anywhere", Attack, "Stargate1")})
+Trigger2(P6, {Deaths(P10, AtLeast, (StargateGenTime[25] * SDspeed) + 1, 20)}, {SetScanImage(546)})
+
+---- 2nd effects ----
+
+
+
+
+
+---- after 2nd effects ----
+
+Trigger2(P6, {Deaths(P10, AtLeast, (StargateGenTime[27] * SDspeed) - 2, 20)}, {SetScanImage(972)})
+for i = 27 do
+	CSPlotWithProperties(EllipseArr[1], P8, 65, "Stargate1", nil, 1, 64, P8, {CommandLeastAt(167, "Stargate1"), Deaths(P10, AtLeast, StargateGenTime[i] * SDspeed - 1, 20)},nil,nil,StargateProperties)
+	CSPlotWithProperties(EllipseArr[2], P8, 66, "Stargate1", nil, 1, 64, P8, {CommandLeastAt(167, "Stargate1"), Deaths(P10, AtLeast, StargateGenTime[i] * SDspeed - 1, 20)},nil,nil,StargateProperties)
+	CSPlotWithProperties(EllipseArr[3], P8, 69, "Stargate1", nil, 1, 64, P8, {CommandLeastAt(167, "Stargate1"), Deaths(P10, AtLeast, StargateGenTime[i] * SDspeed - 1, 20)},nil,nil,StargateProperties)
+	CSPlotWithProperties(EllipseArr[4], P8, 95, "Stargate1", nil, 1, 64, P8, {CommandLeastAt(167, "Stargate1"), Deaths(P10, AtLeast, StargateGenTime[i] * SDspeed - 1, 20)},nil,nil,StargateProperties)
+
+	CSPlotWithProperties(EllipseArr[5], P8, 96, "Stargate1", nil, 1, 64, P8, {CommandLeastAt(167, "Stargate1"), Deaths(P10, AtLeast, StargateGenTime[i] * SDspeed - 1, 20)},nil,nil,StargateProperties)
+	CSPlotWithProperties(EllipseArr[6], P8, 12, "Stargate1", nil, 1, 64, P8, {CommandLeastAt(167, "Stargate1"), Deaths(P10, AtLeast, StargateGenTime[i] * SDspeed - 1, 20)},nil,nil,StargateProperties)
+	CSPlotWithProperties(EllipseArr[7], P8, 16, "Stargate1", nil, 1, 64, P8, {CommandLeastAt(167, "Stargate1"), Deaths(P10, AtLeast, StargateGenTime[i] * SDspeed - 1, 20)},nil,nil,StargateProperties)
+	CSPlotWithProperties(EllipseArr[8], P8, 51, "Stargate1", nil, 1, 64, P8, {CommandLeastAt(167, "Stargate1"), Deaths(P10, AtLeast, StargateGenTime[i] * SDspeed - 1, 20)},nil,nil,StargateProperties)
+	CSPlot(SH_Flower, P6, 33, "Stargate1", nil, 1, 32, P6,{CommandLeastAt(167, "Stargate1"), Deaths(P10, AtLeast, StargateGenTime[i] * SDspeed, 20)})
+
+	Trigger2(P6,{CommandLeastAt(167, "Stargate1"),Deaths(P10, Exactly, StargateGenTime[i] * SDspeed, 20) }, {GiveUnits(All,"Men" , P8, "Anywhere", P5),SetInvincibility(Disable, "Men", P5, "Anywhere"),Order("Men", P5, "Anywhere", Attack, "Stargate1")})
+end
+Trigger2(P6, {Deaths(P10, AtLeast, (StargateGenTime[27] * SDspeed) + 1, 20)}, {SetScanImage(546)})
+
 
 
 
