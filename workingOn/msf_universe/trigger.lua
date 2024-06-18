@@ -75,223 +75,470 @@ function AddV(V,Value)
 	end
 end
 
+-------- Properties
+TempProperties = {
+    clocked = false,
+    burrowed = false,
+    intransit = false,
+    hallucinated = false,
+    invincible = false,
+    hitpoint = 30,
+    shield = 50,
+    energy = 0,
+    resource = 0,
+    hanger = 0,}
+HiveProperties = {
+    clocked = false,
+    burrowed = false,
+    intransit = false,
+    hallucinated = false,
+    invincible = false,
+    hitpoint = 70,
+    shield = 50,
+    energy = 0,
+    resource = 0,
+    hanger = 0,
+    }
+EftProperties = {
+    clocked = false,
+    burrowed = false,
+    intransit = false,
+    hallucinated = false,
+    invincible = false,
+    hitpoint = 100,
+    shield = 100,
+    energy = 0,
+    resource = 0,
+    hanger = 0,
+    }
+StargateProperties = {
+    clocked = false,
+    burrowed = false,
+    intransit = false,
+    hallucinated = false,
+    invincible = true,
+    hitpoint = 100,
+    shield = 100,
+    energy = 0,
+    resource = 0,
+    hanger = 0,
+    } 
+StargatePropertiesHero = {
+clocked = false,
+burrowed = false,
+intransit = false,
+hallucinated = false,
+invincible = true,
+hitpoint = 70,
+shield = 50,
+energy = 0,
+resource = 0,
+hanger = 0,
+}
+
+
 JYD = "Set Unit Order To: Junk Yard Dog"
 Gentime = SDspeed * 251
-
----------------------- Init system setting --------
-Trigger {
-    players = {Force1},
-    conditions = {
-        Deaths(CurrentPlayer,Exactly,0,158);
-        Bring(CurrentPlayer,AtLeast,1,12,"mainLocation")
-    },
-    actions = {
-        RemoveUnitAt(1,12,"mainLocation",CurrentPlayer);
-        DisplayText("브금ㄴㄴ");
-        SetDeaths(CurrentPlayer,SetTo,1,158);
-        PreserveTrigger()
-    },
-}
-
-Trigger { -- off
-    players = {Force1},
-    conditions = {
-        Deaths(CurrentPlayer,Exactly,1,158);
-        Bring(CurrentPlayer,AtLeast,1,12,"mainLocation")
-    },
-    actions = {
-        RemoveUnitAt(1,12,"mainLocation",CurrentPlayer);
-        DisplayText("브금ㅇㅇ");
-        SetDeaths(CurrentPlayer,SetTo,0,158);
-        PreserveTrigger()
-    },
-}
-
-
-for i=0, 3 do -- 예약메딕
-
-    Trigger { -- 
-        players = {i},
-        conditions = {
-            Always()
-        },
-        actions = {
-            SetMemoryBA(0x57F27C+(228*i)+2,SetTo,0);
-            SetMemoryBA(0x57F27C+(228*i)+34,SetTo,1);
-        },
-    }
-    
-    Trigger { -- 
-        players = {i},
-        conditions = {
-            Deaths(i,Exactly,0,"Map Revealer");
-            Bring(i,AtLeast,1,17,"Anywhere");
-        },
-        actions = {
-            RemoveUnit(17,i);
-            DisplayText("2Tic 예약메딕 사용 200 Ore.");
-            SetMemoryBA(0x57F27C+(228*i)+2,SetTo,1);
-            SetMemoryBA(0x57F27C+(228*i)+34,SetTo,0);
-            SetDeaths(i,SetTo,1,"Map Revealer");
-            PreserveTrigger();
-        },
-    }
-    
-    Trigger { -- 
-        players = {i},
-        conditions = {
-            Deaths(i,Exactly,1,"Map Revealer");
-            Bring(i,AtLeast,1,17,"Anywhere");
-        },
-        actions = {
-            RemoveUnit(17,i);
-            DisplayText("예약메딕 사용안함 150 Ore.");
-            SetMemoryBA(0x57F27C+(228*i)+2,SetTo,0);
-            SetMemoryBA(0x57F27C+(228*i)+34,SetTo,1);
-            SetDeaths(i,SetTo,0,"Map Revealer");
-            PreserveTrigger();
-        },
-    }
-    
-    end
-    Trigger { -- 1틱메딕
-        players = {Force1},
-        conditions = {
-            Command(CurrentPlayer, AtLeast, 1, "Terran Medic");
-        },
-        actions = {
-            ModifyUnitHitPoints(All, "Men", CurrentPlayer, "Anywhere", 100);
-            ModifyUnitShields(All, "Men", CurrentPlayer, "Anywhere", 100);
-            RemoveUnit("Terran Medic", CurrentPlayer);
-            PreserveTrigger();
-        },
-    }
-    
-    Trigger { -- 2틱메딕
-        players = {Force1},
-        conditions = {
-            Command(CurrentPlayer, AtLeast, 1, 2);
-        },
-        actions = {
-            ModifyUnitHitPoints(All, "Men", CurrentPlayer, "Anywhere", 100);
-            ModifyUnitShields(All, "Men", CurrentPlayer, "Anywhere", 100);
-            RemoveUnit(2, CurrentPlayer);
-            PreserveTrigger();
-        },
-    }
-    
-    
-    Trigger { -- 일마 생산
-        players = {AllPlayers},
-        conditions = {
-            Bring(CurrentPlayer, AtLeast, 1, 0, "mainLocation");
-        },
-        actions = {
-            PlayWAV("staredit\\wav\\ghost_dead.ogg");
-            CreateUnit(1, 0, "HealZone", CurrentPlayer);
-            RemoveUnitAt(1, 0, "mainLocation", CurrentPlayer);
-            PreserveTrigger();
-        },
-    }
-    
-    Trigger { -- 영마 생산
-        players = {AllPlayers},
-        conditions = {
-            Bring(CurrentPlayer, AtLeast, 1, 20, "mainLocation");
-        },
-        actions = {
-            PlayWAV("staredit\\wav\\ghost_living.ogg");
-            RemoveUnitAt(1, 20, "mainLocation", CurrentPlayer);
-            CreateUnit(1, 20, "HealZone", CurrentPlayer);
-            PreserveTrigger();
-        },
-    }
-    
-    Trigger { -- 스마 생산
-        players = {AllPlayers},
-        conditions = {
-            Bring(CurrentPlayer, AtLeast, 1, 1, "mainLocation");
-        },
-        actions = {
-            PlayWAV("staredit\\wav\\ghost_nevergiveup.ogg");
-            RemoveUnitAt(1, 1, "mainLocation", CurrentPlayer);
-            CreateUnit(1, 1, "HealZone", CurrentPlayer);
-            PreserveTrigger();
-        },
-    }
-
------------ Special building trigger
-
-TriggerX(P7, Always(), {Wait(100),CreateUnit(1, 151, "celebrate1", P7),CreateUnit(1, 151, "celebrate2", P7)})
-
----------- Exchange Trigger
-
 ExRate = {29,31,33,35}
+ScanInitSetting(Force2,0)
 
-for i = 0, 3 do
-	TriggerX(P8,{Command(Force1,Exactly,i+1,111)},{SetNDeaths(FP,SetTo,i+1,P_Count)},{Preserved}) -- 상시 플레이어수 체크
-end
+--------- Plot shape
+WAVE1 = CSMakePolygon(4,50,0,35,5)
+WAVE2 = CSMakePolygon(4,50,0,20,5)
+WAVE3 = CSMakePolygon(4,50,45,13,5)
+Bigwave1 = CSMakePolygon(6,45,0,50,1)
+Bigwave2 = CSMakeLine(6,80,0,15,0)
+
+------ Hat
+square1 = CSMakePolygonX(4,80,0,36,0)
+square2 = CSMakePolygonX(4,70,45,36,0)
+
+Shape5 = CSMakePolygon(6,80,0,91,1)
+Shape4 = CSMakePolygon(6,80,0,61,1)
+Shape3 = CSMakePolygon(6,80,0,37,1)
+Shape2 = CSMakePolygon(6,80,0,19,1)
+Shape1 = CSMakePolygon(6,80,0,7,0)
+
+sixline = CSMakeCircleX(6,64,30,54,0)
+spiral1 = CSMakeSpiral(4, 16, 1/1.2, 40, 0, 37, 5)
+spiral2 = CSMakeSpiral(4, 16, 1/1.2, 40, 45, 37, 5)
 
 
-for i = 0, 3 do
-    for j = 15, 0, -1 do
+CX2 = CSMakeCircleX(6,80,30,30,0)
+
+------ Lair
+LSU = CSMakeLineX(6,64,0,30,0)
+LSU2 = CSMakeLineX(6,64,10,30,0)
+LSU3 = CSMakeLineX(6,64,20,30,0)
+LSU4 = CSMakeLineX(6,64,30,30,0)
+LSU5 = CSMakeLineX(6,64,40,30,0)
+
+LGU1 = CSMakePolygonX(6,64,30,6,0)
+LGU2 = CSMakePolygonX(6,64,30,24,6)
+LGU3 = CSMakePolygonX(6,64,30,54,24)
+LGU4 = CSMakePolygonX(6,64,30,96,54)
+
+LGU1a = CSMakePolygonX(6,1,30,6,0)
+LGU2a = CSMakePolygonX(6,1,30,24,6)
+LGU3a = CSMakePolygonX(6,1,30,54,24)
+
+Eft1 = CSMakeLineX(6,64,10,24,0)
+Eft2 = CSMakeLineX(6,64,20,24,0)
+Eft3 = CSMakeLineX(6,64,30,24,0)
+Eftstar = CSMakeStarX(5,108,64,36,90,0)
+
+------ Hive
+Line1 = CSMakeLineX(2,64,0,23,1)
+Trdline = CSMakeLineX(3,64,0,28,1)
+Trdline2 = CSMakeLineX(3,64,60,28,1)
+Triangle1 = CSMakePolygonX(3, 64, 0, 18, 0)
+Triangle2 = CSMakePolygonX(3, 64, 0, 61, 18)
+Triangle3 = CSMakePolygonX(3, 64, 0, 61, 0)
+HiveEtf1 = CSMakeSpiral(6, 16, 1/2, 40, 0, 130, 0)
+-- CAPlot(CS_SortR(HiveEtf1,1),P6,33,"Hive3",nil,1,32,{1,0,0,0,HiveEtf1[1]/36,0},nil,P6,{CommandLeastAt(133,"Hive3")})
+
+------- Starport
+PA = CSMakePolygon(6,80,0,61,1)
+PB = CSMakePolygon(6,80,0,37,1)
+PC = CSMakePolygon(6,80,0,19,1)
+PD = CSMakePolygon(6,80,0,7,0)
+PE = CSMakePolygon(6,80,0,91,1)
+
+PAA = CSMakePolygon(6,1,0,61,1)
+PBA = CSMakePolygon(6,1,0,37,1)
+PCA = CSMakePolygon(6,1,0,19,1)
+PDA = CSMakePolygon(6,1,0,7,0)
+PEA = CSMakePolygon(6,1,0,91,1)
+
+------- Stargate
+SShape1 = CSMakeCircle(6,64,0,7,1)
+SShape2 = CSMakeCircle(6,64,0,19,7)
+SShape3 = CSMakeCircle(6,64,0,37,19)
+Overlapped = CS_OverlapX(LGU1, LGU2, LGU3, LGU4)
+Overlapped2 = CS_OverlapX(LGU1, LGU2, LGU3, LGU4, SShape1,SShape2,SShape3)
+E_Base = CSMakeCircle(6,30,0,91,61)
+EllipseN = CS_RemoveStack(CS_MoveXY(CS_Distortion(E_Base,{3,0},{3,0},nil,nil),550,0),20)
+EllipseArr = {EllipseN,CS_Rotate(EllipseN,45),CS_Rotate(EllipseN,90),CS_Rotate(EllipseN,135),CS_Rotate(EllipseN,180),CS_Rotate(EllipseN,225),CS_Rotate(EllipseN,270),CS_Rotate(EllipseN,315)}
+SH_Flower = CS_OverlapX(EllipseArr[1],EllipseArr[2],EllipseArr[3],EllipseArr[4],EllipseArr[5],EllipseArr[6],EllipseArr[7],EllipseArr[8])
+Shape3 = CSMakeCircleX(6,120,30,54,24)
+Cross = CSMakeLineX(2,32,0, 46,0)
+Cross1 = CSMakeLineX(2,32,90, 46,0)
+StargateEft = CS_RemoveStack(CS_OverlapX(Shape3, Cross, Cross1,SShape2), 16)
+
+-------- Plot Timeline
+LairTimeline = {3.0, 5.7, 8.5, 14.1, 14.6, 15.3, 15.7, 16, 17, 19.7, 21.6, 22, 22.3, 22.5 }
+
+HiveGenTime = { 1.79, 2.7, 3.60, 4.57, 5.5, 6.5, 7.5, 8.4, 9.3, 10.2, 11.1, 12, 12.9, 13.8, 14.7, 15.8}
+HiveEftTime = {2.22, 3.18, 4.15, 5.07, 6, 7, 7.9 ,8.8 ,9.7,10.6, 11.5, 12.4, 13.3, 14.2, 15.1}
+HiveGenTime2 = {16.8, 18.7, 20.5, 22.4, 24.3, 26.1, 28, 29.9}
+
+Starport_gen = {4.1, 6, 8, 12, 14, 16, 19.8, 21.8, 23.8, 27.7, 29.7, 31.7}
+
+StargateGenTime = {
+    1.9, 2.4, 2.9, 3.4, 3.8, 4.3, 4.8, 5.2, 
+    9.6, 10.4, 10.9, 11.4, 11.9, 12.4, 12.9, 13.4, 
+    19.1, 19.5, 20, 20.5, 20.9, 
+    28.2, 
+    32.9, 36.7, 40.5, -- after effects
+    48.1, 55.8 -- after 2nd effects
+    }
+    StargateEftTime = {
+    32, 32.4, -- reloading effect
+    47.2, 47.6 -- 2nd effects
+    }
+-- Lair Eft : 94 | Hive Eft : 84 | SP EFT : 42 | SG EFT : 202 | FT EFT : 11
+---------------------- Init system setting --------
+function Install_initial_system_setting()
+    DoActions2(FP, {KillUnit(94, Force2),KillUnit(84, Force2),KillUnit(42, Force2),KillUnit(202, Force2),KillUnit(11, Force2)}, preserved)
+
     Trigger {
+        players = {Force1},
+        conditions = {
+            Deaths(CurrentPlayer,Exactly,0,158);
+            Bring(CurrentPlayer,AtLeast,1,12,"mainLocation")
+        },
+        actions = {
+            RemoveUnitAt(1,12,"mainLocation",CurrentPlayer);
+            DisplayText("브금ㄴㄴ");
+            SetDeaths(CurrentPlayer,SetTo,1,158);
+            PreserveTrigger()
+        },
+    }
+    
+    Trigger { -- off
+        players = {Force1},
+        conditions = {
+            Deaths(CurrentPlayer,Exactly,1,158);
+            Bring(CurrentPlayer,AtLeast,1,12,"mainLocation")
+        },
+        actions = {
+            RemoveUnitAt(1,12,"mainLocation",CurrentPlayer);
+            DisplayText("브금ㅇㅇ");
+            SetDeaths(CurrentPlayer,SetTo,0,158);
+            PreserveTrigger()
+        },
+    }
+    
+    
+    for i=0, 3 do -- 예약메딕
+    
+        Trigger { -- 
+            players = {i},
+            conditions = {
+                Always()
+            },
+            actions = {
+                SetMemoryBA(0x57F27C+(228*i)+2,SetTo,0);
+                SetMemoryBA(0x57F27C+(228*i)+34,SetTo,1);
+            },
+        }
+        
+        Trigger { -- 
+            players = {i},
+            conditions = {
+                Deaths(i,Exactly,0,"Map Revealer");
+                Bring(i,AtLeast,1,17,"Anywhere");
+            },
+            actions = {
+                RemoveUnit(17,i);
+                DisplayText("2Tic 예약메딕 사용 200 Ore.");
+                SetMemoryBA(0x57F27C+(228*i)+2,SetTo,1);
+                SetMemoryBA(0x57F27C+(228*i)+34,SetTo,0);
+                SetDeaths(i,SetTo,1,"Map Revealer");
+                PreserveTrigger();
+            },
+        }
+        
+        Trigger { -- 
+            players = {i},
+            conditions = {
+                Deaths(i,Exactly,1,"Map Revealer");
+                Bring(i,AtLeast,1,17,"Anywhere");
+            },
+            actions = {
+                RemoveUnit(17,i);
+                DisplayText("예약메딕 사용안함 150 Ore.");
+                SetMemoryBA(0x57F27C+(228*i)+2,SetTo,0);
+                SetMemoryBA(0x57F27C+(228*i)+34,SetTo,1);
+                SetDeaths(i,SetTo,0,"Map Revealer");
+                PreserveTrigger();
+            },
+        }
+        
+        end
+        Trigger { -- 1틱메딕
             players = {Force1},
             conditions = {
-                    Label(0);
-                    Score(CurrentPlayer,Kills,AtLeast,2^j*100); 
-                    NDeaths(FP,Exactly,i+1,P_Count); 
-                },
+                Command(CurrentPlayer, AtLeast, 1, "Terran Medic");
+            },
             actions = {
-                    SetScore(CurrentPlayer,Subtract,2^j*100,Kills);
-                    SetResources(CurrentPlayer,Add,2^j*ExRate[i+1],Ore);
-                    PreserveTrigger()
-                    }
-    }
-    end 
-    end
-
-
--- for j = 15, 0, -1 do
---         TriggerX(Force1,{Score(CurrentPlayer,Kills,AtLeast,2^j*100)},{
---             SetScore(CurrentPlayer,Subtract,2^j*100,Kills);
---             SetResources(CurrentPlayer,Add,2^j*ExRate[i],Ore);
---         },{Preserved})
--- end
-    -------------------------- Wave Trigger ------------------------------
-
-    WAVE1 = CSMakePolygon(4,50,0,35,5)
-    WAVE2 = CSMakePolygon(4,50,0,20,5)
-    WAVE3 = CSMakePolygon(4,50,45,13,5)
-    
-    ----------- 30 sec period --------
-    
-    Trigger{
-        players = {P6},
-        conditions = {
-            Always();
-        },
-        actions = {
-            SetDeaths(P8, Add, 1, 131);
-            PreserveTrigger();
+                ModifyUnitHitPoints(All, "Men", CurrentPlayer, "Anywhere", 100);
+                ModifyUnitShields(All, "Men", CurrentPlayer, "Anywhere", 100);
+                RemoveUnit("Terran Medic", CurrentPlayer);
+                PreserveTrigger();
+            },
         }
-    }
-    
-    Trigger2(P6, {Deaths(P8, Exactly, 1020, 131)}, SetDeaths(P8, SetTo, 0, 131),{preserved})
-    
-    
-    CSPlotOrder(WAVE1, P7, 40, "celebrate1", nil, 1, 32, CSMakePolygon(4,1,0,35,5), 0, Attack, "HealZone", nil, 64, nil, P6,{Deaths(P8, Exactly, 1019, 131)},nil,1)
-    CSPlotOrder(WAVE2, P7, 44, "celebrate1", nil, 1, 32, CSMakePolygon(4,1,0,20,5), 0, Attack, "HealZone", nil, 64, nil, P6,{Deaths(P8, Exactly, 1019, 131)},nil,1)
-    CSPlotOrder(WAVE3, P7, 51, "celebrate1", nil, 1, 32, CSMakePolygon(4,1,45,13,5), 0, Attack, "HealZone", nil, 64, nil, P6,{Deaths(P8, Exactly, 1019, 131)},nil,1)
+        
+        Trigger { -- 2틱메딕
+            players = {Force1},
+            conditions = {
+                Command(CurrentPlayer, AtLeast, 1, 2);
+            },
+            actions = {
+                ModifyUnitHitPoints(All, "Men", CurrentPlayer, "Anywhere", 100);
+                ModifyUnitShields(All, "Men", CurrentPlayer, "Anywhere", 100);
+                RemoveUnit(2, CurrentPlayer);
+                PreserveTrigger();
+            },
+        }
+        
+        
+        Trigger { -- 일마 생산
+            players = {AllPlayers},
+            conditions = {
+                Bring(CurrentPlayer, AtLeast, 1, 0, "mainLocation");
+            },
+            actions = {
+                PlayWAV("staredit\\wav\\ghost_dead.ogg");
+                CreateUnit(1, 0, "HealZone", CurrentPlayer);
+                RemoveUnitAt(1, 0, "mainLocation", CurrentPlayer);
+                PreserveTrigger();
+            },
+        }
+        
+        Trigger { -- 영마 생산
+            players = {AllPlayers},
+            conditions = {
+                Bring(CurrentPlayer, AtLeast, 1, 20, "mainLocation");
+            },
+            actions = {
+                PlayWAV("staredit\\wav\\ghost_living.ogg");
+                RemoveUnitAt(1, 20, "mainLocation", CurrentPlayer);
+                CreateUnit(1, 20, "HealZone", CurrentPlayer);
+                PreserveTrigger();
+            },
+        }
+        
+        Trigger { -- 스마 생산
+            players = {AllPlayers},
+            conditions = {
+                Bring(CurrentPlayer, AtLeast, 1, 1, "mainLocation");
+            },
+            actions = {
+                PlayWAV("staredit\\wav\\ghost_nevergiveup.ogg");
+                RemoveUnitAt(1, 1, "mainLocation", CurrentPlayer);
+                CreateUnit(1, 1, "HealZone", CurrentPlayer);
+                PreserveTrigger();
+            },
+        }
+    -------------- CPU AI Script
+-- Trigger { -- No comment (866B4FC4)
+--     players = {P6},
+--     conditions = {
+--         Always();
+--     },
+--     actions = {
+--         RunAIScriptAt("Expansion Zerg Campaign Insane", "Hive3");
+--         RunAIScriptAt("Value This Area Higher", "HealZone");
+--     },
+-- }
 
-    CSPlotOrder(WAVE1, P7, 40, "celebrate2", nil, 1, 32, CSMakePolygon(4,1,0,35,5), 0, Attack, "HealZone", nil, 64, nil, P6,{Deaths(P8, Exactly, 1019, 131)},nil,1)
-    CSPlotOrder(WAVE2, P7, 44, "celebrate2", nil, 1, 32, CSMakePolygon(4,1,0,20,5), 0, Attack, "HealZone", nil, 64, nil, P6,{Deaths(P8, Exactly, 1019, 131)},nil,1)
-    CSPlotOrder(WAVE3, P7, 51, "celebrate2", nil, 1, 32, CSMakePolygon(4,1,45,13,5), 0, Attack, "HealZone", nil, 64, nil, P6,{Deaths(P8, Exactly, 1019, 131)},nil,1)
+    
+Trigger { -- 나간플레이어 유닛삭제
+players = {P8},
+conditions = {
+        Always();
+    },
+actions = {
+        RemoveUnit("Men",P12);
+        RemoveUnit(111,P12);
+        RemoveUnit(107,P12);
+        PreserveTrigger();
+    },
+}
+
+Trigger {
+players = {Force1},
+conditions = {
+    Always();
+},
+actions = {
+    SetAllianceStatus(Force1,AlliedVictory);
+    SetResources(P1, Add, 1000000, Ore);
+    -- PreserveTrigger();
+},
+}
+
+Trigger { -- 컴퓨터동맹설정
+players = {Force2},
+conditions = {
+    Always();
+},
+actions = {
+    SetResources(P5, SetTo, 9999999, OreAndGas);
+    SetResources(P6, SetTo, 9999999, OreAndGas);
+    SetResources(P7, SetTo, 9999999, OreAndGas);
+    PreserveTrigger();
+    SetAllianceStatus(Force2,AlliedVictory);
+    SetAllianceStatus(Force1, Enemy);
+    },
+}
+
+Trigger { 
+players = {Force2},
+conditions = {
+    Always();
+},
+actions = {
+    RunAIScript('Turn ON Shared Vision for Player 1');
+    RunAIScript('Turn ON Shared Vision for Player 2');
+    RunAIScript('Turn ON Shared Vision for Player 3');
+    RunAIScript('Turn ON Shared Vision for Player 4');
+    PreserveTrigger();
+},
+}
+
+Trigger {
+players = {Force1},
+conditions = {
+    Always();
+},
+actions = {
+    RunAIScript("Turn ON Shared Vision for Player 8");
+    PreserveTrigger();
+},
+}
+
+Trigger {
+players = {Force1},
+conditions = {
+    Always();
+},
+actions = {
+    RunAIScript('Turn ON Shared Vision for Player 1');
+    RunAIScript('Turn ON Shared Vision for Player 2');
+    RunAIScript('Turn ON Shared Vision for Player 3');
+    RunAIScript('Turn ON Shared Vision for Player 4');
+    PreserveTrigger();
+},
+}
+Trigger2(P8, {Always()}, SetAllianceStatus(Force1, Ally),preserved)
+    
+end
+function Install_SpecialGunplot()
+    TriggerX(P7, Always(), {Wait(100),CreateUnit(1, 151, "celebrate1", P7),CreateUnit(1, 151, "celebrate2", P7)})
+end
+function Install_ExchangeTrigger()
+    for i = 0, 3 do
+        TriggerX(P8,{Command(Force1,Exactly,i+1,111)},{SetNDeaths(FP,SetTo,i+1,P_Count)},{Preserved}) -- 상시 플레이어수 체크
+    end
+    
+    
+    for i = 0, 3 do
+        for j = 15, 0, -1 do
+        Trigger {
+                players = {Force1},
+                conditions = {
+                        Label(0);
+                        Score(CurrentPlayer,Kills,AtLeast,2^j*100); 
+                        NDeaths(FP,Exactly,i+1,P_Count); 
+                    },
+                actions = {
+                        SetScore(CurrentPlayer,Subtract,2^j*100,Kills);
+                        SetResources(CurrentPlayer,Add,2^j*ExRate[i+1],Ore);
+                        PreserveTrigger()
+                        }
+        }
+        end 
+        end
+end
+function Install_WaveTrigger()
+    ----------- 30 sec period --------
+
+Trigger{
+    players = {P6},
+    conditions = {
+        Always();
+    },
+    actions = {
+        SetDeaths(P8, Add, 1, 131);
+        PreserveTrigger();
+    }
+}
+
+Trigger2(P6, {Deaths(P8, Exactly, 1020, 131)}, SetDeaths(P8, SetTo, 0, 131),{preserved})
+
+
+CSPlotOrder(WAVE1, P7, 40, "celebrate1", nil, 1, 32, CSMakePolygon(4,1,0,35,5), 0, Attack, "HealZone", nil, 64, nil, P6,{Deaths(P8, Exactly, 1019, 131)},nil,1)
+CSPlotOrder(WAVE2, P7, 44, "celebrate1", nil, 1, 32, CSMakePolygon(4,1,0,20,5), 0, Attack, "HealZone", nil, 64, nil, P6,{Deaths(P8, Exactly, 1019, 131)},nil,1)
+CSPlotOrder(WAVE3, P7, 51, "celebrate1", nil, 1, 32, CSMakePolygon(4,1,45,13,5), 0, Attack, "HealZone", nil, 64, nil, P6,{Deaths(P8, Exactly, 1019, 131)},nil,1)
+
+CSPlotOrder(WAVE1, P7, 40, "celebrate2", nil, 1, 32, CSMakePolygon(4,1,0,35,5), 0, Attack, "HealZone", nil, 64, nil, P6,{Deaths(P8, Exactly, 1019, 131)},nil,1)
+CSPlotOrder(WAVE2, P7, 44, "celebrate2", nil, 1, 32, CSMakePolygon(4,1,0,20,5), 0, Attack, "HealZone", nil, 64, nil, P6,{Deaths(P8, Exactly, 1019, 131)},nil,1)
+CSPlotOrder(WAVE3, P7, 51, "celebrate2", nil, 1, 32, CSMakePolygon(4,1,45,13,5), 0, Attack, "HealZone", nil, 64, nil, P6,{Deaths(P8, Exactly, 1019, 131)},nil,1)
 
 ------------------ Big Wave Trigger 132 -----------------
 
-Bigwave1 = CSMakePolygon(6,45,0,50,1)
-Bigwave2 = CSMakeLine(6,80,0,15,0)
 
 Trigger{
 	players = {P6},
@@ -358,8 +605,8 @@ for i = 16, 20 do
 	CSPlotOrder(Bigwave1, P6, 88, "celebrate2", nil, 1, 32, CSMakePolygon(6,1,0,50,1), 0, Attack, "HealZone", nil, 64, nil, P6,{Deaths(P8, Exactly, Gentime * i + 180, 132)},nil,1)
 	CSPlotOrder(Bigwave2, P6, 64, "celebrate2", nil, 1, 32, CSMakeLine(6,1,0,15,0), 0, Attack, "HealZone", nil, 64, nil, P6,{Deaths(P8, Exactly, Gentime * i + 180, 132)},nil,1)
 end
-
-    
+end
+function Install_HealZoneTrigger()
     ----------- Heal Zone -----------
     TriggerX(FP, Always(), ModifyUnitShields(All, "Any unit", AllPlayers, "Anywhere", 100));
     TriggerX(FP, Always(), ModifyUnitHitPoints(All, "Any unit", AllPlayers, "Anywhere", 100));
@@ -387,394 +634,6 @@ end
             PreserveTrigger();
         },
     }
-------------- 영작 트리거
-
-
-Trigger { -- 영작유닛 데스값 -1
-	players = {P7},
-	conditions = {
-		Always();
-	},
-	actions = {
-		SetDeaths(CurrentPlayer, Subtract, 1, 77);
-		SetDeaths(CurrentPlayer, Subtract, 1, 78);
-		SetDeaths(CurrentPlayer, Subtract, 1, 52);
-		SetDeaths(CurrentPlayer, Subtract, 1, 104);
-		SetDeaths(CurrentPlayer, Subtract, 1, 70);
-		SetDeaths(CurrentPlayer, Subtract, 1, 21);
-		SetDeaths(CurrentPlayer, Subtract, 1, 23);
-		SetDeaths(CurrentPlayer, Subtract, 1, 93);
-		SetDeaths(CurrentPlayer, Subtract, 1, 69);
-		SetDeaths(CurrentPlayer, Subtract, 1, 28);
-		SetDeaths(CurrentPlayer, Subtract, 1, 62);
-		SetDeaths(CurrentPlayer, Subtract, 1, 86);
-		SetDeaths(CurrentPlayer, Subtract, 1, 27);
-		SetDeaths(CurrentPlayer, Subtract, 1, 64);
-		SetDeaths(CurrentPlayer, Subtract, 1, 7);
-		SetDeaths(CurrentPlayer, Subtract, 1, 3);
-		SetDeaths(CurrentPlayer, Subtract, 1, 60);
-		SetDeaths(CurrentPlayer, Subtract, 1, 58);
-		SetDeaths(CurrentPlayer, Subtract, 1, 76);
-		SetDeaths(CurrentPlayer, Subtract, 1, 75);
-		SetDeaths(CurrentPlayer, Subtract, 1, 74);
-
-		PreserveTrigger();
-	},
-}
-
-
-Trigger{
-	players = {force1},
-	conditions = {
-		Deaths(P7, AtLeast, 1, 150);
-		Deaths(P9,Exactly,0,200)
-	},
-	actions = {
-		DisplayText("\x13\x11｡˙+ﾟ\x08Gift \x03box \x11ﾟ.+｡ \x04를 열어 \x1970000 \x1FPoint\x04를 획득했습니다 !", 4);
-		SetScore(CurrentPlayer, Add, 70000, Kills);
-		PlayWAV("staredit\\wav\\hey.ogg");
-		PlayWAV("staredit\\wav\\hey.ogg");
-		PlayWAV("staredit\\wav\\hey.ogg");
-		PlayWAV("staredit\\wav\\hey.ogg");
-		PlayWAV("staredit\\wav\\hey.ogg");
-		PlayWAV("staredit\\wav\\hey.ogg");
-		PreserveTrigger();
-	}
-}
-
-Trigger{
-	players = {P6},
-	conditions = {
-		Always();
-	},
-	actions = {
-		SetDeaths(P7, Subtract, 1, 150);
-		PreserveTrigger();
-	}
-}
-
-Trigger { -- fenix z
-	players = {Force1},
-	conditions = {
-		Deaths(P7, AtLeast, 1, 77);
-		Deaths(P9,Exactly,0,200)
-	},
-	actions = {
-		DisplayText("\x13\x11｡˙+ﾟ\x08Parallel's \x03Didymos \x11ﾟ.+｡ \x01을 \x06처치 \x04하였습니다 + 35000 \x1FPoints!\x04", 4);
-		SetScore(CurrentPlayer, Add, 35000, Kills);
-		PlayWAV("staredit\\wav\\killsound.wav");
-		PlayWAV("staredit\\wav\\killsound.wav");
-		PreserveTrigger();
-	},
-}
-
-Trigger { -- fenix d
-	players = {Force1},
-	conditions = {
-		Deaths(P7, AtLeast, 1, 78);
-		Deaths(P9,Exactly,0,200)
-	},
-	actions = {
-		DisplayText("\x13\x11｡˙+ﾟ\x08Parallel's \x03Dimorphos \x11ﾟ.+｡ \x01을 \x06처치 \x04하였습니다 + 40000 \x1FPoints!\x04", 4);
-		SetScore(CurrentPlayer, Add, 40000, Kills);
-		PlayWAV("staredit\\wav\\killsound.wav");
-		PlayWAV("staredit\\wav\\killsound.wav");
-		PreserveTrigger();
-	},
-}
-
-Trigger { -- unclean
-	players = {Force1},
-	conditions = {
-		Deaths(P7, AtLeast, 1, 52);
-		Deaths(P9,Exactly,0,200)
-	},
-	actions = {
-		DisplayText("\x13\x11｡˙+ﾟ\x08Parallel's \x03Biela’s Comet \x11ﾟ.+｡ \x01을 \x06처치 \x04하였습니다 + 45000 \x1FPoints!\x04", 4);
-		SetScore(CurrentPlayer, Add, 45000, Kills);
-		PlayWAV("staredit\\wav\\killsound.wav");
-		PlayWAV("staredit\\wav\\killsound.wav");
-		PreserveTrigger();
-	},
-}
-
-Trigger { -- inf duran
-	players = {Force1},
-	conditions = {
-		Deaths(P7, AtLeast, 1, 104);
-		Deaths(P9,Exactly,0,200)
-	},
-	actions = {
-		DisplayText("\x13\x11｡˙+ﾟ\x08Parallel's \x03Psyche \x11.+ﾟ｡ \x01을 \x06처치 \x04하였습니다 + 45000 \x1FPoints!\x04", 4);
-		SetScore(CurrentPlayer, Add, 45000, Kills);
-		PlayWAV("staredit\\wav\\killsound.wav");
-		PlayWAV("staredit\\wav\\killsound.wav");
-		PreserveTrigger();
-	},
-}
-
-Trigger { -- scout
-	players = {Force1},
-	conditions = {
-		Deaths(P7, AtLeast, 1, 70);
-		Deaths(P9,Exactly,0,200)
-	},
-	actions = {
-		DisplayText("\x13\x11｡˙+ﾟ\x08Parallel's \x03Restriction \x11.+ﾟ｡ \x01을 \x06처치 \x04하였습니다 + 50000 \x1FPoints!\x04", 4);
-		SetScore(CurrentPlayer, Add, 50000, Kills);
-		PlayWAV("staredit\\wav\\killsound.wav");
-		PlayWAV("staredit\\wav\\killsound.wav");
-		PreserveTrigger();
-	},
-}
-
-Trigger { -- No comment (ABB625F6)
-	players = {Force1},
-	conditions = {
-		Deaths(P7, AtLeast, 1, 21);
-		Deaths(P9,Exactly,0,200)
-	},
-	actions = {
-		DisplayText("\x13\x11｡˙+ﾟ\x08Parallel's \x03Aphophis \x11.+ﾟ｡ \x01를 \x06처치 \x04하였습니다 + 55000 \x1FPoints!\x04", 4);
-		SetScore(CurrentPlayer, Add, 55000, Kills);
-		PlayWAV("staredit\\wav\\killsound.wav");
-		PlayWAV("staredit\\wav\\killsound.wav");
-		PreserveTrigger();
-	},
-}
-
-Trigger { -- tank
-	players = {Force1},
-	conditions = {
-		Deaths(P7, AtLeast, 1, 23);
-		Deaths(P9,Exactly,0,200)
-	},
-	actions = {
-		DisplayText("\x13\x11｡˙+ﾟ\x08Parallel's \x03Comet Hyakutake \x11.+ﾟ｡ \x01를 \x06처치 \x04하였습니다 + 100000 \x1FPoints!\x04", 4);
-		SetScore(CurrentPlayer, Add, 100000, Kills);
-		PlayWAV("staredit\\wav\\killsound.wav");
-		PlayWAV("staredit\\wav\\killsound.wav");
-		PreserveTrigger();
-	},
-}
-
-Trigger { -- scantid
-	players = {Force1},
-	conditions = {
-		Deaths(P7, AtLeast, 1, 93);
-		Deaths(P9,Exactly,0,200)
-	},
-	actions = {
-		DisplayText("\x13\x11｡˙+ﾟ\x08Parallel's \x03'Oumuamua \x11.+ﾟ｡ \x01를 \x06처치 \x04하였습니다 + 45000 \x1FPoints!\x04", 4);
-		SetScore(CurrentPlayer, Add, 45000, Kills);
-		PlayWAV("staredit\\wav\\killsound.wav");
-		PlayWAV("staredit\\wav\\killsound.wav");
-		PreserveTrigger();
-	},
-}
-
-Trigger { -- matriach
-	players = {Force1},
-	conditions = {
-		Deaths(P7, AtLeast, 1, 69);
-		Deaths(P9,Exactly,0,200)
-	},
-	actions = {
-		DisplayText("\x13\x11｡˙+ﾟ\x08Parallel's \x03Vesta \x11.+ﾟ｡ \x01를 \x06처치 \x04하였습니다 + 50000 \x1FPoints!\x04", 4);
-		SetScore(CurrentPlayer, Add, 50000, Kills);
-		PlayWAV("staredit\\wav\\killsound.wav");
-		PlayWAV("staredit\\wav\\killsound.wav");
-		PreserveTrigger();
-	},
-}
-
-Trigger { -- yamabattle
-	players = {Force1},
-	conditions = {
-		Deaths(P7, AtLeast, 1, 28);
-		Deaths(P9,Exactly,0,200)
-	},
-	actions = {
-		DisplayText("\x13\x11｡˙+ﾟ\x08Parallel's \x03Cassini \x11.+ﾟ｡ \x01를 \x06처치 \x04하였습니다 + 130000 \x1FPoints!\x04", 4);
-		SetScore(CurrentPlayer, Add, 130000, Kills);
-		PlayWAV("staredit\\wav\\killsound.wav");
-		PlayWAV("staredit\\wav\\killsound.wav");
-		PreserveTrigger();
-	},
-}
-
-Trigger { -- devour H
-	players = {Force1},
-	conditions = {
-		Deaths(P7, AtLeast, 1, 62);
-		Deaths(P9,Exactly,0,200)
-	},
-	actions = {
-		DisplayText("\x13\x11｡˙+ﾟ\x08Parallel's \x03Bennu \x11.+ﾟ｡ \x01를 \x06처치 \x04하였습니다 + 65000 \x1FPoints!\x04", 4);
-		SetScore(CurrentPlayer, Add, 65000, Kills);
-		PlayWAV("staredit\\wav\\killsound.wav");
-		PlayWAV("staredit\\wav\\killsound.wav");
-		PreserveTrigger();
-	},
-}
-
-Trigger { -- Danimoth
-	players = {Force1},
-	conditions = {
-		Deaths(P7, AtLeast, 1, 86);
-		Deaths(P9,Exactly,0,200)
-	},
-	actions = {
-		DisplayText("\x13\x11｡˙+ﾟ\x08Parallel's \x03Borisov \x11.+ﾟ｡ \x01를 \x06처치 \x04하였습니다 + 85000 \x1FPoints!\x04", 4);
-		SetScore(CurrentPlayer, Add, 85000, Kills);
-		PlayWAV("staredit\\wav\\killsound.wav");
-		PlayWAV("staredit\\wav\\killsound.wav");
-		PreserveTrigger();
-	},
-}
-
-Trigger { -- Goliath
-	players = {Force1},
-	conditions = {
-		Deaths(P7, AtLeast, 1, 3);
-		Deaths(P9,Exactly,0,200)
-	},
-	actions = {
-		DisplayText("\x13\x11｡˙+ﾟ\x08Parallel's \x03Perseid meteor \x11.+ﾟ｡ \x01를 \x06처치 \x04하였습니다 + 75000 \x1FPoints!\x04", 4);
-		SetScore(CurrentPlayer, Add, 75000, Kills);
-		PlayWAV("staredit\\wav\\killsound.wav");
-		PlayWAV("staredit\\wav\\killsound.wav");
-		PreserveTrigger();
-	},
-}
-
-Trigger { -- Nuke battle
-	players = {Force1},
-	conditions = {
-		Deaths(P7, AtLeast, 1, 27);
-		Deaths(P9,Exactly,0,200)
-	},
-	actions = {
-		DisplayText("\x13\x11｡˙+ﾟ\x08Parallel's \x03Tempel 1 \x11.+ﾟ｡ \x01를 \x06처치 \x04하였습니다 + 200000 \x1FPoints!\x04", 4);
-		SetScore(CurrentPlayer, Add, 200000, Kills);
-		PlayWAV("staredit\\wav\\killsound.wav");
-		PlayWAV("staredit\\wav\\killsound.wav");
-		PreserveTrigger();
-	},
-}
-
-Trigger { -- Prove
-	players = {Force1},
-	conditions = {
-		Deaths(P7, AtLeast, 1, 64);
-		Deaths(P9,Exactly,0,200)
-	},
-	actions = {
-		DisplayText("\x13\x11｡˙+ﾟ\x08Parallel's \x03Halley’s Comet \x11.+ﾟ｡ \x01를 \x06처치 \x04하였습니다 + 70000 \x1FPoints!\x04", 4);
-		SetScore(CurrentPlayer, Add, 70000, Kills);
-		PlayWAV("staredit\\wav\\killsound.wav");
-		PlayWAV("staredit\\wav\\killsound.wav");
-		PreserveTrigger();
-	},
-}
-
-Trigger { -- SCV
-	players = {Force1},
-	conditions = {
-		Deaths(P7, AtLeast, 1, 7);
-		Deaths(P9,Exactly,0,200)
-	},
-	actions = {
-		DisplayText("\x13\x11｡˙+ﾟ\x08Parallel's \x03Pluto \x11.+ﾟ｡ \x01를 \x06처치 \x04하였습니다 + 75000 \x1FPoints!\x04", 4);
-		SetScore(CurrentPlayer, Add, 75000, Kills);
-		PlayWAV("staredit\\wav\\killsound.wav");
-		PlayWAV("staredit\\wav\\killsound.wav");
-		PreserveTrigger();
-	},
-}
-
-Trigger{ -- Corsair
-	players = {force1},
-	conditions = {
-		Deaths(P7, AtLeast, 1, 60);
-		Deaths(P9,Exactly,0,200)
-	},
-	actions = {
-		DisplayText("\x13\x11｡˙+ﾟ\x08Parallel's \x03Ikeya-Seki \x11.+ﾟ｡ \x01를 \x06처치 \x04하였습니다 + 90000 \x1FPoints!\x04", 4);
-		SetScore(CurrentPlayer, Add, 90000, Kills);
-		PlayWAV("staredit\\wav\\killsound.wav");
-		PlayWAV("staredit\\wav\\killsound.wav");
-		PreserveTrigger();
-	}
-}
-
-Trigger{ -- Intercepter
-	players = {force1},
-	conditions = {
-		Deaths(P7, AtLeast, 1, 58);
-		Deaths(P9,Exactly,0,200)
-	},
-	actions = {
-		DisplayText("\x13\x11｡˙+ﾟ\x08Parallel's \x03Intercepter \x11.+ﾟ｡ \x01를 \x06처치 \x04하였습니다 + 80000 \x1FPoints!\x04", 4);
-		SetScore(CurrentPlayer, Add, 80000, Kills);
-		PlayWAV("staredit\\wav\\killsound.wav");
-		PlayWAV("staredit\\wav\\killsound.wav");
-		PreserveTrigger();
-	}
-}
-
-Trigger{ -- DA
-	players = {force1},
-	conditions = {
-		Deaths(P7, AtLeast, 1, 76);
-		Deaths(P9,Exactly,0,200)
-	},
-	actions = {
-		DisplayText("\x13\x11｡˙+ﾟ\x08Parallel's \x03Purity \x11.+ﾟ｡ \x01를 \x06처치 \x04하였습니다 + 85000 \x1FPoints!\x04", 4);
-		SetScore(CurrentPlayer, Add, 85000, Kills);
-		PlayWAV("staredit\\wav\\killsound.wav");
-		PlayWAV("staredit\\wav\\killsound.wav");
-		PreserveTrigger();
-	}
-}
-
-Trigger{ -- ZE
-	players = {force1},
-	conditions = {
-		Deaths(P7, AtLeast, 1, 75);
-		Deaths(P9,Exactly,0,200)
-	},
-	actions = {
-		DisplayText("\x13\x11｡˙+ﾟ\x08Parallel's \x03Veil \x11.+ﾟ｡ \x01를 \x06처치 \x04하였습니다 + 100000 \x1FPoints!\x04", 4);
-		SetScore(CurrentPlayer, Add, 100000, Kills);
-		PlayWAV("staredit\\wav\\killsound.wav");
-		PlayWAV("staredit\\wav\\killsound.wav");
-		PreserveTrigger();
-	}
-}
-
-Trigger{ -- HD
-	players = {force1},
-	conditions = {
-		Deaths(P7, AtLeast, 1, 74);
-		Deaths(P9,Exactly,0,200)
-	},
-	actions = {
-		DisplayText("\x13\x11｡˙+ﾟ\x08Parallel's \x03Unrevealer \x11.+ﾟ｡ \x01를 \x06처치 \x04하였습니다 + 150000 \x1FPoints!\x04", 4);
-		SetScore(CurrentPlayer, Add, 150000, Kills);
-		PlayWAV("staredit\\wav\\killsound.wav");
-		PlayWAV("staredit\\wav\\killsound.wav");
-		PreserveTrigger();
-	}
-}
-
-
-
-
-
-
-
-
     ------------ Bunker Heal Zone ----------
     Trigger{
         players = {Force1},
@@ -801,7 +660,390 @@ Trigger{ -- HD
             PreserveTrigger();
         },
     }
------- Neutral bunker trigger ------
+end
+function Install_HerounitTrigger()
+    ------------- 영작 트리거
+
+Trigger { -- 영작유닛 데스값 -1
+players = {P7},
+conditions = {
+    Always();
+},
+actions = {
+    SetDeaths(CurrentPlayer, Subtract, 1, 77);
+    SetDeaths(CurrentPlayer, Subtract, 1, 78);
+    SetDeaths(CurrentPlayer, Subtract, 1, 52);
+    SetDeaths(CurrentPlayer, Subtract, 1, 104);
+    SetDeaths(CurrentPlayer, Subtract, 1, 70);
+    SetDeaths(CurrentPlayer, Subtract, 1, 21);
+    SetDeaths(CurrentPlayer, Subtract, 1, 23);
+    SetDeaths(CurrentPlayer, Subtract, 1, 93);
+    SetDeaths(CurrentPlayer, Subtract, 1, 69);
+    SetDeaths(CurrentPlayer, Subtract, 1, 28);
+    SetDeaths(CurrentPlayer, Subtract, 1, 62);
+    SetDeaths(CurrentPlayer, Subtract, 1, 86);
+    SetDeaths(CurrentPlayer, Subtract, 1, 27);
+    SetDeaths(CurrentPlayer, Subtract, 1, 64);
+    SetDeaths(CurrentPlayer, Subtract, 1, 7);
+    SetDeaths(CurrentPlayer, Subtract, 1, 3);
+    SetDeaths(CurrentPlayer, Subtract, 1, 60);
+    SetDeaths(CurrentPlayer, Subtract, 1, 58);
+    SetDeaths(CurrentPlayer, Subtract, 1, 76);
+    SetDeaths(CurrentPlayer, Subtract, 1, 75);
+    SetDeaths(CurrentPlayer, Subtract, 1, 74);
+
+    PreserveTrigger();
+},
+}
+
+
+Trigger{
+players = {force1},
+conditions = {
+    Deaths(P7, AtLeast, 1, 150);
+    Deaths(P9,Exactly,0,200)
+},
+actions = {
+    DisplayText("\x13\x11｡˙+ﾟ\x08Gift \x03box \x11ﾟ.+｡ \x04를 열어 \x1970000 \x1FPoint\x04를 획득했습니다 !", 4);
+    SetScore(CurrentPlayer, Add, 70000, Kills);
+    PlayWAV("staredit\\wav\\hey.ogg");
+    PlayWAV("staredit\\wav\\hey.ogg");
+    PlayWAV("staredit\\wav\\hey.ogg");
+    PlayWAV("staredit\\wav\\hey.ogg");
+    PlayWAV("staredit\\wav\\hey.ogg");
+    PlayWAV("staredit\\wav\\hey.ogg");
+    PreserveTrigger();
+}
+}
+
+Trigger{
+players = {P6},
+conditions = {
+    Always();
+},
+actions = {
+    SetDeaths(P7, Subtract, 1, 150);
+    PreserveTrigger();
+}
+}
+
+Trigger { -- fenix z
+players = {Force1},
+conditions = {
+    Deaths(P7, AtLeast, 1, 77);
+    Deaths(P9,Exactly,0,200)
+},
+actions = {
+    DisplayText("\x13\x11｡˙+ﾟ\x08Parallel's \x03Didymos \x11ﾟ.+｡ \x01을 \x06처치 \x04하였습니다 + 35000 \x1FPoints!\x04", 4);
+    SetScore(CurrentPlayer, Add, 35000, Kills);
+    PlayWAV("staredit\\wav\\killsound.wav");
+    PlayWAV("staredit\\wav\\killsound.wav");
+    PreserveTrigger();
+},
+}
+
+Trigger { -- fenix d
+players = {Force1},
+conditions = {
+    Deaths(P7, AtLeast, 1, 78);
+    Deaths(P9,Exactly,0,200)
+},
+actions = {
+    DisplayText("\x13\x11｡˙+ﾟ\x08Parallel's \x03Dimorphos \x11ﾟ.+｡ \x01을 \x06처치 \x04하였습니다 + 40000 \x1FPoints!\x04", 4);
+    SetScore(CurrentPlayer, Add, 40000, Kills);
+    PlayWAV("staredit\\wav\\killsound.wav");
+    PlayWAV("staredit\\wav\\killsound.wav");
+    PreserveTrigger();
+},
+}
+
+Trigger { -- unclean
+players = {Force1},
+conditions = {
+    Deaths(P7, AtLeast, 1, 52);
+    Deaths(P9,Exactly,0,200)
+},
+actions = {
+    DisplayText("\x13\x11｡˙+ﾟ\x08Parallel's \x03Biela’s Comet \x11ﾟ.+｡ \x01을 \x06처치 \x04하였습니다 + 45000 \x1FPoints!\x04", 4);
+    SetScore(CurrentPlayer, Add, 45000, Kills);
+    PlayWAV("staredit\\wav\\killsound.wav");
+    PlayWAV("staredit\\wav\\killsound.wav");
+    PreserveTrigger();
+},
+}
+
+Trigger { -- inf duran
+players = {Force1},
+conditions = {
+    Deaths(P7, AtLeast, 1, 104);
+    Deaths(P9,Exactly,0,200)
+},
+actions = {
+    DisplayText("\x13\x11｡˙+ﾟ\x08Parallel's \x03Psyche \x11.+ﾟ｡ \x01을 \x06처치 \x04하였습니다 + 45000 \x1FPoints!\x04", 4);
+    SetScore(CurrentPlayer, Add, 45000, Kills);
+    PlayWAV("staredit\\wav\\killsound.wav");
+    PlayWAV("staredit\\wav\\killsound.wav");
+    PreserveTrigger();
+},
+}
+
+Trigger { -- scout
+players = {Force1},
+conditions = {
+    Deaths(P7, AtLeast, 1, 70);
+    Deaths(P9,Exactly,0,200)
+},
+actions = {
+    DisplayText("\x13\x11｡˙+ﾟ\x08Parallel's \x03Restriction \x11.+ﾟ｡ \x01을 \x06처치 \x04하였습니다 + 50000 \x1FPoints!\x04", 4);
+    SetScore(CurrentPlayer, Add, 50000, Kills);
+    PlayWAV("staredit\\wav\\killsound.wav");
+    PlayWAV("staredit\\wav\\killsound.wav");
+    PreserveTrigger();
+},
+}
+
+Trigger { -- No comment (ABB625F6)
+players = {Force1},
+conditions = {
+    Deaths(P7, AtLeast, 1, 21);
+    Deaths(P9,Exactly,0,200)
+},
+actions = {
+    DisplayText("\x13\x11｡˙+ﾟ\x08Parallel's \x03Aphophis \x11.+ﾟ｡ \x01를 \x06처치 \x04하였습니다 + 55000 \x1FPoints!\x04", 4);
+    SetScore(CurrentPlayer, Add, 55000, Kills);
+    PlayWAV("staredit\\wav\\killsound.wav");
+    PlayWAV("staredit\\wav\\killsound.wav");
+    PreserveTrigger();
+},
+}
+
+Trigger { -- tank
+players = {Force1},
+conditions = {
+    Deaths(P7, AtLeast, 1, 23);
+    Deaths(P9,Exactly,0,200)
+},
+actions = {
+    DisplayText("\x13\x11｡˙+ﾟ\x08Parallel's \x03Comet Hyakutake \x11.+ﾟ｡ \x01를 \x06처치 \x04하였습니다 + 100000 \x1FPoints!\x04", 4);
+    SetScore(CurrentPlayer, Add, 100000, Kills);
+    PlayWAV("staredit\\wav\\killsound.wav");
+    PlayWAV("staredit\\wav\\killsound.wav");
+    PreserveTrigger();
+},
+}
+
+Trigger { -- scantid
+players = {Force1},
+conditions = {
+    Deaths(P7, AtLeast, 1, 93);
+    Deaths(P9,Exactly,0,200)
+},
+actions = {
+    DisplayText("\x13\x11｡˙+ﾟ\x08Parallel's \x03'Oumuamua \x11.+ﾟ｡ \x01를 \x06처치 \x04하였습니다 + 45000 \x1FPoints!\x04", 4);
+    SetScore(CurrentPlayer, Add, 45000, Kills);
+    PlayWAV("staredit\\wav\\killsound.wav");
+    PlayWAV("staredit\\wav\\killsound.wav");
+    PreserveTrigger();
+},
+}
+
+Trigger { -- matriach
+players = {Force1},
+conditions = {
+    Deaths(P7, AtLeast, 1, 69);
+    Deaths(P9,Exactly,0,200)
+},
+actions = {
+    DisplayText("\x13\x11｡˙+ﾟ\x08Parallel's \x03Vesta \x11.+ﾟ｡ \x01를 \x06처치 \x04하였습니다 + 50000 \x1FPoints!\x04", 4);
+    SetScore(CurrentPlayer, Add, 50000, Kills);
+    PlayWAV("staredit\\wav\\killsound.wav");
+    PlayWAV("staredit\\wav\\killsound.wav");
+    PreserveTrigger();
+},
+}
+
+Trigger { -- yamabattle
+players = {Force1},
+conditions = {
+    Deaths(P7, AtLeast, 1, 28);
+    Deaths(P9,Exactly,0,200)
+},
+actions = {
+    DisplayText("\x13\x11｡˙+ﾟ\x08Parallel's \x03Cassini \x11.+ﾟ｡ \x01를 \x06처치 \x04하였습니다 + 130000 \x1FPoints!\x04", 4);
+    SetScore(CurrentPlayer, Add, 130000, Kills);
+    PlayWAV("staredit\\wav\\killsound.wav");
+    PlayWAV("staredit\\wav\\killsound.wav");
+    PreserveTrigger();
+},
+}
+
+Trigger { -- devour H
+players = {Force1},
+conditions = {
+    Deaths(P7, AtLeast, 1, 62);
+    Deaths(P9,Exactly,0,200)
+},
+actions = {
+    DisplayText("\x13\x11｡˙+ﾟ\x08Parallel's \x03Bennu \x11.+ﾟ｡ \x01를 \x06처치 \x04하였습니다 + 65000 \x1FPoints!\x04", 4);
+    SetScore(CurrentPlayer, Add, 65000, Kills);
+    PlayWAV("staredit\\wav\\killsound.wav");
+    PlayWAV("staredit\\wav\\killsound.wav");
+    PreserveTrigger();
+},
+}
+
+Trigger { -- Danimoth
+players = {Force1},
+conditions = {
+    Deaths(P7, AtLeast, 1, 86);
+    Deaths(P9,Exactly,0,200)
+},
+actions = {
+    DisplayText("\x13\x11｡˙+ﾟ\x08Parallel's \x03Borisov \x11.+ﾟ｡ \x01를 \x06처치 \x04하였습니다 + 85000 \x1FPoints!\x04", 4);
+    SetScore(CurrentPlayer, Add, 85000, Kills);
+    PlayWAV("staredit\\wav\\killsound.wav");
+    PlayWAV("staredit\\wav\\killsound.wav");
+    PreserveTrigger();
+},
+}
+
+Trigger { -- Goliath
+players = {Force1},
+conditions = {
+    Deaths(P7, AtLeast, 1, 3);
+    Deaths(P9,Exactly,0,200)
+},
+actions = {
+    DisplayText("\x13\x11｡˙+ﾟ\x08Parallel's \x03Perseid meteor \x11.+ﾟ｡ \x01를 \x06처치 \x04하였습니다 + 75000 \x1FPoints!\x04", 4);
+    SetScore(CurrentPlayer, Add, 75000, Kills);
+    PlayWAV("staredit\\wav\\killsound.wav");
+    PlayWAV("staredit\\wav\\killsound.wav");
+    PreserveTrigger();
+},
+}
+
+Trigger { -- Nuke battle
+players = {Force1},
+conditions = {
+    Deaths(P7, AtLeast, 1, 27);
+    Deaths(P9,Exactly,0,200)
+},
+actions = {
+    DisplayText("\x13\x11｡˙+ﾟ\x08Parallel's \x03Tempel 1 \x11.+ﾟ｡ \x01를 \x06처치 \x04하였습니다 + 200000 \x1FPoints!\x04", 4);
+    SetScore(CurrentPlayer, Add, 200000, Kills);
+    PlayWAV("staredit\\wav\\killsound.wav");
+    PlayWAV("staredit\\wav\\killsound.wav");
+    PreserveTrigger();
+},
+}
+
+Trigger { -- Prove
+players = {Force1},
+conditions = {
+    Deaths(P7, AtLeast, 1, 64);
+    Deaths(P9,Exactly,0,200)
+},
+actions = {
+    DisplayText("\x13\x11｡˙+ﾟ\x08Parallel's \x03Halley’s Comet \x11.+ﾟ｡ \x01를 \x06처치 \x04하였습니다 + 70000 \x1FPoints!\x04", 4);
+    SetScore(CurrentPlayer, Add, 70000, Kills);
+    PlayWAV("staredit\\wav\\killsound.wav");
+    PlayWAV("staredit\\wav\\killsound.wav");
+    PreserveTrigger();
+},
+}
+
+Trigger { -- SCV
+players = {Force1},
+conditions = {
+    Deaths(P7, AtLeast, 1, 7);
+    Deaths(P9,Exactly,0,200)
+},
+actions = {
+    DisplayText("\x13\x11｡˙+ﾟ\x08Parallel's \x03Pluto \x11.+ﾟ｡ \x01를 \x06처치 \x04하였습니다 + 75000 \x1FPoints!\x04", 4);
+    SetScore(CurrentPlayer, Add, 75000, Kills);
+    PlayWAV("staredit\\wav\\killsound.wav");
+    PlayWAV("staredit\\wav\\killsound.wav");
+    PreserveTrigger();
+},
+}
+
+Trigger{ -- Corsair
+players = {force1},
+conditions = {
+    Deaths(P7, AtLeast, 1, 60);
+    Deaths(P9,Exactly,0,200)
+},
+actions = {
+    DisplayText("\x13\x11｡˙+ﾟ\x08Parallel's \x03Ikeya-Seki \x11.+ﾟ｡ \x01를 \x06처치 \x04하였습니다 + 90000 \x1FPoints!\x04", 4);
+    SetScore(CurrentPlayer, Add, 90000, Kills);
+    PlayWAV("staredit\\wav\\killsound.wav");
+    PlayWAV("staredit\\wav\\killsound.wav");
+    PreserveTrigger();
+}
+}
+
+Trigger{ -- Intercepter
+players = {force1},
+conditions = {
+    Deaths(P7, AtLeast, 1, 58);
+    Deaths(P9,Exactly,0,200)
+},
+actions = {
+    DisplayText("\x13\x11｡˙+ﾟ\x08Parallel's \x03Intercepter \x11.+ﾟ｡ \x01를 \x06처치 \x04하였습니다 + 80000 \x1FPoints!\x04", 4);
+    SetScore(CurrentPlayer, Add, 80000, Kills);
+    PlayWAV("staredit\\wav\\killsound.wav");
+    PlayWAV("staredit\\wav\\killsound.wav");
+    PreserveTrigger();
+}
+}
+
+Trigger{ -- DA
+players = {force1},
+conditions = {
+    Deaths(P7, AtLeast, 1, 76);
+    Deaths(P9,Exactly,0,200)
+},
+actions = {
+    DisplayText("\x13\x11｡˙+ﾟ\x08Parallel's \x03Purity \x11.+ﾟ｡ \x01를 \x06처치 \x04하였습니다 + 85000 \x1FPoints!\x04", 4);
+    SetScore(CurrentPlayer, Add, 85000, Kills);
+    PlayWAV("staredit\\wav\\killsound.wav");
+    PlayWAV("staredit\\wav\\killsound.wav");
+    PreserveTrigger();
+}
+}
+
+Trigger{ -- ZE
+players = {force1},
+conditions = {
+    Deaths(P7, AtLeast, 1, 75);
+    Deaths(P9,Exactly,0,200)
+},
+actions = {
+    DisplayText("\x13\x11｡˙+ﾟ\x08Parallel's \x03Veil \x11.+ﾟ｡ \x01를 \x06처치 \x04하였습니다 + 100000 \x1FPoints!\x04", 4);
+    SetScore(CurrentPlayer, Add, 100000, Kills);
+    PlayWAV("staredit\\wav\\killsound.wav");
+    PlayWAV("staredit\\wav\\killsound.wav");
+    PreserveTrigger();
+}
+}
+
+Trigger{ -- HD
+players = {force1},
+conditions = {
+    Deaths(P7, AtLeast, 1, 74);
+    Deaths(P9,Exactly,0,200)
+},
+actions = {
+    DisplayText("\x13\x11｡˙+ﾟ\x08Parallel's \x03Unrevealer \x11.+ﾟ｡ \x01를 \x06처치 \x04하였습니다 + 150000 \x1FPoints!\x04", 4);
+    SetScore(CurrentPlayer, Add, 150000, Kills);
+    PlayWAV("staredit\\wav\\killsound.wav");
+    PlayWAV("staredit\\wav\\killsound.wav");
+    PreserveTrigger();
+}
+}
+end
+function Install_Neutral_bunkerTrigger()
+    ------ Neutral bunker trigger ------
 for i = 0, 3 do
     Trigger2(Force1, {Bring(CurrentPlayer,AtLeast,1,"Men","neutralbunker"..(i+1)),Bring(P12,AtLeast,1,125,"neutralbunker"..(i+1))}, 
     {GiveUnits(All,125,P12,"neutralbunker"..(i+1),CurrentPlayer),
@@ -816,7 +1058,8 @@ for i = 0, 3 do
         SetInvincibility(Enable, 125, P12, "neutralbunker"..(i+1))
     },preserved)
 end
-
+end
+function Install_DonateNbanTrigger()
     ------<  기부 트리거  >--------------------------------------------- [ GiveRateUnit = 8  ]
     GText1 = "\x13\x1F─━┫ \x04기부금액 단위가 \x1F5,000 Ore \x04로 \x11변경\x04되었습니다. \x1F┣━─"
     GText2 = "\x13\x1F─━┫ \x04기부금액 단위가 \x1F10,000 Ore \x04로 \x11변경\x04되었습니다. \x1F┣━─"
@@ -944,326 +1187,256 @@ Trigger {
         }
 }
 end
-    
-for e = 1, 2 do    
-    for i = 0, 3 do    
-        Trigger { -- 일마  > 영마 변환
-            players = {i},
-            conditions = {
-                Bring(CurrentPlayer, AtLeast, 1, 0, "convertH"..e);
-                Accumulate(CurrentPlayer, AtLeast, 10000, Ore);
-            },
-            actions = {
-                SetResources(CurrentPlayer, Subtract, 10000, Ore);
-                RemoveUnitAt(1, 0, "convertH"..e, CurrentPlayer);
-                CreateUnit(1, 20, "HealZone", CurrentPlayer);
-                DisplayText("Convert Hero Text", 4);
-                PlayWAV("staredit\\wav\\ghost_living.ogg");
-                PreserveTrigger();
-            },
-        }
-        
-        Trigger { -- 영마 > 스마 변환
-            players = {i},
-            conditions = {
-                Bring(CurrentPlayer, AtLeast, 1, 20, "convertH"..e);
-                Bring(CurrentPlayer, AtLeast, 1, 129, "Anywhere");
-                Accumulate(CurrentPlayer, AtLeast, 15000, Ore);
-            },
-            actions = {
-                SetResources(CurrentPlayer, Subtract, 15000, Ore);
-                RemoveUnitAt(1, 20, "convertH"..e, CurrentPlayer);
-                CreateUnit(1, 1, "HealZone", CurrentPlayer);
-                DisplayText("Convert Special Text", 4);
-                PlayWAV("staredit\\wav\\ghost_nevergiveup.ogg");
-                PreserveTrigger();
-            },
-        }
-        
-        Trigger { -- 일마  > 영마 변환
-            players = {i},
-            conditions = {
-                Bring(CurrentPlayer, AtLeast, 1, 0, "convertH"..e);
-                Accumulate(CurrentPlayer, AtLeast, 10000, Ore);
-            },
-            actions = {
-                SetResources(CurrentPlayer, Subtract, 10000, Ore);
-                RemoveUnitAt(1, 0, "convertH"..e, CurrentPlayer);
-                CreateUnit(1, 20, "HealZone", CurrentPlayer);
-                DisplayText("Convert Hero Text", 4);
-                PlayWAV("staredit\\wav\\ghost_dead.ogg");
-                PreserveTrigger();
-            },
-        }
-        
-        Trigger { -- 영마 > 스마 변환
-            players = {i},
-            conditions = {
-                Bring(CurrentPlayer, AtLeast, 1, 20, "convertH"..e);
-                Bring(CurrentPlayer, AtLeast, 1, 129, "Anywhere");
-                Accumulate(CurrentPlayer, AtLeast, 15000, Ore);
-            },
-            actions = {
-                SetResources(CurrentPlayer, Subtract, 15000, Ore);
-                RemoveUnitAt(1, 20, "convertH"..e, CurrentPlayer);
-                CreateUnit(1, 1, "HealZone", CurrentPlayer);
-                DisplayText("Convert Special Text", 4);
-                PlayWAV("staredit\\wav\\ghost_living.ogg");
-                PreserveTrigger();
-            },
-        }
-        
-        Trigger { -- 일마  > 영마 변환
-            players = {i},
-            conditions = {
-                Bring(CurrentPlayer, AtLeast, 1, 0, "convertH"..e);
-                Accumulate(CurrentPlayer, AtLeast, 10000, Ore);
-            },
-            actions = {
-                SetResources(CurrentPlayer, Subtract, 10000, Ore);
-                RemoveUnitAt(1, 0, "convertH"..e, CurrentPlayer);
-                CreateUnit(1, 20, "HealZone", CurrentPlayer);
-                DisplayText("Convert Hero Text", 4);
-                PlayWAV("staredit\\wav\\ghost_dead.ogg");
-                PreserveTrigger();
-            },
-        }
-        
-        Trigger { -- 영마 > 스마 변환
-            players = {i},
-            conditions = {
-                Bring(CurrentPlayer, AtLeast, 1, 20, "convertH"..e);
-                Bring(CurrentPlayer, AtLeast, 1, 129, "Anywhere");
-                Accumulate(CurrentPlayer, AtLeast, 15000, Ore);
-            },
-            actions = {
-                SetResources(CurrentPlayer, Subtract, 15000, Ore);
-                RemoveUnitAt(1, 20, "convertH"..e, CurrentPlayer);
-                CreateUnit(1, 1, "HealZone", CurrentPlayer);
-                DisplayText("Convert Special Text", 4);
-                PlayWAV("staredit\\wav\\ghost_living.ogg");
-                PreserveTrigger();
-            },
-        }
-        
-        Trigger { -- 일마  > 영마 변환
-            players = {i},
-            conditions = {
-                Bring(CurrentPlayer, AtLeast, 1, 0, "convertH"..e);
-                Accumulate(CurrentPlayer, AtLeast, 10000, Ore);
-            },
-            actions = {
-                SetResources(CurrentPlayer, Subtract, 10000, Ore);
-                RemoveUnitAt(1, 0, "convertH"..e, CurrentPlayer);
-                CreateUnit(1, 20, "HealZone", CurrentPlayer);
-                DisplayText("Convert Hero Text", 4);
-                PlayWAV("staredit\\wav\\ghost_dead.ogg");
-                PreserveTrigger();
-            },
-        }
-
-        Trigger { -- 일마  > 영마 변환
-            players = {i},
-            conditions = {
-                Bring(CurrentPlayer, AtLeast, 1, 0, "convertH"..e);
-                Accumulate(CurrentPlayer, AtLeast, 10000, Ore);
-            },
-            actions = {
-                SetResources(CurrentPlayer, Subtract, 10000, Ore);
-                RemoveUnitAt(1, 0, "convertH"..e, CurrentPlayer);
-                CreateUnit(1, 20, "HealZone", CurrentPlayer);
-                DisplayText("Convert Hero Text", 4);
-                PlayWAV("staredit\\wav\\ghost_dead.ogg");
-                PreserveTrigger();
-            },
-        }
-
-        
-        Trigger { -- 영마 > 스마 변환
-            players = {CurrentPlayer},
-            conditions = {
-                Bring(CurrentPlayer, AtLeast, 1, 20, "convertH"..e);
-                Bring(CurrentPlayer, AtLeast, 1, 129, "Anywhere");
-                Accumulate(CurrentPlayer, AtLeast, 15000, Ore);
-            },
-            actions = {
-                SetResources(CurrentPlayer, Subtract, 15000, Ore);
-                RemoveUnitAt(1, 20, "convertH"..e, CurrentPlayer);
-                CreateUnit(1, 1, "HealZone", CurrentPlayer);
-                DisplayText("Convert Special Text", 4);
-                PlayWAV("staredit\\wav\\ghost_living.ogg");
-                PreserveTrigger();
-            },
-        }
-
-        Trigger { -- 영마 > 스마 변환
-            players = {i},
-            conditions = {
-                Bring(CurrentPlayer, AtLeast, 1, 20, "convertH"..e);
-                Bring(CurrentPlayer, AtLeast, 1, 129, "Anywhere");
-                Accumulate(CurrentPlayer, AtLeast, 15000, Ore);
-            },
-            actions = {
-                SetResources(CurrentPlayer, Subtract, 15000, Ore);
-                RemoveUnitAt(1, 20, "convertH"..e, CurrentPlayer);
-                CreateUnit(1, 1, "HealZone", CurrentPlayer);
-                DisplayText("Convert Special Text", 4);
-                PlayWAV("staredit\\wav\\ghost_living.ogg");
-                PreserveTrigger();
-            },
-        }
-        
-    end
 end
-    Trigger{
-        players = {Force1},
-        conditions = {
-            Deaths(P7, Exactly, 1, 152);
-            Deaths(P9,Exactly,0,200);
-        },
-        actions = {
-            DisplayText("\x13\x19｡˙+ﾟ\x11Special \x1fGuardians of \x19Galaxy\x19 ｡+ﾟ. 가 전장에 합류했습니다 !", 4);
-            PlayWAV("staredit\\wav\\unlock.ogg");
-            PlayWAV("staredit\\wav\\unlock.ogg");
-            PlayWAV("staredit\\wav\\unlock.ogg");
+function Install_ConvertMarineTrigger()
+    for e = 1, 2 do    
+        for i = 0, 3 do    
+            Trigger { -- 일마  > 영마 변환
+                players = {i},
+                conditions = {
+                    Bring(CurrentPlayer, AtLeast, 1, 0, "convertH"..e);
+                    Accumulate(CurrentPlayer, AtLeast, 10000, Ore);
+                },
+                actions = {
+                    SetResources(CurrentPlayer, Subtract, 10000, Ore);
+                    RemoveUnitAt(1, 0, "convertH"..e, CurrentPlayer);
+                    CreateUnit(1, 20, "HealZone", CurrentPlayer);
+                    DisplayText("Convert Hero Text", 4);
+                    PlayWAV("staredit\\wav\\ghost_living.ogg");
+                    PreserveTrigger();
+                },
+            }
+            
+            Trigger { -- 영마 > 스마 변환
+                players = {i},
+                conditions = {
+                    Bring(CurrentPlayer, AtLeast, 1, 20, "convertH"..e);
+                    Bring(CurrentPlayer, AtLeast, 1, 129, "Anywhere");
+                    Accumulate(CurrentPlayer, AtLeast, 15000, Ore);
+                },
+                actions = {
+                    SetResources(CurrentPlayer, Subtract, 15000, Ore);
+                    RemoveUnitAt(1, 20, "convertH"..e, CurrentPlayer);
+                    CreateUnit(1, 1, "HealZone", CurrentPlayer);
+                    DisplayText("Convert Special Text", 4);
+                    PlayWAV("staredit\\wav\\ghost_nevergiveup.ogg");
+                    PreserveTrigger();
+                },
+            }
+            
+            Trigger { -- 일마  > 영마 변환
+                players = {i},
+                conditions = {
+                    Bring(CurrentPlayer, AtLeast, 1, 0, "convertH"..e);
+                    Accumulate(CurrentPlayer, AtLeast, 10000, Ore);
+                },
+                actions = {
+                    SetResources(CurrentPlayer, Subtract, 10000, Ore);
+                    RemoveUnitAt(1, 0, "convertH"..e, CurrentPlayer);
+                    CreateUnit(1, 20, "HealZone", CurrentPlayer);
+                    DisplayText("Convert Hero Text", 4);
+                    PlayWAV("staredit\\wav\\ghost_dead.ogg");
+                    PreserveTrigger();
+                },
+            }
+            
+            Trigger { -- 영마 > 스마 변환
+                players = {i},
+                conditions = {
+                    Bring(CurrentPlayer, AtLeast, 1, 20, "convertH"..e);
+                    Bring(CurrentPlayer, AtLeast, 1, 129, "Anywhere");
+                    Accumulate(CurrentPlayer, AtLeast, 15000, Ore);
+                },
+                actions = {
+                    SetResources(CurrentPlayer, Subtract, 15000, Ore);
+                    RemoveUnitAt(1, 20, "convertH"..e, CurrentPlayer);
+                    CreateUnit(1, 1, "HealZone", CurrentPlayer);
+                    DisplayText("Convert Special Text", 4);
+                    PlayWAV("staredit\\wav\\ghost_living.ogg");
+                    PreserveTrigger();
+                },
+            }
+            
+            Trigger { -- 일마  > 영마 변환
+                players = {i},
+                conditions = {
+                    Bring(CurrentPlayer, AtLeast, 1, 0, "convertH"..e);
+                    Accumulate(CurrentPlayer, AtLeast, 10000, Ore);
+                },
+                actions = {
+                    SetResources(CurrentPlayer, Subtract, 10000, Ore);
+                    RemoveUnitAt(1, 0, "convertH"..e, CurrentPlayer);
+                    CreateUnit(1, 20, "HealZone", CurrentPlayer);
+                    DisplayText("Convert Hero Text", 4);
+                    PlayWAV("staredit\\wav\\ghost_dead.ogg");
+                    PreserveTrigger();
+                },
+            }
+            
+            Trigger { -- 영마 > 스마 변환
+                players = {i},
+                conditions = {
+                    Bring(CurrentPlayer, AtLeast, 1, 20, "convertH"..e);
+                    Bring(CurrentPlayer, AtLeast, 1, 129, "Anywhere");
+                    Accumulate(CurrentPlayer, AtLeast, 15000, Ore);
+                },
+                actions = {
+                    SetResources(CurrentPlayer, Subtract, 15000, Ore);
+                    RemoveUnitAt(1, 20, "convertH"..e, CurrentPlayer);
+                    CreateUnit(1, 1, "HealZone", CurrentPlayer);
+                    DisplayText("Convert Special Text", 4);
+                    PlayWAV("staredit\\wav\\ghost_living.ogg");
+                    PreserveTrigger();
+                },
+            }
+            
+            Trigger { -- 일마  > 영마 변환
+                players = {i},
+                conditions = {
+                    Bring(CurrentPlayer, AtLeast, 1, 0, "convertH"..e);
+                    Accumulate(CurrentPlayer, AtLeast, 10000, Ore);
+                },
+                actions = {
+                    SetResources(CurrentPlayer, Subtract, 10000, Ore);
+                    RemoveUnitAt(1, 0, "convertH"..e, CurrentPlayer);
+                    CreateUnit(1, 20, "HealZone", CurrentPlayer);
+                    DisplayText("Convert Hero Text", 4);
+                    PlayWAV("staredit\\wav\\ghost_dead.ogg");
+                    PreserveTrigger();
+                },
+            }
+    
+            Trigger { -- 일마  > 영마 변환
+                players = {i},
+                conditions = {
+                    Bring(CurrentPlayer, AtLeast, 1, 0, "convertH"..e);
+                    Accumulate(CurrentPlayer, AtLeast, 10000, Ore);
+                },
+                actions = {
+                    SetResources(CurrentPlayer, Subtract, 10000, Ore);
+                    RemoveUnitAt(1, 0, "convertH"..e, CurrentPlayer);
+                    CreateUnit(1, 20, "HealZone", CurrentPlayer);
+                    DisplayText("Convert Hero Text", 4);
+                    PlayWAV("staredit\\wav\\ghost_dead.ogg");
+                    PreserveTrigger();
+                },
+            }
+    
+            
+            Trigger { -- 영마 > 스마 변환
+                players = {CurrentPlayer},
+                conditions = {
+                    Bring(CurrentPlayer, AtLeast, 1, 20, "convertH"..e);
+                    Bring(CurrentPlayer, AtLeast, 1, 129, "Anywhere");
+                    Accumulate(CurrentPlayer, AtLeast, 15000, Ore);
+                },
+                actions = {
+                    SetResources(CurrentPlayer, Subtract, 15000, Ore);
+                    RemoveUnitAt(1, 20, "convertH"..e, CurrentPlayer);
+                    CreateUnit(1, 1, "HealZone", CurrentPlayer);
+                    DisplayText("Convert Special Text", 4);
+                    PlayWAV("staredit\\wav\\ghost_living.ogg");
+                    PreserveTrigger();
+                },
+            }
+    
+            Trigger { -- 영마 > 스마 변환
+                players = {i},
+                conditions = {
+                    Bring(CurrentPlayer, AtLeast, 1, 20, "convertH"..e);
+                    Bring(CurrentPlayer, AtLeast, 1, 129, "Anywhere");
+                    Accumulate(CurrentPlayer, AtLeast, 15000, Ore);
+                },
+                actions = {
+                    SetResources(CurrentPlayer, Subtract, 15000, Ore);
+                    RemoveUnitAt(1, 20, "convertH"..e, CurrentPlayer);
+                    CreateUnit(1, 1, "HealZone", CurrentPlayer);
+                    DisplayText("Convert Special Text", 4);
+                    PlayWAV("staredit\\wav\\ghost_living.ogg");
+                    PreserveTrigger();
+                },
+            }
+            
+        end
+    end
+        Trigger{
+            players = {Force1},
+            conditions = {
+                Deaths(P7, Exactly, 1, 152);
+                Deaths(P9,Exactly,0,200);
+            },
+            actions = {
+                DisplayText("\x13\x19｡˙+ﾟ\x11Special \x1fGuardians of \x19Galaxy\x19 ｡+ﾟ. 가 전장에 합류했습니다 !", 4);
+                PlayWAV("staredit\\wav\\unlock.ogg");
+                PlayWAV("staredit\\wav\\unlock.ogg");
+                PlayWAV("staredit\\wav\\unlock.ogg");
+            }
         }
-    }
-    
-    
-    
-    Trigger{ -- 해금
-        players = {P1},
-        conditions = {
-            Deaths(P7, Exactly, 1, 152);
-        },
-        actions = {
-            CreateUnit(1, 129, "unlock1", CurrentPlayer);
+        
+        
+        
+        Trigger{ -- 해금
+            players = {P1},
+            conditions = {
+                Deaths(P7, Exactly, 1, 152);
+            },
+            actions = {
+                CreateUnit(1, 129, "unlock1", CurrentPlayer);
+            }
         }
-    }
-    
-    Trigger{ -- 해금
-        players = {P2},
-        conditions = {
-            Deaths(P7, Exactly, 1, 152);
-        },
-        actions = {
-            CreateUnit(1, 129, "unlock2", CurrentPlayer);
+        
+        Trigger{ -- 해금
+            players = {P2},
+            conditions = {
+                Deaths(P7, Exactly, 1, 152);
+            },
+            actions = {
+                CreateUnit(1, 129, "unlock2", CurrentPlayer);
+            }
         }
-    }
-    
-    Trigger{ -- 해금
-        players = {P3},
-        conditions = {
-            Deaths(P7, Exactly, 1, 152);
-        },
-        actions = {
-            CreateUnit(1, 129, "unlock3", CurrentPlayer);
+        
+        Trigger{ -- 해금
+            players = {P3},
+            conditions = {
+                Deaths(P7, Exactly, 1, 152);
+            },
+            actions = {
+                CreateUnit(1, 129, "unlock3", CurrentPlayer);
+            }
         }
-    }
-    
-    Trigger{ -- 해금
-        players = {P4},
-        conditions = {
-            Deaths(P7, Exactly, 1, 152);
-        },
-        actions = {
-            CreateUnit(1, 129, "unlock4", CurrentPlayer);
+        
+        Trigger{ -- 해금
+            players = {P4},
+            conditions = {
+                Deaths(P7, Exactly, 1, 152);
+            },
+            actions = {
+                CreateUnit(1, 129, "unlock4", CurrentPlayer);
+            }
         }
-    }
-    
-    -------------- CPU AI Script
-    -- Trigger { -- No comment (866B4FC4)
-    --     players = {P6},
-    --     conditions = {
-    --         Always();
-    --     },
-    --     actions = {
-    --         RunAIScriptAt("Expansion Zerg Campaign Insane", "Hive3");
-    --         RunAIScriptAt("Value This Area Higher", "HealZone");
-    --     },
-    -- }
+end
+function Install_CCMU()
+CanText1 = "\x13\x04\n\x0D\x0D\x13\x04● ● ● \x08ＤＡＮＧＥＲ\x04 ● ● ●\n\x14\n\x14\n"
+CanText2 = StrDesignX("\x04맵상의 유닛이 \x08１６００\x04기 이상 있습니다.").."\n"..StrDesignX("\x08캔낫\x04이 \x073회 이상\x04 걸릴 경우 \x10게임\x04에서 \x06패배\x04합니다.\x04").."\n"
+CanText3 = "\x13\x04\n\x0D\x0D\x13\x04● ● ● \x08ＤＡＮＧＥＲ\x04 ● ● ●\n\x14\n\x14\n"
 
-    
-Trigger { -- 나간플레이어 유닛삭제
-players = {P8},
-conditions = {
-        Always();
-    },
-actions = {
-        RemoveUnit("Men",P12);
-        RemoveUnit(111,P12);
-        RemoveUnit(107,P12);
-        PreserveTrigger();
-    },
+
+Trigger{
+	players = {Force1},
+	conditions = {
+		Memory(0x6283F0, AtLeast, 1600),
+	},
+	actions = {
+		DisplayText(CanText1, 4);
+		DisplayText(CanText2, 4);
+		DisplayText(CanText3, 4);
+		PlayWAV("sound\\Terran\\RAYNORM\\URaPss02.WAV");
+		PlayWAV("sound\\Terran\\RAYNORM\\URaPss02.WAV");
+		Wait(5000);
+		PreserveTrigger();
+	},
 }
-
-Trigger {
-players = {Force1},
-conditions = {
-    Always();
-},
-actions = {
-    SetAllianceStatus(Force1,AlliedVictory);
-    SetResources(P1, Add, 1000000, Ore);
-    -- PreserveTrigger();
-},
-}
-
-Trigger { -- 컴퓨터동맹설정
-players = {Force2},
-conditions = {
-    Always();
-},
-actions = {
-    SetResources(P5, SetTo, 9999999, OreAndGas);
-    SetResources(P6, SetTo, 9999999, OreAndGas);
-    SetResources(P7, SetTo, 9999999, OreAndGas);
-    PreserveTrigger();
-    SetAllianceStatus(Force2,AlliedVictory);
-    SetAllianceStatus(Force1, Enemy);
-    },
-}
-
-Trigger { 
-players = {Force2},
-conditions = {
-    Always();
-},
-actions = {
-    RunAIScript('Turn ON Shared Vision for Player 1');
-    RunAIScript('Turn ON Shared Vision for Player 2');
-    RunAIScript('Turn ON Shared Vision for Player 3');
-    RunAIScript('Turn ON Shared Vision for Player 4');
-    PreserveTrigger();
-},
-}
-
-Trigger {
-players = {Force1},
-conditions = {
-    Always();
-},
-actions = {
-    RunAIScript("Turn ON Shared Vision for Player 8");
-    PreserveTrigger();
-},
-}
-
-Trigger {
-players = {Force1},
-conditions = {
-    Always();
-},
-actions = {
-    RunAIScript('Turn ON Shared Vision for Player 1');
-    RunAIScript('Turn ON Shared Vision for Player 2');
-    RunAIScript('Turn ON Shared Vision for Player 3');
-    RunAIScript('Turn ON Shared Vision for Player 4');
-    PreserveTrigger();
-},
-}
-
-
+end
 
 
 
