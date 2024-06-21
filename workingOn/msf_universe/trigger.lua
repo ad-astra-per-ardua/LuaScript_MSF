@@ -19,7 +19,7 @@ __SubDirSetting("C:\\Users\\USER\\Desktop\\mapping\\tesingmap\\lua")
 --↓ Tep에 그대로 붙여넣기----------------------------------------
 FP = P8
 SetForces({P1,P2,P3,P4},{P5,P6,P7,P8},{},{},{P1,P2,P3,P4,P5,P6,P7,P8}) 
-SetFixedPlayer(P6)
+SetFixedPlayer(P8)
 -- StartCtrig(1,nil,0,1,"C:\\Users\\rlatj\\Desktop\\workingarea\\mapping\\euddraft0.9.10.12")
 StartCtrig(1,nil,0,1,"C:\\Users\\USER\\Desktop\\mapping\\euddraft0.9.10.12")
 CJump(AllPlayers,0)
@@ -38,11 +38,15 @@ CJumpEnd(AllPlayers,0)
 Enable_PlayerCheck()
 ObserverChatToAll(FP, _Void(0xFF), nil, nil, 0)
 NoAirCollisionX(FP)
-DoActions(FP,{SetSpeed(SetTo, "#X5")})
+DoActions(FP,{SetSpeed(SetTo, "#X2")})
 function RotatePlayer(Print,Players,RecoverCP)
 	return CopyCpAction(Print,Players,RecoverCP)
 end
--- 여기에 변수, 배열 및 Include류 함수 선언 --
+
+function ElapsedTime(Comparison, Time)
+    Comparison = ParseComparison(Comparison)
+    return Condition(0, 0, Time, 0, Comparison, 12, 0, 0)
+end
 
 function SetMemoryBA(Offset,Type,Value)
 	local ret = bit32.band(Offset, 0xFFFFFFFF)%4
@@ -74,6 +78,14 @@ function AddV(V,Value)
 		return TSetCVar(FP,V[2],Add,Value)
 	end
 end
+-- 여기에 변수, 배열 및 Include류 함수 선언 --
+
+TriggerX(FP, Always(), ModifyUnitShields(All, "Any unit", AllPlayers, "Anywhere", 100));
+TriggerX(FP, Always(), ModifyUnitHitPoints(All, "Any unit", AllPlayers, "Anywhere", 100));
+TriggerX(FP,Always(),{CreateUnit(1, 15, "admin1",P1)})
+TriggerX(FP,Always(),{CreateUnit(1, 87, "HealZone",P1)})
+
+CIf(AllPlayers,ElapsedTime(AtLeast,3))
 
 -------- Properties
 TempProperties = {
@@ -142,7 +154,14 @@ Gentime = SDspeed * 251
 ExRate = {29,31,33,35}
 ScanInitSetting(Force2,0)
 
+
+
 --------- Plot shape
+
+HeroShape1 = {4,{32,32},{-32,32},{-32,-32},{32,-32}}
+HeroShape2 = {1, {0,0}}
+-- CSPlot(HeroShape1,P1,54,"Location 1",nil,1,32,P1)
+-- CSPlot(HeroShape2,P1,54,"Location 1",nil,1,32,P1)
 WAVE1 = CSMakePolygon(4,50,0,35,5)
 WAVE2 = CSMakePolygon(4,50,0,20,5)
 WAVE3 = CSMakePolygon(4,50,45,13,5)
@@ -247,10 +266,37 @@ StargateGenTime = {
     47.2, 47.6 -- 2nd effects
     }
 -- Lair Eft : 94 | Hive Eft : 84 | SP EFT : 42 | SG EFT : 202 | FT EFT : 11
----------------------- Init system setting --------
-function Install_initial_system_setting()
-    DoActions2(FP, {KillUnit(94, Force2),KillUnit(84, Force2),KillUnit(42, Force2),KillUnit(202, Force2),KillUnit(11, Force2)}, preserved)
 
+---------------------- Init system setting --------
+
+function Install_initial_system_setting()
+    DoActions(FP, SetInvincibility(Enable, "Buildings", P12, "Anywhere"),preserved)
+    DoActions(FP, {KillUnit(94, Force2),KillUnit(84, Force2),KillUnit(42, Force2),KillUnit(202, Force2),KillUnit(11, Force2)}, preserved)
+    
+    for i=1, 4 do
+        Trigger { -- 미션 오브젝트
+            players = {Force1},
+            conditions = {
+                Command(AllPlayers,Exactly,i,111);
+            },
+            actions = {
+                SetMissionObjectives(StrDesignX("\x04MSF Universe Ver. \x07Test \x04플레이 중입니다.").."\n"..StrDesignX("\x04현재\x17 "..i.."명 \x04플레이 중").."\n"..StrDesignX("\x04환전률 : \x1F"..ExRate[i].."% \x04 적용 중 입니다").."\n"..StrDesignX("\x19테스트에 협력해주셔서 감사합니다.(_ _)"));
+            },
+        }
+        end
+    Trigger { -- 싱글 플레이 지원금
+	players = {Force1},
+	conditions = {
+		Command(AllPlayers,AtMost,1,111);
+		Command(CurrentPlayer,AtLeast,1,111);
+	},
+	actions = {
+		CreateUnit(2,20,"HealZone",CurrentPlayer);
+		SetResources(CurrentPlayer,Add,30000,Ore);
+        DisplayText(StrDesignX("\x04싱글 플레이 인식"), 4);
+        DisplayText(StrDesignX("\x07+ 30,000 Ore, \x04영마 \x072마리 \x04추가 지급"), 4);
+		},
+	}
     Trigger {
         players = {Force1},
         conditions = {
@@ -391,102 +437,111 @@ function Install_initial_system_setting()
                 PreserveTrigger();
             },
         }
-    -------------- CPU AI Script
--- Trigger { -- No comment (866B4FC4)
---     players = {P6},
---     conditions = {
---         Always();
---     },
---     actions = {
---         RunAIScriptAt("Expansion Zerg Campaign Insane", "Hive3");
---         RunAIScriptAt("Value This Area Higher", "HealZone");
---     },
--- }
+        -------------- CPU AI Script
+    -- Trigger { -- No comment (866B4FC4)
+    --     players = {P6},
+    --     conditions = {
+    --         Always();
+    --     },
+    --     actions = {
+    --         RunAIScriptAt("Expansion Zerg Campaign Insane", "Hive3");
+    --         RunAIScriptAt("Value This Area Higher", "HealZone");
+    --     },
+    -- }
 
-    
-Trigger { -- 나간플레이어 유닛삭제
-players = {P8},
-conditions = {
+        
+    Trigger { -- 나간플레이어 유닛삭제
+    players = {P8},
+    conditions = {
+            Always();
+        },
+    actions = {
+            RemoveUnit("Men",P12);
+            RemoveUnit(111,P12);
+            RemoveUnit(107,P12);
+            PreserveTrigger();
+        },
+    }
+    Trigger {
+    players = {Force1},
+    conditions = {
         Always();
     },
-actions = {
-        RemoveUnit("Men",P12);
-        RemoveUnit(111,P12);
-        RemoveUnit(107,P12);
+    actions = {
+        SetAllianceStatus(Force1,AlliedVictory);
+        SetResources(P1, Add, 1000000, Ore);
+        -- PreserveTrigger();
+    },
+    }
+    Trigger { -- 컴퓨터동맹설정
+    players = {Force2},
+    conditions = {
+        Always();
+    },
+    actions = {
+        SetResources(P5, SetTo, 9999999, OreAndGas);
+        SetResources(P6, SetTo, 9999999, OreAndGas);
+        SetResources(P7, SetTo, 9999999, OreAndGas);
+        PreserveTrigger();
+        SetAllianceStatus(Force2,AlliedVictory);
+        SetAllianceStatus(Force1, Enemy);
+        },
+    }
+    Trigger { 
+    players = {Force2},
+    conditions = {
+        Always();
+    },
+    actions = {
+        RunAIScript('Turn ON Shared Vision for Player 1');
+        RunAIScript('Turn ON Shared Vision for Player 2');
+        RunAIScript('Turn ON Shared Vision for Player 3');
+        RunAIScript('Turn ON Shared Vision for Player 4');
         PreserveTrigger();
     },
-}
-
-Trigger {
-players = {Force1},
-conditions = {
-    Always();
-},
-actions = {
-    SetAllianceStatus(Force1,AlliedVictory);
-    SetResources(P1, Add, 1000000, Ore);
-    -- PreserveTrigger();
-},
-}
-
-Trigger { -- 컴퓨터동맹설정
-players = {Force2},
-conditions = {
-    Always();
-},
-actions = {
-    SetResources(P5, SetTo, 9999999, OreAndGas);
-    SetResources(P6, SetTo, 9999999, OreAndGas);
-    SetResources(P7, SetTo, 9999999, OreAndGas);
-    PreserveTrigger();
-    SetAllianceStatus(Force2,AlliedVictory);
-    SetAllianceStatus(Force1, Enemy);
+    }
+    Trigger {
+    players = {Force1},
+    conditions = {
+        Always();
     },
-}
-
-Trigger { 
-players = {Force2},
-conditions = {
-    Always();
-},
-actions = {
-    RunAIScript('Turn ON Shared Vision for Player 1');
-    RunAIScript('Turn ON Shared Vision for Player 2');
-    RunAIScript('Turn ON Shared Vision for Player 3');
-    RunAIScript('Turn ON Shared Vision for Player 4');
-    PreserveTrigger();
-},
-}
-
-Trigger {
-players = {Force1},
-conditions = {
-    Always();
-},
-actions = {
-    RunAIScript("Turn ON Shared Vision for Player 8");
-    PreserveTrigger();
-},
-}
-
-Trigger {
-players = {Force1},
-conditions = {
-    Always();
-},
-actions = {
-    RunAIScript('Turn ON Shared Vision for Player 1');
-    RunAIScript('Turn ON Shared Vision for Player 2');
-    RunAIScript('Turn ON Shared Vision for Player 3');
-    RunAIScript('Turn ON Shared Vision for Player 4');
-    PreserveTrigger();
-},
-}
-Trigger2(P8, {Always()}, SetAllianceStatus(Force1, Ally),preserved)
+    actions = {
+        RunAIScript("Turn ON Shared Vision for Player 8");
+        PreserveTrigger();
+    },
+    }
+    Trigger {
+    players = {Force1},
+    conditions = {
+        Always();
+    },
+    actions = {
+        RunAIScript('Turn ON Shared Vision for Player 1');
+        RunAIScript('Turn ON Shared Vision for Player 2');
+        RunAIScript('Turn ON Shared Vision for Player 3');
+        RunAIScript('Turn ON Shared Vision for Player 4');
+        PreserveTrigger();
+    },
+    }
+    Trigger2(P8, {Always()}, SetAllianceStatus(Force1, Ally),preserved)
     
 end
+
 function Install_SpecialGunplot()
-    TriggerX(P7, Always(), {Wait(100),CreateUnit(1, 151, "celebrate1", P7),CreateUnit(1, 151, "celebrate2", P7)})
+    TriggerX(P7, Always(), {Wait(100),
+    CreateUnit(1, 151, "celebrate1", P7),
+    CreateUnit(1, 151, "celebrate2", P7),
+    CreateUnit(1, 130,"nuke1", P7);
+    CreateUnit(1, 130,"nuke2", P7);
+    CreateUnit(1, 174,"middle1", P7);
+    CreateUnit(1, 175,"middle2", P7);
+    CreateUnit(1, 127,"middle3", P7);
+    CreateUnit(1, 148,"middle4", P7);
+    SetInvincibility(Enable, 127, P7, "Anywhere");
+    SetInvincibility(Enable, 148, P7, "Anywhere");
+    SetInvincibility(Enable, 174, P7, "Anywhere");
+    SetInvincibility(Enable, 175, P7, "Anywhere");
+})
 end
 function Install_ExchangeTrigger()
     for i = 0, 3 do
@@ -553,10 +608,10 @@ Trigger{
 
 for i = 1 , 10 do
 	Trigger2(Force1, Deaths(P8, Exactly, Gentime * i, 132), {PlayWAV("staredit\\wav\\bigwave.ogg"),PlayWAV("staredit\\wav\\bigwave.ogg"),PlayWAV("staredit\\wav\\bigwave.ogg"),MinimapPing("celebrate1")})
-	CSPlotOrder(Bigwave1, P6, 54, "celebrate1", nil, 1, 32, CSMakePolygon(6,1,0,50,1), 0, Attack, "HealZone", nil, 64, nil, P6,{Deaths(P8, Exactly, Gentime * i, 132)},nil,1)
-	CSPlotOrder(Bigwave1, P6, 53, "celebrate1", nil, 1, 32, CSMakePolygon(6,1,0,50,1), 0, Attack, "HealZone", nil, 64, nil, P6,{Deaths(P8, Exactly, Gentime * i, 132)},nil,1)
-	CSPlotOrder(Bigwave1, P6, 55, "celebrate1", nil, 1, 32, CSMakePolygon(6,1,0,50,1), 0, Attack, "HealZone", nil, 64, nil, P6,{Deaths(P8, Exactly, Gentime * i, 132)},nil,1)
-	CSPlotOrder(Bigwave1, P6, 56, "celebrate1", nil, 1, 32, CSMakePolygon(6,1,0,50,1), 0, Attack, "HealZone", nil, 64, nil, P6,{Deaths(P8, Exactly, Gentime * i, 132)},nil,1)
+	CSPlotOrder(Bigwave1, P6, 37, "celebrate1", nil, 1, 32, CSMakePolygon(6,1,0,50,1), 0, Attack, "HealZone", nil, 64, nil, P6,{Deaths(P8, Exactly, Gentime * i, 132)},nil,1)
+	CSPlotOrder(Bigwave1, P6, 38, "celebrate1", nil, 1, 32, CSMakePolygon(6,1,0,50,1), 0, Attack, "HealZone", nil, 64, nil, P6,{Deaths(P8, Exactly, Gentime * i, 132)},nil,1)
+	CSPlotOrder(Bigwave1, P6, 37, "celebrate1", nil, 1, 32, CSMakePolygon(6,1,0,50,1), 0, Attack, "HealZone", nil, 64, nil, P6,{Deaths(P8, Exactly, Gentime * i, 132)},nil,1)
+	CSPlotOrder(Bigwave1, P6, 38, "celebrate1", nil, 1, 32, CSMakePolygon(6,1,0,50,1), 0, Attack, "HealZone", nil, 64, nil, P6,{Deaths(P8, Exactly, Gentime * i, 132)},nil,1)
 	CSPlotOrder(Bigwave2, P6, 62, "celebrate1", nil, 1, 32, CSMakeLine(6,1,0,15,0), 0, Attack, "HealZone", nil, 64, nil, P6,{Deaths(P8, Exactly, Gentime * i, 132)},nil,1)
 end
 
@@ -581,10 +636,10 @@ end
 
 for i = 1 , 10 do
 	Trigger2(Force1, Deaths(P8, Exactly, Gentime * i, 132), {MinimapPing("celebrate2")})
-	CSPlotOrder(Bigwave1, P6, 54, "celebrate2", nil, 1, 32, CSMakePolygon(6,1,0,50,1), 0, Attack, "HealZone", nil, 64, nil, P6,{Deaths(P8, Exactly, Gentime * i, 132)},nil,1)
-	CSPlotOrder(Bigwave1, P6, 53, "celebrate2", nil, 1, 32, CSMakePolygon(6,1,0,50,1), 0, Attack, "HealZone", nil, 64, nil, P6,{Deaths(P8, Exactly, Gentime * i, 132)},nil,1)
-	CSPlotOrder(Bigwave1, P6, 55, "celebrate2", nil, 1, 32, CSMakePolygon(6,1,0,50,1), 0, Attack, "HealZone", nil, 64, nil, P6,{Deaths(P8, Exactly, Gentime * i, 132)},nil,1)
-	CSPlotOrder(Bigwave1, P6, 56, "celebrate2", nil, 1, 32, CSMakePolygon(6,1,0,50,1), 0, Attack, "HealZone", nil, 64, nil, P6,{Deaths(P8, Exactly, Gentime * i, 132)},nil,1)
+	CSPlotOrder(Bigwave1, P6, 37, "celebrate2", nil, 1, 32, CSMakePolygon(6,1,0,50,1), 0, Attack, "HealZone", nil, 64, nil, P6,{Deaths(P8, Exactly, Gentime * i, 132)},nil,1)
+	CSPlotOrder(Bigwave1, P6, 38, "celebrate2", nil, 1, 32, CSMakePolygon(6,1,0,50,1), 0, Attack, "HealZone", nil, 64, nil, P6,{Deaths(P8, Exactly, Gentime * i, 132)},nil,1)
+	CSPlotOrder(Bigwave1, P6, 37, "celebrate2", nil, 1, 32, CSMakePolygon(6,1,0,50,1), 0, Attack, "HealZone", nil, 64, nil, P6,{Deaths(P8, Exactly, Gentime * i, 132)},nil,1)
+	CSPlotOrder(Bigwave1, P6, 38, "celebrate2", nil, 1, 32, CSMakePolygon(6,1,0,50,1), 0, Attack, "HealZone", nil, 64, nil, P6,{Deaths(P8, Exactly, Gentime * i, 132)},nil,1)
 	CSPlotOrder(Bigwave2, P6, 62, "celebrate2", nil, 1, 32, CSMakeLine(6,1,0,15,0), 0, Attack, "HealZone", nil, 64, nil, P6,{Deaths(P8, Exactly, Gentime * i, 132)},nil,1)
 end
 
@@ -608,8 +663,6 @@ end
 end
 function Install_HealZoneTrigger()
     ----------- Heal Zone -----------
-    TriggerX(FP, Always(), ModifyUnitShields(All, "Any unit", AllPlayers, "Anywhere", 100));
-    TriggerX(FP, Always(), ModifyUnitHitPoints(All, "Any unit", AllPlayers, "Anywhere", 100));
     Trigger {
         players = {Force1},
         conditions = {
@@ -662,7 +715,35 @@ function Install_HealZoneTrigger()
     }
 end
 function Install_HerounitTrigger()
-    ------------- 영작 트리거
+for i = 1, 4 do
+    TriggerX(P7, Always(), CreateUnit(1, 23, "tank"..i, P7))
+end
+for i = 1, 3 do
+    TriggerX(P7, Always(), CreateUnit(1, 29, "emp"..i, P7))
+    TriggerX(P7, Always(), CreateUnit(1, 27, "nuke"..i, P7))
+end
+for i = 1, 6 do
+    TriggerX(P7, Always(), CreateUnit(1, 76, "purity"..i, P7))
+end
+for i = 1, 2 do
+    TriggerX(P7, Always(), CreateUnit(1, 74, "unrevealer"..i, P7))
+    TriggerX(P7, Always(), CreateUnit(1, 28, "yama"..i, P7))
+end
+for i = 1 , 5 do
+    CSPlot(HeroShape1, P7, 93, "mutant"..i, nil, 1, 32, P7, Always())
+end
+for i = 1, 2 do
+    CSPlot(HeroShape1, P7, 64, "hcomet"..i, nil, 1, 32, P7, Always())
+end
+for i = 1, 2 do
+    CSPlot(HeroShape1, P7, 58, "intercepter"..i, nil, 1, 32, P7, Always())
+end
+for i = 1, 2 do
+    CSPlot(HeroShape1, P7, 7, "pluto"..i, nil, 1, 32, P7, Always())
+end
+CSPlot(HeroShape1, P7, 21, "wraith1", nil, 1, 32, P7, Always())
+CSPlot(HeroShape1, P7, 69, "vesta1", nil, 1, 32, P7, Always())
+
 
 Trigger { -- 영작유닛 데스값 -1
 players = {P7},
@@ -691,6 +772,8 @@ actions = {
     SetDeaths(CurrentPlayer, Subtract, 1, 76);
     SetDeaths(CurrentPlayer, Subtract, 1, 75);
     SetDeaths(CurrentPlayer, Subtract, 1, 74);
+    SetDeaths(CurrentPlayer, Subtract, 1, 29);
+
 
     PreserveTrigger();
 },
@@ -1041,6 +1124,21 @@ actions = {
     PreserveTrigger();
 }
 }
+
+Trigger { -- fenix d
+players = {Force1},
+conditions = {
+    Deaths(P7, AtLeast, 1, 29);
+    Deaths(P9,Exactly,0,200)
+},
+actions = {
+    DisplayText("\x13\x11｡˙+ﾟ\x08Parallel's \x03Dark Matter \x11ﾟ.+｡ \x01를 \x06처치 \x04하였습니다 + 100000 \x1FPoints!\x04", 4);
+    SetScore(CurrentPlayer, Add, 100000, Kills);
+    PlayWAV("staredit\\wav\\killsound.wav");
+    PlayWAV("staredit\\wav\\killsound.wav");
+    PreserveTrigger();
+},
+}
 end
 function Install_Neutral_bunkerTrigger()
     ------ Neutral bunker trigger ------
@@ -1054,8 +1152,7 @@ end
 for i = 0, 3 do
     Trigger2(Force1, {Bring(CurrentPlayer,Exactly,0,"Men","neutralbunker"..(i+1)),Bring(CurrentPlayer,AtLeast,1,125,"neutralbunker"..(i+1))},
     { 
-        GiveUnits(All,125,CurrentPlayer,"neutralbunker"..(i+1),P12),
-        SetInvincibility(Enable, 125, P12, "neutralbunker"..(i+1))
+        GiveUnits(All,125,CurrentPlayer,"neutralbunker"..(i+1),P12)
     },preserved)
 end
 end
@@ -1378,7 +1475,8 @@ function Install_ConvertMarineTrigger()
         Trigger{ -- 해금
             players = {P1},
             conditions = {
-                Deaths(P7, Exactly, 1, 152);
+                -- Deaths(P7, Exactly, 1, 152);
+                Always();
             },
             actions = {
                 CreateUnit(1, 129, "unlock1", CurrentPlayer);
@@ -1388,7 +1486,8 @@ function Install_ConvertMarineTrigger()
         Trigger{ -- 해금
             players = {P2},
             conditions = {
-                Deaths(P7, Exactly, 1, 152);
+                -- Deaths(P7, Exactly, 1, 152);
+                Always();
             },
             actions = {
                 CreateUnit(1, 129, "unlock2", CurrentPlayer);
@@ -1398,7 +1497,8 @@ function Install_ConvertMarineTrigger()
         Trigger{ -- 해금
             players = {P3},
             conditions = {
-                Deaths(P7, Exactly, 1, 152);
+                -- Deaths(P7, Exactly, 1, 152);
+                Always();
             },
             actions = {
                 CreateUnit(1, 129, "unlock3", CurrentPlayer);
@@ -1408,7 +1508,8 @@ function Install_ConvertMarineTrigger()
         Trigger{ -- 해금
             players = {P4},
             conditions = {
-                Deaths(P7, Exactly, 1, 152);
+                -- Deaths(P7, Exactly, 1, 152);
+                Always();
             },
             actions = {
                 CreateUnit(1, 129, "unlock4", CurrentPlayer);
@@ -1420,6 +1521,13 @@ CanText1 = "\x13\x04\n\x0D\x0D\x13\x04● ● ● \x08ＤＡＮＧＥＲ\x04 ●
 CanText2 = StrDesignX("\x04맵상의 유닛이 \x08１６００\x04기 이상 있습니다.").."\n"..StrDesignX("\x08캔낫\x04이 \x073회 이상\x04 걸릴 경우 \x10게임\x04에서 \x06패배\x04합니다.\x04").."\n"
 CanText3 = "\x13\x04\n\x0D\x0D\x13\x04● ● ● \x08ＤＡＮＧＥＲ\x04 ● ● ●\n\x14\n\x14\n"
 
+CanText11 = "\x13\x04\n\x0D\x0D\x13\x04● ● ● \x08ＤＡＮＧＥＲ\x04 ● ● ●\n\x14\n\x14\n"
+CanText22 = StrDesignX("\x08ＣＣＭＵ\x04가 감지되었습니다.").."\n"..StrDesignX("\x08ＣＣＭＵ\x04가 \x073회 이상\x04 감지 될 경우 \x10게임\x04에서 \x06패배\x04합니다.\x04").."\n"
+CanText33 = "\x13\x04\n\x0D\x0D\x13\x04● ● ● \x08ＤＡＮＧＥＲ\x04 ● ● ●\n\x14\n\x14\n"
+
+CanText111 = "\x13\x04\n\x0D\x0D\x13\x04● ● ● \x08ＤＥＦＥＡＴ\x04 ● ● ●\n\x14\n\x14\n"
+CanText222 = StrDesignX("\x08ＣＣＭＵ\x04가 \x073회 이상 \x04감지되었습니다.").."\n"..StrDesignX("\x10게임\x04에서 \x06패배\x04합니다. T^T\x04").."\n"
+CanText333 = "\x13\x04\n\x0D\x0D\x13\x04● ● ● \x08ＤＥＦＥＡＴ\x04 ● ● ●\n\x14\n\x14\n"
 
 Trigger{
 	players = {Force1},
@@ -1427,15 +1535,725 @@ Trigger{
 		Memory(0x6283F0, AtLeast, 1600),
 	},
 	actions = {
-		DisplayText(CanText1, 4);
-		DisplayText(CanText2, 4);
-		DisplayText(CanText3, 4);
-		PlayWAV("sound\\Terran\\RAYNORM\\URaPss02.WAV");
-		PlayWAV("sound\\Terran\\RAYNORM\\URaPss02.WAV");
+		DisplayText(CanText1, 4),
+		DisplayText(CanText2, 4),
+		DisplayText(CanText3, 4),
+		PlayWAV("sound\\Terran\\RAYNORM\\URaPss02.WAV"),
+		PlayWAV("sound\\Terran\\RAYNORM\\URaPss02.WAV"),
 		Wait(5000);
 		PreserveTrigger();
 	},
 }
+TriggerX(Force1, {FMemory(0x58F458, AtLeast, 1700)}, {KillUnit(16, Force2),
+KillUnit(44, Force2),
+KillUnit(56, Force2),
+KillUnit(16, Force2),
+KillUnit(51, Force2),
+KillUnit(88, Force2),
+KillUnit(89, Force2),
+KillUnit(66, Force2),
+KillUnit(65, Force2),
+KillUnit(95, Force2),
+KillUnit(55, Force2),
+KillUnit(69, Force2),
+RunAIScriptAt(JYD, "Anywhere"),
+DisplayText(CanText11, 4),
+DisplayText(CanText22, 4),
+DisplayText(CanText33, 4),
+PlayWAV("sound\\Terran\\GOLIATH\\TGoPss01.WAV"),
+PlayWAV("sound\\Terran\\GOLIATH\\TGoPss01.WAV")},
+preserved)
+
+
+TriggerX(Force1, {FMemory(0x58F450, AtLeast, 3)},{
+DisplayText(CanText111, 4),
+DisplayText(CanText222, 4),
+DisplayText(CanText333, 4),
+Defeat();
+})
+end
+function Install_normalGunplot()
+    for i = 1, 10 do
+        TriggerX(FP, Always(), CreateUnit(1, 131, "hat"..i, P6))
+    end
+    for i = 1, 12 do
+        TriggerX(FP, Always(), CreateUnit(1, 132, "lair"..i, P6))
+    end
+    for i = 1, 10 do
+        TriggerX(FP, Always(), CreateUnit(1, 133, "hive"..i, P6))
+    end
+    for i = 1, 10 do
+        TriggerX(FP, Always(), CreateUnit(1, 114, "starp"..i, P6))
+    end
+    for i = 1, 10 do
+        TriggerX(FP, Always(), CreateUnit(1, 167, "starg"..i, P6))
+    end
+
+end
+function Install_BGMPhase()
+    Trigger { -- 건물데스값 -1
+players = {P6},
+    conditions = {
+        Always();
+    },
+    actions = {
+        SetDeaths(P6,Subtract,1,131);
+        SetDeaths(P6,Subtract,1,132);
+        SetDeaths(P6,Subtract,1,133);
+        SetDeaths(P6,Subtract,1,113);
+        SetDeaths(P6,Subtract,1,114);
+        SetDeaths(P6,Subtract,1,160);
+        SetDeaths(P6,Subtract,1,167);
+        SetDeaths(P6,Subtract,1,154);
+        PreserveTrigger()
+    }
+}
+
+    
+    Trigger { -- 경우 1 
+        players = {Force1},
+        conditions = {
+            Deaths(CurrentPlayer, Exactly, 1, "Zerg Beacon"); -- 햇 브금 스위치
+            Deaths(CurrentPlayer, Exactly, 0, "Zerg Flag Beacon"); -- 햇 브금 타이머
+            Deaths(CurrentPlayer, Exactly, 0, "Unused Zerg Bldg"); -- 레어 브금 타이머
+            Deaths(CurrentPlayer, Exactly, 0, "Unused Terran Bldg type   2"); -- 하이브 브금 타이머
+            Deaths(CurrentPlayer, Exactly, 0, 220); -- 스타포트 브금 타이머
+            Deaths(CurrentPlayer, Exactly, 0, 221); -- 스타게이트 브금 타이머
+            Deaths(CurrentPlayer, Exactly, 0, 158); -- 브금온오프
+        },
+        actions = {
+            SetDeaths(CurrentPlayer, SetTo, 1666, "Zerg Flag Beacon"); -- 햇 브금 타이머
+            PlayWAV("staredit\\wav\\hat.ogg");
+            PlayWAV("staredit\\wav\\hat.ogg");
+            PreserveTrigger();
+        },
+    }
+    
+    Trigger { -- 노래시간 감소
+        players = {P6},
+        conditions = {
+            Always();
+        },
+        actions = {
+            SetDeaths(Force1, Subtract, 1, "Zerg Flag Beacon"); -- 햇 브금 타이머
+            PreserveTrigger();
+        },
+    }
+    
+    Trigger { -- 변수 초기화
+        players = {Force1},
+        conditions = {
+            Deaths(CurrentPlayer, AtLeast, 1, "Zerg Beacon"); -- 햇 브금 스위치
+        },
+        actions = {
+            SetDeaths(CurrentPlayer, SetTo, 0, "Zerg Beacon"); -- 햇 브금 스위치
+            PreserveTrigger();
+        },
+    }
+    
+    Trigger { -- 경우 2
+        players = {Force1},
+        conditions = {
+            Deaths(CurrentPlayer, Exactly, 1, "Unused Zerg Bldg 5"); -- 레어 브금 스위치
+            Deaths(CurrentPlayer, Exactly, 0, "Zerg Flag Beacon"); -- 햇 브금 타이머
+            Deaths(CurrentPlayer, Exactly, 0, "Unused Zerg Bldg"); -- 레어 브금 타이머
+            Deaths(CurrentPlayer, Exactly, 0, "Unused Terran Bldg type   2"); -- 하이브 브금 타이머
+            Deaths(CurrentPlayer, Exactly, 0, 220); -- 스타포트 브금 타이머
+            Deaths(CurrentPlayer, Exactly, 0, 221); -- 스타게이트 브금 타이머
+            Deaths(CurrentPlayer, Exactly, 0, 158); -- 브금온오프
+        },
+        actions = {
+            SetDeaths(CurrentPlayer, SetTo, 966, "Unused Zerg Bldg"); -- 레어 브금 타이머
+            PlayWAV("staredit\\wav\\Lair.ogg");
+            PlayWAV("staredit\\wav\\Lair.ogg");
+            PreserveTrigger();
+        },
+    }
+    
+    Trigger { -- 노래시간 감소
+        players = {P6},
+        conditions = {
+            Always();
+        },
+        actions = {
+            SetDeaths(Force1, Subtract, 1, "Unused Zerg Bldg"); -- 레어 브금 타이머
+            PreserveTrigger();
+        },
+    }
+    
+    Trigger { -- 변수 초기화
+        players = {Force1},
+        conditions = {
+            Deaths(CurrentPlayer, AtLeast, 1, "Unused Zerg Bldg 5"); -- 레어 브금 스위치
+        },
+        actions = {
+            SetDeaths(CurrentPlayer, SetTo, 0, "Unused Zerg Bldg 5");
+            PreserveTrigger();
+        },
+    }
+    
+    Trigger { -- 경우 3
+        players = {Force1},
+        conditions = {
+            Deaths(CurrentPlayer, Exactly, 1, "Unused Terran Bldg type   1"); -- 하이브 브금 스위치
+            Deaths(CurrentPlayer, Exactly, 0, "Zerg Flag Beacon"); -- 햇 브금 타이머
+            Deaths(CurrentPlayer, Exactly, 0, "Unused Terran Bldg type   2"); -- 하이브 브금 타이머
+            Deaths(CurrentPlayer, Exactly, 0, "Unused Zerg Bldg"); -- 레어 브금 타이머
+            Deaths(CurrentPlayer, Exactly, 0, 220); -- 스타포트 브금 타이머
+            Deaths(CurrentPlayer, Exactly, 0, 221); -- 스타게이트 브금 타이머
+            Deaths(CurrentPlayer, Exactly, 0, 158); -- 브금온오프
+        },
+        actions = {
+            SetDeaths(CurrentPlayer, SetTo, 1054, "Unused Terran Bldg type   2"); -- 하이브 브금 타이머
+            PlayWAV("staredit\\wav\\hive.ogg");
+            PlayWAV("staredit\\wav\\hive.ogg");
+            PlayWAV("staredit\\wav\\hive.ogg");
+            PreserveTrigger();
+        },
+    }
+    
+    Trigger { -- 노래시간 감소
+        players = {P6},
+        conditions = {
+            Always();
+        },
+        actions = {
+            SetDeaths(Force1, Subtract, 1, "Unused Terran Bldg type   2"); -- 하이브 브금 타이머
+            PreserveTrigger();
+        },
+    }
+    
+    Trigger { -- 변수 초기화
+        players = {Force1},
+        conditions = {
+            Deaths(CurrentPlayer, AtLeast, 1, "Unused Terran Bldg type   1"); -- 하이브 브금 스위치
+        },
+        actions = {
+            SetDeaths(CurrentPlayer, SetTo, 0, "Unused Terran Bldg type   1"); -- 하이브 브금 스위치
+            PreserveTrigger();
+        },
+    }
+    
+    Trigger { -- 경우 4
+        players = {Force1},
+        conditions = {
+            Deaths(CurrentPlayer, Exactly, 0, "Zerg Flag Beacon"); -- 햇 브금 타이머
+            Deaths(CurrentPlayer, Exactly, 0, "Unused Terran Bldg type   2"); -- 하이브 브금 타이머
+            Deaths(CurrentPlayer, Exactly, 0, "Unused Zerg Bldg"); -- 레어 브금 타이머
+            Deaths(CurrentPlayer, Exactly, 1, "Independent Starport"); -- 스타포트 브금 스위치
+            Deaths(CurrentPlayer, Exactly, 0, 220); -- 스타포트 브금 타이머
+            Deaths(CurrentPlayer, Exactly, 0, 221); -- 스타게이트 브금 타이머
+            Deaths(CurrentPlayer, Exactly, 0, 158); -- 브금온오프
+        },
+        actions = {
+            SetDeaths(CurrentPlayer, SetTo, 1190, 220); -- 스타포트 브금 타이머
+            PlayWAV("staredit\\wav\\terran1.ogg");
+            PlayWAV("staredit\\wav\\terran1.ogg");
+            PreserveTrigger();
+        },
+    }
+    
+    Trigger { -- 노래시간 감소
+        players = {P6},
+        conditions = {
+            Always();
+        },
+        actions = {
+            SetDeaths(Force1, Subtract, 1, 220); -- 스타포트 브금 타이머
+            PreserveTrigger();
+        },
+    }
+    
+    Trigger { -- 변수 초기화
+        players = {Force1},
+        conditions = {
+            Deaths(CurrentPlayer, AtLeast, 1, "Independent Starport"); -- 스타포트 브금 스위치
+        },
+        actions = {
+            SetDeaths(CurrentPlayer, SetTo, 0, "Independent Starport"); -- 스타포트 브금 스위치
+            PreserveTrigger();
+        },
+    }
+    
+    Trigger { -- 경우 5
+        players = {Force1},
+        conditions = {
+            Deaths(CurrentPlayer, Exactly, 0, "Zerg Flag Beacon"); -- 햇 브금 타이머
+            Deaths(CurrentPlayer, Exactly, 0, "Unused Terran Bldg type   2"); -- 하이브 브금 타이머
+            Deaths(CurrentPlayer, Exactly, 0, "Unused Zerg Bldg"); -- 레어 브금 타이머
+            Deaths(CurrentPlayer, Exactly, 0, 220); -- 스타포트 브금 타이머
+            Deaths(CurrentPlayer, Exactly, 0, 221); -- 스타게이트 브금 타이머
+            Deaths(CurrentPlayer, Exactly, 1, 218); -- 스타게이트 브금 스위치
+            Deaths(CurrentPlayer, Exactly, 0, 158); -- 브금온오프
+        },
+        actions = {
+            SetDeaths(CurrentPlayer, SetTo, 2074, 221); -- 스타게이트 브금 타이머
+            PlayWAV("staredit\\wav\\stargate.ogg");
+            PlayWAV("staredit\\wav\\stargate.ogg");
+            PreserveTrigger();
+        },
+    }
+    
+    Trigger { -- 노래시간 감소
+        players = {P6},
+        conditions = {
+            Always();
+        },
+        actions = {
+            SetDeaths(Force1, Subtract, 1, 221); -- 스타게이트 브금 타이머
+            PreserveTrigger();
+        },
+    }
+    
+    Trigger { -- 변수 초기화
+        players = {Force1},
+        conditions = {
+            Deaths(CurrentPlayer, AtLeast, 1, 218); -- 스타게이트 브금 스위치
+        },
+        actions = {
+            SetDeaths(CurrentPlayer, SetTo, 0, 218); -- 스타게이트 브금 스위치
+            PreserveTrigger();
+        },
+    }
+    
+    Trigger { -- Link with variation with trigger
+        players = {Force1},
+        conditions = {
+            Deaths(P6, AtLeast, 1, 131);
+        },
+        actions = {
+            DisplayText("Hatchery Destroyed! + 40000 Points");
+            SetScore(CurrentPlayer, Add, 40000, Kills);
+            SetDeaths(CurrentPlayer, SetTo, 1, "Zerg Beacon"); -- 햇 브금 스위치
+            PreserveTrigger();
+        },
+    }
+    
+    Trigger { -- Link with variation with trigger
+        players = {Force1},
+        conditions = {
+            Deaths(P6, AtLeast, 1, 132);
+        },
+        actions = {
+            DisplayText("Lair Destroyed! + 50000 Points");
+            SetScore(CurrentPlayer, Add, 50000, Kills);
+            SetDeaths(CurrentPlayer, SetTo, 1, "Unused Zerg Bldg 5"); -- 레어 브금 스위치
+            PreserveTrigger();
+        },
+    }
+    
+    Trigger { -- Link with variation with trigger
+        players = {Force1},
+        conditions = {
+            Deaths(P6, AtLeast, 1, 133);
+        },
+        actions = {
+            DisplayText("Hive Destroyed! + 60000 Points");
+            SetScore(CurrentPlayer, Add, 60000, Kills);
+            SetDeaths(CurrentPlayer, SetTo, 1, "Unused Terran Bldg type   1"); -- 하이브 브금 스위치
+            PreserveTrigger();
+        },
+    }
+    
+    Trigger { -- Link with variation with trigger
+        players = {Force1},
+        conditions = {
+            Deaths(P6, AtLeast, 1, 114);
+        },
+        actions = {
+            DisplayText("Starport Destroyed! + 80000 Points");
+            SetScore(CurrentPlayer, Add, 80000, Kills);
+            SetDeaths(CurrentPlayer, SetTo, 1, "Independent Starport"); -- 스타포트 브금 스위치
+            PreserveTrigger();
+        },
+    }
+    
+    
+    Trigger{
+        players = {Force1},
+        conditions = {
+            Deaths(P6, AtLeast, 1, 167);
+        },
+        actions = {
+            DisplayText("Stargate Destroyed! + 100000 Points");
+            SetScore(CurrentPlayer, Add, 100000, Kills);
+            SetDeaths(CurrentPlayer, SetTo, 1, 218); -- 스타게이트 브금 스위치
+            PreserveTrigger();
+        },
+    }
+
+    
+end
+function Install_NormalGunPlotShape()
+    ScanInitSetting(P6,0)
+    ScanInitSetting(P5,0)
+    ------ Gunplot deathvar uses P10 starts with 0
+    ------ Hat 1 tier
+
+    function HatcheryGunplot1( Hatname, Deathvar)
+        Trigger{
+            players = {P6},
+            conditions = {
+                CommandLeastAt(131, Hatname);
+            },
+            actions = {
+                SetDeaths(P10,Add,1,Deathvar);
+                PreserveTrigger();
+            }
+        }
+        -- Hat1 hatchery phase 1
+        CSPlotOrder(square1, P6, 54, Hatname, nil, 1, 16, square1, 0, Attack, "HealZone", nil, 0, nil, P6,{CommandLeastAt(131, Hatname), Deaths(P10, AtLeast, 50,Deathvar)})
+        CSPlotOrder(square1, P7, 53, Hatname, nil, 1, 16, square1, 0, Attack, "HealZone", nil, 0, nil, P7,{CommandLeastAt(131, Hatname), Deaths(P10, AtLeast, 85, Deathvar)})
+        CSPlotOrder(square1, P6, 40, Hatname, nil, 1, 16, square1, 0, Attack, "HealZone", nil, 0, nil, P6,{CommandLeastAt(131, Hatname), Deaths(P10, AtLeast, 115, Deathvar)})
+        CSPlotOrder(spiral1, P6, 43, Hatname, nil, 1, 10, spiral1, 0, Attack, "HealZone", nil, 0, nil, P6,{CommandLeastAt(131, Hatname), Deaths(P10, AtLeast, 180, Deathvar)})
+        CSPlotOrder(square1, P7, 39, Hatname, nil, 1, 16, square1, 0, Attack, "HealZone", nil, 0, nil, P7,{CommandLeastAt(131, Hatname), Deaths(P10, AtLeast, 145, Deathvar)})
+        
+        CSPlotOrder(spiral1, P7, 55, Hatname, nil, 1, 12, spiral1, 0, Attack, "HealZone", nil, 0, nil, P7,{CommandLeastAt(131, Hatname), Deaths(P10, AtLeast, 275, Deathvar)})
+        CSPlotOrder(spiral2, P6, 56, Hatname, nil, 1, 12, spiral2, 0, Attack, "HealZone", nil, 0, nil, P6,{CommandLeastAt(131, Hatname), Deaths(P10, AtLeast, 345, Deathvar)})
+        CSPlotOrder(spiral1, P7, 55, Hatname, nil, 1, 12, spiral1, 0, Attack, "HealZone", nil, 0, nil, P7,{CommandLeastAt(131, Hatname), Deaths(P10, AtLeast, 415, Deathvar)})
+        CSPlotOrder(spiral2, P6, 56, Hatname, nil, 1, 12, spiral2, 0, Attack, "HealZone", nil, 0, nil, P6,{CommandLeastAt(131, Hatname), Deaths(P10, AtLeast, 485, Deathvar)})
+        
+        -- -- Hat1 hatchery phase 2
+        CSPlotOrder(square2, P7, 54, Hatname, nil, 1, 20, square2, 0, Attack, "HealZone", nil, 0, nil, P7,{CommandLeastAt(131, Hatname), Deaths(P10, AtLeast, 578, Deathvar)})
+        CSPlotOrder(square2, P6, 53, Hatname, nil, 1, 20, square2, 0, Attack, "HealZone", nil, 0, nil, P6,{CommandLeastAt(131, Hatname), Deaths(P10, AtLeast, 613, Deathvar)})
+        CSPlotOrder(spiral1, P7, 56, Hatname, nil, 1, 12, spiral1, 0, Attack, "HealZone", nil, 0, nil, P7,{CommandLeastAt(131, Hatname), Deaths(P10, AtLeast, 640, Deathvar)})
+        CSPlotOrder(spiral2, P6, 55, Hatname, nil, 1, 12, spiral2, 0, Attack, "HealZone", nil, 0, nil, P6,{CommandLeastAt(131, Hatname), Deaths(P10, AtLeast, 691, Deathvar)})
+        CSPlotOrder(square2, P6, 39, Hatname, nil, 1, 20, square2, 0, Attack, "HealZone", nil, 0, nil, P6,{CommandLeastAt(131, Hatname), Deaths(P10, AtLeast, 691, Deathvar)})
+        end
+    ------ Hat 1 tier
+    
+    ------ Hat 2 tier
+    function HatcheryGunplot2( Hatname, Deathvar)
+        Trigger{
+            players = {P6},
+            conditions = {
+                CommandLeastAt(131, Hatname);
+            },
+            actions = {
+                SetDeaths(P10,Add,1,Deathvar);
+                PreserveTrigger();
+            }
+        }
+        -- Hat1 hatchery phase 1
+        CSPlotOrder(square1, P6, 65, Hatname, nil, 1, 16, square1, 0, Attack, "HealZone", nil, 0, nil, P6,{CommandLeastAt(131, Hatname), Deaths(P10, AtLeast, 50,Deathvar)})
+        CSPlotOrder(square1, P7, 66, Hatname, nil, 1, 16, square1, 0, Attack, "HealZone", nil, 0, nil, P7,{CommandLeastAt(131, Hatname), Deaths(P10, AtLeast, 85, Deathvar)})
+        CSPlotOrder(square1, P6, 65, Hatname, nil, 1, 16, square1, 0, Attack, "HealZone", nil, 0, nil, P6,{CommandLeastAt(131, Hatname), Deaths(P10, AtLeast, 115, Deathvar)})
+        CSPlotOrder(spiral1, P6, 16, Hatname, nil, 1, 10, spiral1, 0, Attack, "HealZone", nil, 0, nil, P6,{CommandLeastAt(131, Hatname), Deaths(P10, AtLeast, 180, Deathvar)})
+        CSPlotOrder(square1, P7, 39, Hatname, nil, 1, 16, square1, 0, Attack, "HealZone", nil, 0, nil, P7,{CommandLeastAt(131, Hatname), Deaths(P10, AtLeast, 145, Deathvar)})
+        
+        CSPlotOrder(spiral1, P7, 88, Hatname, nil, 1, 12, spiral1, 0, Attack, "HealZone", nil, 0, nil, P7,{CommandLeastAt(131, Hatname), Deaths(P10, AtLeast, 275, Deathvar)})
+        CSPlotOrder(spiral2, P6, 89, Hatname, nil, 1, 12, spiral2, 0, Attack, "HealZone", nil, 0, nil, P6,{CommandLeastAt(131, Hatname), Deaths(P10, AtLeast, 345, Deathvar)})
+        CSPlotOrder(spiral1, P7, 43, Hatname, nil, 1, 12, spiral1, 0, Attack, "HealZone", nil, 0, nil, P7,{CommandLeastAt(131, Hatname), Deaths(P10, AtLeast, 415, Deathvar)})
+        CSPlotOrder(spiral2, P6, 44, Hatname, nil, 1, 12, spiral2, 0, Attack, "HealZone", nil, 0, nil, P6,{CommandLeastAt(131, Hatname), Deaths(P10, AtLeast, 485, Deathvar)})
+        
+        -- -- Hat1 hatchery phase 2
+        CSPlotOrder(square2, P7, 51, Hatname, nil, 1, 20, square2, 0, Attack, "HealZone", nil, 0, nil, P7,{CommandLeastAt(131, Hatname), Deaths(P10, AtLeast, 578, Deathvar)})
+        CSPlotOrder(square2, P6, 52, Hatname, nil, 1, 20, square2, 0, Attack, "HealZone", nil, 0, nil, P6,{CommandLeastAt(131, Hatname), Deaths(P10, AtLeast, 613, Deathvar)})
+        CSPlotOrder(spiral1, P7, 43, Hatname, nil, 1, 12, spiral1, 0, Attack, "HealZone", nil, 0, nil, P7,{CommandLeastAt(131, Hatname), Deaths(P10, AtLeast, 640, Deathvar)})
+        CSPlotOrder(spiral2, P6, 56, Hatname, nil, 1, 12, spiral2, 0, Attack, "HealZone", nil, 0, nil, P6,{CommandLeastAt(131, Hatname), Deaths(P10, AtLeast, 691, Deathvar)})
+        CSPlotOrder(square2, P6, 65, Hatname, nil, 1, 20, square2, 0, Attack, "HealZone", nil, 0, nil, P6,{CommandLeastAt(131, Hatname), Deaths(P10, AtLeast, 691, Deathvar)})
+        end
+        ------ End of hatchery shape plot function 
+
+        --- Lair Plot
+        function LairGunplot( Lairname, Deathvar)
+            Trigger{
+                players = {P6},
+                conditions = {
+                    CommandLeastAt(132, Lairname);
+                },
+                actions = {
+                    SetDeaths(P10,Add,1,Deathvar);
+                    PreserveTrigger();
+                }
+            }
+            ---- 1젠 ----
+            CSPlotOrder(LGU1, P6, 39, Lairname, nil, 1, 20, LGU1a, 0, Attack , "HealZone", nil, 0, nil, P6, {CommandLeastAt(132, Lairname), Deaths(P10, AtLeast, LairTimeline[1] * SDspeed,Deathvar)})
+            CSPlotOrder(LGU2, P6, 51, Lairname, nil, 1, 20, LGU2a, 0, Attack , "HealZone", nil, 0, nil, P6, {CommandLeastAt(132, Lairname), Deaths(P10, AtLeast, LairTimeline[1] * SDspeed,Deathvar)})
+            CSPlotOrder(LGU3, P6, 46, Lairname, nil, 1, 20, LGU3a, 0, Attack , "HealZone", nil, 0, nil, P6, {CommandLeastAt(132, Lairname), Deaths(P10, AtLeast, LairTimeline[1] * SDspeed,Deathvar)})
+            CSPlotOrder(LSU, P6, 55, Lairname, nil, 1, 20, LSU, 0, Attack , "HealZone", nil, 0, nil, P6, {CommandLeastAt(132, Lairname), Deaths(P10, AtLeast, LairTimeline[1] * SDspeed,Deathvar)})
+            CSPlotOrder(LSU2, P6, 44, Lairname, nil, 1, 20, LSU2, 0, Attack , "HealZone", nil, 0, nil, P6, {CommandLeastAt(132, Lairname), Deaths(P10, AtLeast, LairTimeline[1] * SDspeed,Deathvar)})
+            
+            ---2젠
+            CSPlotOrder(LGU1, P6, 39, Lairname, nil, 1, 20, LGU1, 0, Attack , "HealZone", nil, 0, nil, P6, {CommandLeastAt(132, Lairname), Deaths(P10, AtLeast, LairTimeline[2] * SDspeed,Deathvar)})
+            CSPlotOrder(LGU2, P7, 51, Lairname, nil, 1, 20, LGU2, 0, Attack , "HealZone", nil, 0, nil, P7, {CommandLeastAt(132, Lairname), Deaths(P10, AtLeast, LairTimeline[2] * SDspeed,Deathvar)})
+            CSPlotOrder(LGU3, P6, 46, Lairname, nil, 1, 20, LGU3, 0, Attack , "HealZone", nil, 0, nil, P6, {CommandLeastAt(132, Lairname), Deaths(P10, AtLeast, LairTimeline[2] * SDspeed,Deathvar)})
+            CSPlotOrder(LSU, P7, 55, Lairname, nil, 1, 20, LSU, 0, Attack , "HealZone", nil, 0, nil, P7, {CommandLeastAt(132, Lairname), Deaths(P10, AtLeast, LairTimeline[2] * SDspeed,Deathvar)})
+            CSPlotOrder(LSU2, P6, 56, Lairname, nil, 1, 20, LSU2, 0, Attack , "HealZone", nil, 0, nil, P6, {CommandLeastAt(132, Lairname), Deaths(P10, AtLeast, LairTimeline[2] * SDspeed,Deathvar)})
+            --- 3젠
+            CSPlotOrder(LGU1, P7, 16, Lairname, nil, 1, 20, LGU1, 0, Attack , "HealZone", nil, 0, nil, P7, {CommandLeastAt(132, Lairname), Deaths(P10, AtLeast, LairTimeline[3] * SDspeed,Deathvar)})
+            CSPlotOrder(LGU2, P6, 51, Lairname, nil, 1, 20, LGU2, 0, Attack , "HealZone", nil, 0, nil, P6, {CommandLeastAt(132, Lairname), Deaths(P10, AtLeast, LairTimeline[3] * SDspeed,Deathvar)})
+            CSPlotOrder(LGU3, P7, 46, Lairname, nil, 1, 20, LGU3, 0, Attack , "HealZone", nil, 0, nil, P7, {CommandLeastAt(132, Lairname), Deaths(P10, AtLeast, LairTimeline[3] * SDspeed,Deathvar)})
+            CSPlotOrder(LSU, P6, 55, Lairname, nil, 1, 20, LSU, 0, Attack , "HealZone", nil, 0, nil, P6, {CommandLeastAt(132, Lairname), Deaths(P10, AtLeast, LairTimeline[3] * SDspeed,Deathvar)})
+            CSPlotOrder(LSU2, P7, 16, Lairname, nil, 1, 20, LSU2, 0, Attack , "HealZone", nil, 0, nil, P7, {CommandLeastAt(132, Lairname), Deaths(P10, AtLeast, LairTimeline[3] * SDspeed,Deathvar)})
+            
+            ---이펙트
+            CSPlot(LSU, P6, 94, Lairname, nil, 1, 20, P6, {CommandLeastAt(132, Lairname), Deaths(P10, AtLeast, LairTimeline[4] * SDspeed,Deathvar)})
+            CSPlot(LSU2, P6, 94, Lairname, nil,1, 20, P6, {CommandLeastAt(132, Lairname), Deaths(P10, AtLeast, LairTimeline[5] * SDspeed,Deathvar)})
+            CSPlot(LSU3, P6, 94, Lairname, nil, 1, 20, P6, {CommandLeastAt(132, Lairname), Deaths(P10, AtLeast, LairTimeline[6] * SDspeed,Deathvar)})
+            CSPlot(LSU4, P6, 94, Lairname, nil, 1, 20, P6, {CommandLeastAt(132, Lairname), Deaths(P10, AtLeast, LairTimeline[7] * SDspeed,Deathvar)})
+            CSPlot(LSU5, P6, 94, Lairname, nil, 1, 20, P6, {CommandLeastAt(132, Lairname), Deaths(P10, AtLeast, LairTimeline[8] * SDspeed,Deathvar)})
+            ---- 4gen ---
+            
+            CSPlotOrder(LGU1, P7, 51, Lairname, nil, 1, 20, LGU1, 0, Attack , "HealZone", nil, 0, nil, P7, {CommandLeastAt(132, Lairname), Deaths(P10, AtLeast, LairTimeline[9] * SDspeed,Deathvar)})
+            CSPlotOrder(LGU2, P6, 16, Lairname, nil, 1, 20, LGU2, 0, Attack , "HealZone", nil, 0, nil, P6, {CommandLeastAt(132, Lairname), Deaths(P10, AtLeast, LairTimeline[9] * SDspeed,Deathvar)})
+            CSPlotOrder(LGU3, P7, 46, Lairname, nil, 1, 20, LGU3, 0, Attack , "HealZone", nil, 0, nil, P7, {CommandLeastAt(132, Lairname), Deaths(P10, AtLeast, LairTimeline[9] * SDspeed,Deathvar)})
+            CSPlotOrder(LSU, P6, 56, Lairname, nil, 1, 20, LSU, 0, Attack , "HealZone", nil, 0, nil, P6, {CommandLeastAt(132, Lairname), Deaths(P10, AtLeast, LairTimeline[9] * SDspeed,Deathvar)})
+            CSPlotOrderWithProperties(LSU3, P6, 62, Lairname, nil, 1, 20, LSU3, 0, Attack , Lairname, nil, 0, nil, P6, {CommandLeastAt(132, Lairname), Deaths(P10, AtLeast, LairTimeline[9] * SDspeed,Deathvar)},nil,0,TempProperties)
+            
+            ----- effect with unit ------
+            CSPlot(sixline, P6, 94, Lairname, nil, 1, 20, P6, {CommandLeastAt(132, Lairname), Deaths(P10, AtLeast, LairTimeline[13] * SDspeed,Deathvar)})
+            CSPlotOrderWithProperties(sixline, P6, 44, Lairname, nil, 1, 20, sixline, 0, Attack , "HealZone", nil, 0, nil, P6, {CommandLeastAt(132, Lairname), Deaths(P10, AtLeast, LairTimeline[10] * SDspeed,Deathvar)},nil,0,TempProperties)
+            
+            CSPlot(LGU1, P6, 94, Lairname, nil, 1, 20, P6, {CommandLeastAt(132, Lairname), Deaths(P10, AtLeast, LairTimeline[10] * SDspeed,Deathvar)})
+            CSPlotOrderWithProperties(LGU1, P6, 43, Lairname, nil, 1, 20, LGU1, 0, Attack , "HealZone", nil, 0, nil, P6, {CommandLeastAt(132, Lairname), Deaths(P10, AtLeast, LairTimeline[11] * SDspeed,Deathvar)},nil,0,TempProperties)
+            
+            CSPlot(LGU2, P6, 94, Lairname, nil, 1, 20, P6, {CommandLeastAt(132, Lairname), Deaths(P10, AtLeast, LairTimeline[11] * SDspeed,Deathvar)})
+            CSPlotOrderWithProperties(LGU2, P6, 44, Lairname, nil, 1, 20, LGU2, 0, Attack , "HealZone", nil, 0, nil, P6, {CommandLeastAt(132, Lairname), Deaths(P10, AtLeast, LairTimeline[12] * SDspeed,Deathvar)},nil,0,TempProperties)
+            
+            CSPlot(LGU3, P6, 94, Lairname, nil, 1, 20, P6, {CommandLeastAt(132, Lairname), Deaths(P10, AtLeast, LairTimeline[12] * SDspeed,Deathvar)})
+            CSPlotOrderWithProperties(LGU3, P6, 62, Lairname, nil, 1, 20, LGU3, 0, Attack , "HealZone", nil, 0, nil, P6, {CommandLeastAt(132, Lairname), Deaths(P10, AtLeast, LairTimeline[13] * SDspeed,Deathvar)},nil,0,TempProperties)
+            
+            CSPlot(Eftstar, P6, 94, Lairname, nil, 1, 20, P6, {CommandLeastAt(132, Lairname), Deaths(P10, AtLeast, LairTimeline[14] * SDspeed,Deathvar)})
+            CSPlotOrderWithProperties(Eftstar, P6, 43, Lairname, nil, 1, 20, Eftstar, 0, Attack , "HealZone", nil, 0, nil, P6, {CommandLeastAt(132, Lairname), Deaths(P10, AtLeast, LairTimeline[14] * SDspeed,Deathvar)},nil,0,TempProperties)
+            
+            end
+            ------ End of lair shape plot function 
+
+
+        ----- Hive Shape Plot
+        function HiveGunPlot2(Hivename, DeathVar)
+            Trigger {
+                players = {P6},
+                conditions = {
+                    CommandLeastAt(133, Hivename);
+                },
+                actions = {
+                    SetDeaths(P10, Add, 1, DeathVar);
+                    PreserveTrigger()
+                },
+            }
+            Trigger2(P6, {Deaths(P10, AtLeast, 1, 10)})
+            CAPlot(CS_SortR(HiveEtf1,1),P6,84,Hivename,nil,1,32,{1,0,0,0,HiveEtf1[1]/36,0},nil,P6,{CommandLeastAt(133,Hivename)})
+
+            for i = 1 ,16 do
+            Line1 = CSMakeLineX(2,64,90+11*i,17,1)
+            CSPlotOrder(Line1,P6,56,Hivename,nil,1,32,Line1,0,Attack, "HealZone",nil,0,nil,P6,{CommandLeastAt(133, Hivename), Deaths(P10, Exactly, HiveGenTime[i] * SDspeed, DeathVar)} )
+            end
+
+            for i = 1 ,15 do
+            Line2 = CSMakeLineX(2,64,101+11*i,17,1)
+            CSPlotWithProperties(Line2, P6, 84, Hivename, nil, 1, 32, P6, {CommandLeastAt(133, Hivename), Deaths(P10, AtLeast, HiveEftTime[i] * SDspeed, DeathVar)},nil,0,EftProperties)
+            end
+
+            CSPlotOrder(Triangle2, P6, 38, Hivename, nil, 1, 20, Triangle2, 0, Patrol, "HealZone", nil,0 , nil, P6, {CommandLeastAt(133, Hivename), Deaths(P10, AtLeast, HiveGenTime[1] * SDspeed, DeathVar)})
+            CSPlotOrder(Triangle1, P6, 51, Hivename, nil, 1, 20, Triangle1, 0, Attack, "HealZone", nil,0 , nil, P6, {CommandLeastAt(133, Hivename), Deaths(P10, AtLeast, HiveGenTime[1] * SDspeed, DeathVar)})
+
+            CSPlotOrder(LGU3, P6, 16, Hivename, nil, 1, 20, LGU3, 0, Attack, "HealZone", nil,0 , nil, P6, {CommandLeastAt(133, Hivename), Deaths(P10, AtLeast, HiveGenTime[5] * SDspeed, DeathVar)})
+            CSPlotOrder(LGU2, P6, 38, Hivename, nil, 1, 20, LGU2, 0, Patrol, "HealZone", nil,0 , nil, P6, {CommandLeastAt(133, Hivename), Deaths(P10, AtLeast, HiveGenTime[5] * SDspeed, DeathVar)})
+            CSPlotOrder(LGU1, P6, 48, Hivename, nil, 1, 20, LGU1, 0, Attack, "HealZone", nil,0 , nil, P6, {CommandLeastAt(133, Hivename), Deaths(P10, AtLeast, HiveGenTime[5] * SDspeed, DeathVar)})
+            CSPlotOrderWithProperties(Trdline, P6, 69, Hivename, nil, 1, 20, Trdline, 0, Attack, "HealZone", nil,0 , nil, P6, {CommandLeastAt(133, Hivename), Deaths(P10, AtLeast, HiveGenTime[5] * SDspeed, DeathVar)},nil,0,HiveProperties)
+
+            CSPlotOrder(LGU3, P6, 16, Hivename, nil, 1, 20, LGU3, 0, Attack, "HealZone", nil,0 , nil, P6, {CommandLeastAt(133, Hivename), Deaths(P10, AtLeast, HiveGenTime[9] * SDspeed, DeathVar)})
+            CSPlotOrder(LGU2, P6, 38, Hivename, nil, 1, 20, LGU2, 0, Patrol, "HealZone", nil,0 , nil, P6, {CommandLeastAt(133, Hivename), Deaths(P10, AtLeast, HiveGenTime[9] * SDspeed, DeathVar)})
+            CSPlotOrder(LGU1, P6, 51, Hivename, nil, 1, 20, LGU1, 0, Attack, "HealZone", nil,0 , nil, P6, {CommandLeastAt(133, Hivename), Deaths(P10, AtLeast, HiveGenTime[9] * SDspeed, DeathVar)})
+
+            CSPlotOrderWithProperties(Trdline2, P6, 62, Hivename, nil, 1, 20, Trdline2, 0, Attack, "HealZone", nil,0 , nil, P6, {CommandLeastAt(133, Hivename), Deaths(P10, AtLeast, HiveGenTime[9] * SDspeed, DeathVar)},nil,0,HiveProperties)
+            CSPlotOrderWithProperties(Trdline, P6, 62, Hivename, nil, 1, 20, Trdline2, 0, Attack, "HealZone", nil,0 , nil, P6, {CommandLeastAt(133, Hivename), Deaths(P10, AtLeast, HiveGenTime[13] * SDspeed, DeathVar)},nil,0,HiveProperties)
+
+            CSPlotOrder(LGU3, P6, 16, Hivename, nil, 1, 20, LGU3, 0, Attack, "HealZone", nil,0 , nil, P6, {CommandLeastAt(133, Hivename), Deaths(P10, AtLeast, HiveGenTime[13] * SDspeed, DeathVar)})
+            CSPlotOrder(LGU2, P6, 38, Hivename, nil, 1, 20, LGU2, 0, Patrol, "HealZone", nil,0 , nil, P6, {CommandLeastAt(133, Hivename), Deaths(P10, AtLeast, HiveGenTime[13] * SDspeed, DeathVar)})
+            CSPlotOrder(LGU1, P6, 51, Hivename, nil, 1, 20, LGU1, 0, Attack, "HealZone", nil,0 , nil, P6, {CommandLeastAt(133, Hivename), Deaths(P10, AtLeast, HiveGenTime[13] * SDspeed, DeathVar)})
+
+            CSPlotOrder(Triangle2, P6, 38, Hivename, nil, 1, 20, Triangle2, 0, Patrol, "HealZone", nil,0 , nil, P6, {CommandLeastAt(133, Hivename), Deaths(P10, AtLeast, HiveGenTime[16] * SDspeed, DeathVar)})
+            CSPlotOrder(Triangle1, P6, 51, Hivename, nil, 1, 20, Triangle1, 0, Attack, "HealZone", nil,0 , nil, P6, {CommandLeastAt(133, Hivename), Deaths(P10, AtLeast, HiveGenTime[16] * SDspeed, DeathVar)})
+
+            for e = 2,8 do
+            CSPlotOrder(CS_Rotate(LGU1,10*(e-1)), P7, 84, Hivename, nil, 1, 20, CS_Rotate(LGU1,10*(e-1)), 0, Attack , "HealZone", nil, 0, nil, P7, {CommandLeastAt(133, Hivename), Deaths(P10, AtLeast, HiveGenTime2[e] * SDspeed,DeathVar)})
+            CSPlotOrder(CS_Rotate(LGU2,10*(e-1)), P6, 84, Hivename, nil, 1, 20, CS_Rotate(LGU2,10*(e-1)), 0, Attack , "HealZone", nil, 0, nil, P6, {CommandLeastAt(133, Hivename), Deaths(P10, AtLeast, HiveGenTime2[e] * SDspeed,DeathVar)})
+            CSPlotOrder(CS_Rotate(LGU3,10*(e-1)), P7, 84, Hivename, nil, 1, 20, CS_Rotate(LGU3,10*(e-1)), 0, Attack , "HealZone", nil, 0, nil, P7, {CommandLeastAt(133, Hivename), Deaths(P10, AtLeast, HiveGenTime2[e] * SDspeed,DeathVar)})
+
+            CSPlotOrder(CS_Rotate(LGU1,10*(e-1)), P7, 51, Hivename, nil, 1, 20, CS_Rotate(LGU1,10*(e-1)), 0, Attack , "HealZone", nil, 0, nil, P7, {CommandLeastAt(133, Hivename), Deaths(P10, AtLeast, HiveGenTime2[e] * SDspeed,DeathVar)})
+            CSPlotOrder(CS_Rotate(LGU2,10*(e-1)), P6, 16, Hivename, nil, 1, 20, CS_Rotate(LGU2,10*(e-1)), 0, Attack , "HealZone", nil, 0, nil, P6, {CommandLeastAt(133, Hivename), Deaths(P10, AtLeast, HiveGenTime2[e] * SDspeed,DeathVar)})
+            CSPlotOrder(CS_Rotate(LGU3,10*(e-1)), P7, 46, Hivename, nil, 1, 20, CS_Rotate(LGU3,10*(e-1)), 0, Patrol , "HealZone", nil, 0, nil, P7, {CommandLeastAt(133, Hivename), Deaths(P10, AtLeast, HiveGenTime2[e] * SDspeed,DeathVar)})
+            end
+            Trigger2(P6, {Deaths(P10, AtLeast, (HiveGenTime2[8] * SDspeed) + 5, DeathVar)})
+        end
+        ------ End of hive shape plot function 
+
+        ------ Starport plot shape function
+        function Starport_GunPlot(Starportname, Deathvar)
+            Trigger {
+                players = {P6},
+                conditions = {
+                    CommandLeastAt(114, Starportname);
+                },
+                actions = {
+                    SetDeaths(P10, Add, 1, Deathvar);
+                    PreserveTrigger();
+                }
+            }
+            
+            for i = 1 , 31 do
+            Trigger2(P6, {CommandLeastAt(114, Starportname), Deaths(P10, AtLeast, i, Deathvar)} , {SetMemoryBA(0x657A9C, SetTo, i)})
+            end
+            
+            Trigger2(P6, {CommandLeastAt(114, Starportname),Deaths(P10, Exactly, 2, Deathvar)}, {SetScanImage(972)})
+            
+            for i = 1, 12, 2 do
+            Trigger2(P6, {CommandLeastAt(114, Starportname),Deaths(P10, Exactly, Starport_gen[i] * SDspeed, Deathvar)})
+            CSPlot(PA, P6, 33, Starportname, nil, 1, 64, P5, {CommandLeastAt(114, Starportname),Deaths(P10, AtLeast, Starport_gen[i] * SDspeed, Deathvar)})
+            CSPlotOrder(PA, P6, 17, Starportname, nil, 1, 64, PAA, 0, Attack, "HealZone",nil , 0, nil, P6, {CommandLeastAt(114, Starportname),Deaths(P10, AtLeast, Starport_gen[i] * SDspeed, Deathvar)})
+            CSPlotOrder(PB, P6, 66, Starportname, nil, 1, 64, PBA, 0, Patrol, "HealZone",nil , 0, nil, P6, {CommandLeastAt(114, Starportname),Deaths(P10, AtLeast, Starport_gen[i] * SDspeed, Deathvar)})
+            CSPlotOrder(PC, P6, 65, Starportname, nil, 1, 64, PCA, 0, Patrol, "HealZone",nil , 0, nil, P6, {CommandLeastAt(114, Starportname),Deaths(P10, AtLeast, Starport_gen[i] * SDspeed, Deathvar)})
+            end
+            for e = 2, 12, 4 do
+            Trigger2(P6, {CommandLeastAt(114, Starportname),Deaths(P10, Exactly, Starport_gen[e] * SDspeed, Deathvar)})
+            CSPlot(PE, P6, 33, Starportname, nil, 1, 64, P5, {CommandLeastAt(114, Starportname), Deaths(P10, Exactly, Starport_gen[e] * SDspeed, Deathvar)})
+            CSPlotOrder(PE, P6, 96, Starportname, nil, 1, 32, CSMakePolygon(6,1,0,91,1), 0, Attack, "HealZone",nil , 0, nil, P6, {CommandLeastAt(114, Starportname),Deaths(P10, AtLeast, Starport_gen[e] * SDspeed, Deathvar)})
+            end
+            
+            for r = 4, 12, 4 do
+            CSPlot(PE, P6, 33, Starportname, nil, 1, 32, P6, Deaths(P10, AtLeast, Starport_gen[r] * SDspeed,Deathvar))
+            CSPlotOrder(PE, P6, 70, Starportname, nil, 1, 32, CSMakePolygon(6,1,0,91,1), 0, Attack, "HealZone",nil , 0, nil, P6, {CommandLeastAt(114, Starportname),Deaths(P10, AtLeast, Starport_gen[r] * SDspeed, Deathvar)})
+            end
+            Trigger2(P6,{CommandLeastAt(114, Starportname), Deaths(P10, Exactly, Starport_gen[12]* SDspeed + 1, Deathvar)},{SetScanImage(546)} )
+        end
+        ---------- end of starport shape functions
+
+        function StargateGunplot(stargatename , Deathvar)
+            Trigger2(P6, {CommandLeastAt(167, stargatename)}, {SetDeaths(P10, Add, 1, Deathvar)},preserved)
+        Trigger2(P6, {Deaths(P10, AtLeast, (StargateGenTime[1] * SDspeed) - 2, Deathvar)})
+        for i = 1,8,8 do
+        CSPlotWithProperties(LGU1, P8, 65, stargatename, nil, 1, 64, P8, {CommandLeastAt(167, stargatename), Deaths(P10, AtLeast, StargateGenTime[i] * SDspeed, Deathvar)},nil,nil,StargateProperties)
+        CSPlotWithProperties(LGU2, P8, 93, stargatename, nil, 1, 64, P8, {CommandLeastAt(167, stargatename), Deaths(P10, AtLeast, StargateGenTime[i+1] * SDspeed, Deathvar)},nil,nil,StargateProperties)
+        CSPlotWithProperties(LGU3, P8, 66, stargatename, nil, 1, 64, P8, {CommandLeastAt(167, stargatename), Deaths(P10, AtLeast, StargateGenTime[i+2] * SDspeed, Deathvar)},nil,nil,StargateProperties)
+        CSPlotWithProperties(LGU4, P8, 16, stargatename, nil, 1, 64, P8, {CommandLeastAt(167, stargatename), Deaths(P10, AtLeast, StargateGenTime[i+3] * SDspeed, Deathvar)},nil,nil,StargateProperties)
+
+        CSPlotWithProperties(SShape1, P8, 89, stargatename, nil, 1, 64, P8, {CommandLeastAt(167, stargatename), Deaths(P10, AtLeast, StargateGenTime[i+4] * SDspeed, Deathvar)},nil,nil,StargateProperties)
+        CSPlotWithProperties(SShape2, P8, 88, stargatename, nil, 1, 64, P8, {CommandLeastAt(167, stargatename), Deaths(P10, AtLeast, StargateGenTime[i+5] * SDspeed, Deathvar)},nil,nil,StargateProperties)
+        CSPlotWithProperties(SShape3, P8, 60, stargatename, nil, 1, 64, P8, {CommandLeastAt(167, stargatename), Deaths(P10, AtLeast, StargateGenTime[i+6] * SDspeed, Deathvar)},nil,nil,StargatePropertiesHero)
+        CSPlotOrder(PA, P5, 89, stargatename, nil, 1, 32, CSMakePolygon(6,1,0,61,1), 0, Patrol, "HealZone",nil , 0, nil, P5, {CommandLeastAt(167, stargatename),Deaths(P10, AtLeast, StargateGenTime[i+7] * SDspeed, Deathvar)}, {SetScanImage(972)})	
+        CSPlotWithProperties(PA, P8, 33, stargatename, nil, 1, 64, P8, {CommandLeastAt(167, stargatename), Deaths(P10, AtLeast, StargateGenTime[i+7] * SDspeed, Deathvar)},nil,nil,StargateProperties)
+
+        Trigger2(P6,{CommandLeastAt(167, stargatename),Deaths(P10, Exactly, StargateGenTime[i+7] * SDspeed + 1, Deathvar) }, {GiveUnits(All,"Men" , P8, "Anywhere", P5),SetInvincibility(Disable, "Men", P5, "Anywhere"),Order("Men", P5, "Anywhere", Attack, stargatename)})
+        end
+
+        for i = 9, 16 ,8 do
+        CSPlotWithProperties(EllipseArr[1], P8, 65, stargatename, nil, 1, 64, P8, {CommandLeastAt(167, stargatename), Deaths(P10, AtLeast, StargateGenTime[i] * SDspeed, Deathvar)},nil,nil,StargateProperties)
+        CSPlotWithProperties(EllipseArr[2], P8, 66, stargatename, nil, 1, 64, P8, {CommandLeastAt(167, stargatename), Deaths(P10, AtLeast, StargateGenTime[i+1] * SDspeed, Deathvar)},nil,nil,StargateProperties)
+        CSPlotWithProperties(EllipseArr[3], P8, 69, stargatename, nil, 1, 64, P8, {CommandLeastAt(167, stargatename), Deaths(P10, AtLeast, StargateGenTime[i+2] * SDspeed, Deathvar)},nil,nil,StargateProperties)
+        CSPlotWithProperties(EllipseArr[4], P8, 95, stargatename, nil, 1, 64, P8, {CommandLeastAt(167, stargatename), Deaths(P10, AtLeast, StargateGenTime[i+3] * SDspeed, Deathvar)},nil,nil,StargateProperties)
+
+        CSPlotWithProperties(EllipseArr[5], P8, 96, stargatename, nil, 1, 64, P8, {CommandLeastAt(167, stargatename), Deaths(P10, AtLeast, StargateGenTime[i+4] * SDspeed, Deathvar)},nil,nil,StargateProperties)
+        CSPlotWithProperties(EllipseArr[6], P8, 12, stargatename, nil, 1, 64, P8, {CommandLeastAt(167, stargatename), Deaths(P10, AtLeast, StargateGenTime[i+5] * SDspeed, Deathvar)},nil,nil,StargateProperties)
+        CSPlotWithProperties(EllipseArr[7], P8, 64, stargatename, nil, 1, 64, P8, {CommandLeastAt(167, stargatename), Deaths(P10, AtLeast, StargateGenTime[i+6] * SDspeed, Deathvar)},nil,nil,StargateProperties)
+        CSPlotWithProperties(EllipseArr[8], P8, 81, stargatename, nil, 1, 64, P8, {CommandLeastAt(167, stargatename), Deaths(P10, AtLeast, StargateGenTime[i+7] * SDspeed, Deathvar)},nil,nil,StargateProperties)
+        CSPlot(SH_Flower, P6, 33, stargatename, nil, 1, 32, P6,{CommandLeastAt(167, stargatename), Deaths(P10, AtLeast, StargateGenTime[i+7] * SDspeed, Deathvar)})
+
+        Trigger2(P6,{CommandLeastAt(167, stargatename),Deaths(P10, Exactly, StargateGenTime[i+7] * SDspeed + 1, Deathvar) }, {GiveUnits(All,"Men" , P8, "Anywhere", P5),SetInvincibility(Disable, "Men", P5, "Anywhere"),Order("Men", P5, "Anywhere", Attack, stargatename)})
+        end
+        Trigger2(P6, {Deaths(P10, AtLeast, (StargateGenTime[16] * SDspeed) + 5, Deathvar)}, {SetScanImage(546)})
+
+        Trigger2(P6, {Deaths(P10, AtLeast, (StargateGenTime[17] * SDspeed) - 2, Deathvar)}, {SetScanImage(972)})
+        for i = 17, 22, 8 do
+        CSPlotWithProperties(LGU4, P8, 65, stargatename, nil, 1, 64, P8, {CommandLeastAt(167, stargatename), Deaths(P10, AtLeast, StargateGenTime[i] * SDspeed, Deathvar)},nil,nil,StargateProperties)
+        CSPlotWithProperties(LGU3, P8, 93, stargatename, nil, 1, 64, P8, {CommandLeastAt(167, stargatename), Deaths(P10, AtLeast, StargateGenTime[i+1] * SDspeed, Deathvar)},nil,nil,StargateProperties)
+        CSPlotWithProperties(LGU2, P8, 66, stargatename, nil, 1, 64, P8, {CommandLeastAt(167, stargatename), Deaths(P10, AtLeast, StargateGenTime[i+2] * SDspeed, Deathvar)},nil,nil,StargateProperties)
+        CSPlotWithProperties(LGU1, P8, 81, stargatename, nil, 1, 64, P8, {CommandLeastAt(167, stargatename), Deaths(P10, AtLeast, StargateGenTime[i+3] * SDspeed, Deathvar)},nil,nil,StargateProperties)
+        CSPlotOrder(PA, P5, 89, stargatename, nil, 1, 32, CSMakePolygon(6,1,0,61,1), 0, Patrol, "HealZone",nil , 0, nil, P5, {CommandLeastAt(167, stargatename),Deaths(P10, AtLeast, StargateGenTime[i+4] * SDspeed, Deathvar)})
+        CSPlot(Overlapped, P6, 33, stargatename, nil, 1, 32, P6,{CommandLeastAt(167, stargatename), Deaths(P10, AtLeast, StargateGenTime[i+4] * SDspeed, Deathvar)})
+
+        Trigger2(P6,{CommandLeastAt(167, stargatename),Deaths(P10, Exactly, StargateGenTime[i+4] * SDspeed + 1, Deathvar) }, {GiveUnits(All,"Men" , P8, "Anywhere", P5),SetInvincibility(Disable, "Men", P5, "Anywhere"),Order("Men", P5, "Anywhere", Attack, stargatename)})
+        end
+        Trigger2(P6, {Deaths(P10, AtLeast, (StargateGenTime[21] * SDspeed) + 5, Deathvar)})
+
+        CSPlotOrder(PA, P5, 96, stargatename, nil, 1, 32, CSMakePolygon(6,1,0,61,1), 0, Patrol, "HealZone",nil , 0, nil, P5, {CommandLeastAt(167, stargatename),Deaths(P10, AtLeast, StargateGenTime[22] * SDspeed, Deathvar)})
+        Trigger2(P6, {Deaths(P10, AtLeast, (StargateEftTime[1] * SDspeed)-5, Deathvar)},{SetScanImage(977)})
+        Trigger2(P6, {CommandLeastAt(167, stargatename), Deaths(P10, AtLeast, StargateEftTime[1] * SDspeed, Deathvar)},
+        {SetMemoryBA(0x657A9C, SetTo, 8)})
+        Trigger2(P6, {Deaths(P10, AtLeast, (StargateEftTime[1] * SDspeed) + 5, Deathvar)},{SetScanImage(978)})
+        Trigger2(P6, {CommandLeastAt(167, stargatename), Deaths(P10, AtLeast, StargateEftTime[2] * SDspeed, Deathvar)},
+        {SetMemoryBA(0x657A9C, SetTo, 31)})
+
+
+
+        CSPlot(StargateEft, P6, 33, stargatename, nil, 1, 32, P6,{CommandLeastAt(167, stargatename), Deaths(P10, Exactly, StargateEftTime[1] * SDspeed , Deathvar)})
+        CSPlot(StargateEft, P6, 33, stargatename, nil, 1, 32, P6,{CommandLeastAt(167, stargatename), Deaths(P10, Exactly, StargateEftTime[2] * SDspeed , Deathvar)})
+
+        CSPlot(StargateEft, P6, 33, stargatename, nil, 1, 32, P6,{CommandLeastAt(167, stargatename), Deaths(P10, AtLeast, StargateGenTime[23] * SDspeed, Deathvar)})
+
+        CSPlotOrder(Cross1, P5, 66, stargatename, nil, 1, 32, CSMakePolygon(6,1,0,46,0), 0, Patrol, "HealZone",nil , 0, nil, P5, {CommandLeastAt(167, stargatename),Deaths(P10, AtLeast, StargateGenTime[23] * SDspeed, Deathvar)},{SetScanImage(546)})	
+        CSPlotOrder(Cross, P5, 65, stargatename, nil, 1, 32, CSMakePolygon(6,1,0,46,0), 0, Patrol, "HealZone",nil , 0, nil, P5, {CommandLeastAt(167, stargatename),Deaths(P10, AtLeast, StargateGenTime[23] * SDspeed, Deathvar)})	
+        CSPlotOrder(Shape3, P5, 88, stargatename, nil, 1, 32, CSMakePolygon(6,1,0,54,24), 0, Patrol, "HealZone",nil , 0, nil, P5, {CommandLeastAt(167, stargatename),Deaths(P10, AtLeast, StargateGenTime[23] * SDspeed, Deathvar)})	
+        CSPlotOrder(PA, P5, 89, stargatename, nil, 1, 32, PAA, 0, Attack, "HealZone",nil , 0, nil, P5, {CommandLeastAt(167, stargatename),Deaths(P10, AtLeast, StargateGenTime[23] * SDspeed, Deathvar)})	
+        Trigger2(P6, {Deaths(P10, AtLeast, (StargateGenTime[23] * SDspeed) + 5, Deathvar)})
+
+        CSPlotOrder(PA, P6, 88, stargatename, nil, 1, 64, PAA, 0, Patrol, "HealZone",nil , 0, nil, P6, {CommandLeastAt(167, stargatename),Deaths(P10, AtLeast, StargateGenTime[24] * SDspeed, Deathvar)})
+
+        ---- after effects ---
+
+        CSPlotWithProperties(LGU1, P8, 65, stargatename, nil, 1, 64, P8, {CommandLeastAt(167, stargatename), Deaths(P10, AtLeast, StargateGenTime[25] * SDspeed-1, Deathvar)},nil,nil,StargateProperties)
+        CSPlotWithProperties(LGU2, P8, 93, stargatename, nil, 1, 64, P8, {CommandLeastAt(167, stargatename), Deaths(P10, AtLeast, StargateGenTime[25] * SDspeed-1, Deathvar)},nil,nil,StargateProperties)
+        CSPlotWithProperties(LGU3, P8, 66, stargatename, nil, 1, 64, P8, {CommandLeastAt(167, stargatename), Deaths(P10, AtLeast, StargateGenTime[25] * SDspeed-1, Deathvar)},nil,nil,StargateProperties)
+        CSPlotWithProperties(LGU4, P8, 81, stargatename, nil, 1, 64, P8, {CommandLeastAt(167, stargatename), Deaths(P10, AtLeast, StargateGenTime[25] * SDspeed-1, Deathvar)},nil,nil,StargateProperties)
+
+        CSPlotWithProperties(SShape1, P8, 89, stargatename, nil, 1, 64, P8, {CommandLeastAt(167, stargatename), Deaths(P10, AtLeast, StargateGenTime[25] * SDspeed-1, Deathvar)},nil,nil,StargateProperties)
+        CSPlotWithProperties(SShape2, P8, 88, stargatename, nil, 1, 64, P8, {CommandLeastAt(167, stargatename), Deaths(P10, AtLeast, StargateGenTime[25] * SDspeed-1, Deathvar)},nil,nil,StargateProperties)
+        CSPlotWithProperties(SShape3, P8, 60, stargatename, nil, 1, 64, P8, {CommandLeastAt(167, stargatename), Deaths(P10, AtLeast, StargateGenTime[25] * SDspeed-1, Deathvar)},nil,nil,StargatePropertiesHero)
+        CSPlotOrder(PB, P5, 89, stargatename, nil, 1, 32, CSMakePolygon(6,1,0,37,1), 0, Patrol, "HealZone",nil , 0, nil, P5, {CommandLeastAt(167, stargatename),Deaths(P10, AtLeast, StargateGenTime[25] * SDspeed, Deathvar)})	
+        CSPlotWithProperties(PB, P8, 33, stargatename, nil, 1, 64, P8, {CommandLeastAt(167, stargatename), Deaths(P10, AtLeast, StargateGenTime[25] * SDspeed, Deathvar)},nil,nil,StargateProperties)
+        Trigger2(P6,{CommandLeastAt(167, stargatename),Deaths(P10, Exactly, StargateGenTime[25] * SDspeed,Deathvar) }, {GiveUnits(All,"Men" , P8, "Anywhere", P5),SetInvincibility(Disable, "Men", P5, "Anywhere"),Order("Men", P5, "Anywhere", Attack, stargatename)})
+        Trigger2(P6, {Deaths(P10, AtLeast, (StargateGenTime[25] * SDspeed) + 1, Deathvar)})
+
+        ---- 2nd effects ----
+
+        Trigger2(P6, {CommandLeastAt(167, stargatename),Deaths(P10, AtLeast, StargateEftTime[3] * SDspeed - 1,Deathvar)}, {SetScanImage(213)})
+        CSPlot(SH_Flower, P6, 33, stargatename, nil, 1, 32, P6,{CommandLeastAt(167, stargatename), Deaths(P10, AtLeast, StargateEftTime[3] * SDspeed, Deathvar)})
+        CSPlot(Eftstar, P6, 33, stargatename, nil, 1, 32, P6,{CommandLeastAt(167, stargatename), Deaths(P10, AtLeast, StargateEftTime[4] * SDspeed, Deathvar)})
+        Trigger2(P6, {CommandLeastAt(167, stargatename),Deaths(P10, AtLeast, StargateEftTime[4] * SDspeed + 1,Deathvar)})
+
+
+        ---- after 2nd effects ----
+
+        Trigger2(P6, {Deaths(P10, AtLeast, (StargateGenTime[27] * SDspeed) - 2, Deathvar)}, {SetScanImage(971)})
+        CSPlot(Eftstar, P6, 33, stargatename, nil, 1, 32, P6,{CommandLeastAt(167, stargatename), Deaths(P10, AtLeast, StargateEftTime[4] * SDspeed, Deathvar)})
+        CSPlot(Eftstar, P7, 124, stargatename, nil, 1, 32, P7,{CommandLeastAt(167, stargatename), Deaths(P10, AtLeast, StargateGenTime[26] * SDspeed, Deathvar)})
+        for i = 27,27 do
+            CSPlotWithProperties(EllipseArr[1], P8, 65, stargatename, nil, 1, 64, P8, {CommandLeastAt(167, stargatename), Deaths(P10, AtLeast, StargateGenTime[i] * SDspeed - 1, Deathvar)},nil,nil,StargateProperties)
+            CSPlotWithProperties(EllipseArr[2], P8, 66, stargatename, nil, 1, 64, P8, {CommandLeastAt(167, stargatename), Deaths(P10, AtLeast, StargateGenTime[i] * SDspeed - 1, Deathvar)},nil,nil,StargateProperties)
+            CSPlotWithProperties(EllipseArr[3], P8, 69, stargatename, nil, 1, 64, P8, {CommandLeastAt(167, stargatename), Deaths(P10, AtLeast, StargateGenTime[i] * SDspeed - 1, Deathvar)},nil,nil,StargateProperties)
+            CSPlotWithProperties(EllipseArr[4], P8, 95, stargatename, nil, 1, 64, P8, {CommandLeastAt(167, stargatename), Deaths(P10, AtLeast, StargateGenTime[i] * SDspeed - 1, Deathvar)},nil,nil,StargateProperties)
+
+            CSPlotWithProperties(EllipseArr[5], P8, 96, stargatename, nil, 1, 64, P8, {CommandLeastAt(167, stargatename), Deaths(P10, AtLeast, StargateGenTime[i] * SDspeed - 1, Deathvar)},nil,nil,StargateProperties)
+            CSPlotWithProperties(EllipseArr[6], P8, 12, stargatename, nil, 1, 64, P8, {CommandLeastAt(167, stargatename), Deaths(P10, AtLeast, StargateGenTime[i] * SDspeed - 1, Deathvar)},nil,nil,StargateProperties)
+            CSPlotWithProperties(EllipseArr[7], P8, 84, stargatename, nil, 1, 64, P8, {CommandLeastAt(167, stargatename), Deaths(P10, AtLeast, StargateGenTime[i] * SDspeed - 1, Deathvar)},nil,nil,StargateProperties)
+            CSPlotWithProperties(EllipseArr[8], P8, 81, stargatename, nil, 1, 64, P8, {CommandLeastAt(167, stargatename), Deaths(P10, AtLeast, StargateGenTime[i] * SDspeed - 1, Deathvar)},nil,nil,StargateProperties)
+            CSPlot(SH_Flower, P6, 33, stargatename, nil, 1, 32, P6,{CommandLeastAt(167, stargatename), Deaths(P10, AtLeast, StargateGenTime[i] * SDspeed, Deathvar)})
+
+            Trigger2(P6, {CommandLeastAt(167, stargatename),Deaths(P10, Exactly, StargateGenTime[i] * SDspeed + 1, Deathvar)},{GiveUnits(All,"Men" , P8, "Anywhere", P5),SetInvincibility(Disable, "Men", P5, "Anywhere"),Order("Men", P5, "Anywhere", Attack, stargatename), SetScanImage(546)})
+            
+        end
+        TriggerX(P6, {CommandLeastAt(167, stargatename),Deaths(P10, Exactly, StargateGenTime[27] * SDspeed + 10, Deathvar)},{Order("Men", P5, stargatename, Attack, "HealZone")})
+        end
+        for i = 1, 6 do -- 1 ~ 6
+            HatcheryGunplot1("hat"..i,i);
+        end
+        for i = 7 , 10 do -- 7 ~ 14
+            HatcheryGunplot2("hat"..i,i);
+        end
+        for i = 1 , 12 do -- 15 ~ 26
+            LairGunplot("lair"..i, i + 14);
+        end
+        for i = 1 , 10 do -- 27 ~ 37
+            HiveGunPlot2("hive"..i, i + 26);
+        end
+        for i = 1 , 10 do -- 38 ~ 48
+            Starport_GunPlot("starp"..i, i + 37);
+        end
+        for i = 1 , 10 do -- 49 ~ 59
+            StargateGunplot("starg"..i,  i + 48);
+        end
 end
 
 
@@ -1451,6 +2269,22 @@ end
 
 
 
+Install_initial_system_setting()
+Install_normalGunplot()
+Install_SpecialGunplot()
+Install_ExchangeTrigger()
+Install_WaveTrigger()
+Install_HealZoneTrigger()
+Install_HerounitTrigger()
+Install_Neutral_bunkerTrigger()
+Install_DonateNbanTrigger()
+Install_ConvertMarineTrigger()
+Install_CCMU()
+Install_BGMPhase()
+Install_NormalGunPlotShape()
+TriggerX(FP, Always(), {SetMemoryBA(0x657A9C, SetTo, 31)})
+
+CIfEnd()
 EndCtrig()
 ErrorCheck()
 EUDTurbo(FP)
