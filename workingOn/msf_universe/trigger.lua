@@ -33,6 +33,7 @@ Nextptrs = CreateVar(FP)
 CanWT = CreateCcode()
 CanCT = CreateCcode()
 P_Count = CreateNcode()
+HumanPlayers = {P1,P2,P3,P4,P5,P6,P7,P8,P9,P10,P11,P12}
 
 CJumpEnd(AllPlayers,0)
 Enable_PlayerCheck()
@@ -79,6 +80,52 @@ function AddV(V,Value)
 	end
 end
 -- 여기에 변수, 배열 및 Include류 함수 선언 --
+
+-------- Verifing start phase
+
+TriggerX(FP,{Memory(0x57F0B4, Exactly, 0);},{
+	RotatePlayer({
+	DisplayTextX(StrDesignX("\x04싱글 플레이 감지 멀티플레이 환경에서 플레이 해주세요.").."\n"..StrDesignX("\x04EUD ERROR \x080x69746977 \x04Activated."),4);
+	Defeat();
+	},HumanPlayers,FP);
+	PlayWAV("sound\\misc\\Buzz\\wav");
+	SetMemory(0x968B968B,SetTo,1);},preserved)
+
+
+    for i = 4, 7 do
+		Trigger {
+			players = {FP},
+			conditions = {
+				MemoryX(0x57EEE8 + 36*i,Exactly,0,0xFF);
+			},
+			actions = {
+				RotatePlayer({
+				DisplayTextX(StrDesignX("\x04컴퓨터 슬롯 변경 감지. \x08헛짓거리 그만하쇼.").."\n"..StrDesignX("\x04EUD ERROR \x080x69746977 \x04Activated."),4);
+				Defeat();
+				},HumanPlayers,FP);
+				PlayWAV("sound\\misc\\Buzz\\wav");
+				SetMemory(0x968B968B,SetTo,1);
+			}
+		}
+		Trigger {
+			players = {FP},
+			conditions = {
+				MemoryX(0x57EEE8 + 36*i,Exactly,2,0xFF);
+			},
+			actions = {
+				RotatePlayer({
+					DisplayTextX(StrDesignX("\x04컴퓨터 슬롯 변경 감지. \x08헛짓거리 그만하쇼.").."\n"..StrDesignX("\x04EUD ERROR \x080x69746977 \x04Activated."),4);
+				Defeat();
+				},HumanPlayers,FP);
+				PlayWAV("sound\\misc\\Buzz\\wav");
+				SetMemory(0x968B968B,SetTo,1);
+			}
+		}
+	end
+-------- End of verifing start phase
+
+
+
 
 TriggerX(FP, Always(), ModifyUnitShields(All, "Any unit", AllPlayers, "Anywhere", 100));
 TriggerX(FP, Always(), ModifyUnitHitPoints(All, "Any unit", AllPlayers, "Anywhere", 100));
@@ -285,6 +332,7 @@ StargateGenTime = {
 function Install_initial_system_setting()
     TriggerX(FP,Always(),{CreateUnit(1, 87, "HealZone",P1)}) -- 디버깅용 유닛
     DoActions(FP, SetInvincibility(Enable, "Buildings", P12, "Anywhere"),preserved)
+    TriggerX(Force1, {Always()}, {PlayWAV("staredit\\wav\\op.ogg"),PlayWAV("staredit\\wav\\op.ogg")});
     DoActions(FP, {KillUnit(94, Force2),KillUnit(84, Force2),KillUnit(42, Force2),KillUnit(202, Force2),KillUnit(11, Force2)}, preserved)
     
     for i=1, 4 do
@@ -294,7 +342,7 @@ function Install_initial_system_setting()
                 Command(AllPlayers,Exactly,i,111);
             },
             actions = {
-                SetMissionObjectives(StrDesignX("\x04MSF Universe Ver. \x07Test \x04플레이 중입니다.").."\n"..StrDesignX("\x04현재\x17 "..i.."명 \x04플레이 중").."\n"..StrDesignX("\x04환전률 : \x1F"..ExRate[i].."% \x04 적용 중 입니다").."\n"..StrDesignX("\x19테스트에 협력해주셔서 감사합니다.(_ _)"));
+                SetMissionObjectives(StrDesignX("\x04MSF Universe Ver. \x07Test \x04플레이 중입니다.").."\n"..StrDesignX("\x04현재\x17 "..i.."명 \x04플레이 중").."\n"..StrDesignX("\x04환전률 : \x1F"..ExRate[i].."% \x04 적용 중 입니다").."\n"..StrDesignX("\x19【 해금 조건 】").."\n"..StrDesignX("\x111.\x04 RGVzdHJveSBEYWdnb3Ro").."\n"..StrDesignX("\x112.\x04 RGVzdHJveSBDZXJlYnJhdGU=").."\n\n"..StrDesignX("\x19테스트에 협력해주셔서 감사합니다.(_ _)"));
             },
         }
         end
@@ -347,7 +395,6 @@ function Install_initial_system_setting()
     TriggerX(FP, {Always()}, {LeaderBoardComputerPlayers(Disable)})
 
     ColorArray = {"\x08","\x0E","\x0F","\x10"};
-
     for i = 0 , 3 do
         TriggerX(Force1, {Deaths(i, AtLeast, 1, 0)}, {
             SetScore(i, Add, 1, Custom),
@@ -582,14 +629,14 @@ function Install_initial_system_setting()
 	},
 	actions = {
 		SetDeaths(P9,Add,1,201);
-		PreserveTrigger()
+		PreserveTrigger();
 	}
 }
 
 Trigger { -- 기지유닛 끌당
 	players = {Force2},
 	conditions = {
-		Deaths(P9,Exactly,2000,201)
+		Deaths(P9,Exactly,1000,201)
 	},
 	actions = {
 		Order("Any unit",Force2,"pulling",Attack,"HealZone");
@@ -678,57 +725,57 @@ Trigger{
 
 for i = 1 , 10 do
 	Trigger2(Force1, Deaths(P8, Exactly, Gentime * i, 132), {PlayWAV("staredit\\wav\\bigwave.ogg"),PlayWAV("staredit\\wav\\bigwave.ogg"),PlayWAV("staredit\\wav\\bigwave.ogg"),MinimapPing("celebrate1"),MinimapPing("celebrate1"),MinimapPing("celebrate1")})
-	CSPlotOrder(Bigwave1, P6, 37, "celebrate1", nil, 1, 32, CSMakePolygon(6,1,0,50,1), 0, Attack, "HealZone", nil, 64, nil, P6,{Deaths(P8, Exactly, Gentime * i, 132)},nil,1)
-	CSPlotOrder(Bigwave1, P6, 38, "celebrate1", nil, 1, 32, CSMakePolygon(6,1,0,50,1), 0, Attack, "HealZone", nil, 64, nil, P6,{Deaths(P8, Exactly, Gentime * i, 132)},nil,1)
-	CSPlotOrder(Bigwave1, P6, 37, "celebrate1", nil, 1, 32, CSMakePolygon(6,1,0,50,1), 0, Attack, "HealZone", nil, 64, nil, P6,{Deaths(P8, Exactly, Gentime * i, 132)},nil,1)
-	CSPlotOrder(Bigwave1, P6, 38, "celebrate1", nil, 1, 32, CSMakePolygon(6,1,0,50,1), 0, Attack, "HealZone", nil, 64, nil, P6,{Deaths(P8, Exactly, Gentime * i, 132)},nil,1)
-	CSPlotOrder(Bigwave2, P6, 62, "celebrate1", nil, 1, 32, CSMakeLine(6,1,0,15,0), 0, Attack, "HealZone", nil, 64, nil, P6,{Deaths(P8, Exactly, Gentime * i, 132)},nil,1)
+	CSPlotOrder(Bigwave1, P6, 37, "celebrate1", nil, 1, 48, CSMakePolygon(6,1,0,50,1), 0, Attack, "HealZone", nil, 64, nil, P6,{Deaths(P8, Exactly, Gentime * i, 132)},nil,1)
+	CSPlotOrder(Bigwave1, P6, 38, "celebrate1", nil, 1, 48, CSMakePolygon(6,1,0,50,1), 0, Attack, "HealZone", nil, 64, nil, P6,{Deaths(P8, Exactly, Gentime * i, 132)},nil,1)
+	CSPlotOrder(Bigwave1, P6, 37, "celebrate1", nil, 1, 48, CSMakePolygon(6,1,0,50,1), 0, Attack, "HealZone", nil, 64, nil, P6,{Deaths(P8, Exactly, Gentime * i, 132)},nil,1)
+	CSPlotOrder(Bigwave1, P6, 38, "celebrate1", nil, 1, 48, CSMakePolygon(6,1,0,50,1), 0, Attack, "HealZone", nil, 64, nil, P6,{Deaths(P8, Exactly, Gentime * i, 132)},nil,1)
+	CSPlotOrder(Bigwave2, P6, 62, "celebrate1", nil, 1, 48, CSMakeLine(6,1,0,15,0), 0, Attack, "HealZone", nil, 64, nil, P6,{Deaths(P8, Exactly, Gentime * i, 132)},nil,1)
 end
 
 for i = 10, 15 do
 	Trigger2(Force1, Deaths(P8, Exactly, Gentime * i + 120, 132), {PlayWAV("staredit\\wav\\bigwave.ogg"),PlayWAV("staredit\\wav\\bigwave.ogg"),PlayWAV("staredit\\wav\\bigwave.ogg"),MinimapPing("celebrate1"),MinimapPing("celebrate1"),MinimapPing("celebrate1")})
-	CSPlotOrder(Bigwave1, P6, 65, "celebrate1", nil, 1, 32, CSMakePolygon(6,1,0,50,1), 0, Attack, "HealZone", nil, 64, nil, P6,{Deaths(P8, Exactly, Gentime * i + 120, 132)},nil,1)
-	CSPlotOrder(Bigwave1, P6, 66, "celebrate1", nil, 1, 32, CSMakePolygon(6,1,0,50,1), 0, Attack, "HealZone", nil, 64, nil, P6,{Deaths(P8, Exactly, Gentime * i + 120, 132)},nil,1)
-	CSPlotOrder(Bigwave1, P6, 51, "celebrate1", nil, 1, 32, CSMakePolygon(6,1,0,50,1), 0, Attack, "HealZone", nil, 64, nil, P6,{Deaths(P8, Exactly, Gentime * i + 120, 132)},nil,1)
-	CSPlotOrder(Bigwave1, P6, 88, "celebrate1", nil, 1, 32, CSMakePolygon(6,1,0,50,1), 0, Attack, "HealZone", nil, 64, nil, P6,{Deaths(P8, Exactly, Gentime * i + 120, 132)},nil,1)
-	CSPlotOrder(Bigwave2, P6, 70, "celebrate1", nil, 1, 32, CSMakeLine(6,1,0,15,0), 0, Attack, "HealZone", nil, 64, nil, P6,{Deaths(P8, Exactly, Gentime * i + 120, 132)},nil,1)
+	CSPlotOrder(Bigwave1, P6, 65, "celebrate1", nil, 1, 48, CSMakePolygon(6,1,0,50,1), 0, Attack, "HealZone", nil, 64, nil, P6,{Deaths(P8, Exactly, Gentime * i + 120, 132)},nil,1)
+	CSPlotOrder(Bigwave1, P6, 66, "celebrate1", nil, 1, 48, CSMakePolygon(6,1,0,50,1), 0, Attack, "HealZone", nil, 64, nil, P6,{Deaths(P8, Exactly, Gentime * i + 120, 132)},nil,1)
+	CSPlotOrder(Bigwave1, P6, 51, "celebrate1", nil, 1, 48, CSMakePolygon(6,1,0,50,1), 0, Attack, "HealZone", nil, 64, nil, P6,{Deaths(P8, Exactly, Gentime * i + 120, 132)},nil,1)
+	CSPlotOrder(Bigwave1, P6, 88, "celebrate1", nil, 1, 48, CSMakePolygon(6,1,0,50,1), 0, Attack, "HealZone", nil, 64, nil, P6,{Deaths(P8, Exactly, Gentime * i + 120, 132)},nil,1)
+	CSPlotOrder(Bigwave2, P6, 70, "celebrate1", nil, 1, 48, CSMakeLine(6,1,0,15,0), 0, Attack, "HealZone", nil, 64, nil, P6,{Deaths(P8, Exactly, Gentime * i + 120, 132)},nil,1)
 end
 
 for i = 16, 20 do
 	Trigger2(Force1, Deaths(P8, Exactly, Gentime * i + 180, 132), {PlayWAV("staredit\\wav\\bigwave.ogg"),PlayWAV("staredit\\wav\\bigwave.ogg"),PlayWAV("staredit\\wav\\bigwave.ogg"),MinimapPing("celebrate1"),MinimapPing("celebrate1"),MinimapPing("celebrate1")})
-	CSPlotOrder(Bigwave1, P6, 77, "celebrate1", nil, 1, 32, CSMakePolygon(6,1,0,50,1), 0, Attack, "HealZone", nil, 64, nil, P6,{Deaths(P8, Exactly, Gentime * i + 180, 132)},nil,1)
-	CSPlotOrder(Bigwave1, P6, 78, "celebrate1", nil, 1, 32, CSMakePolygon(6,1,0,50,1), 0, Attack, "HealZone", nil, 64, nil, P6,{Deaths(P8, Exactly, Gentime * i + 180, 132)},nil,1)
-	CSPlotOrder(Bigwave1, P6, 104, "celebrate1", nil, 1, 32, CSMakePolygon(6,1,0,50,1), 0, Attack, "HealZone", nil, 64, nil, P6,{Deaths(P8, Exactly, Gentime * i + 180, 132)},nil,1)
-	CSPlotOrder(Bigwave1, P6, 88, "celebrate1", nil, 1, 32, CSMakePolygon(6,1,0,50,1), 0, Attack, "HealZone", nil, 64, nil, P6,{Deaths(P8, Exactly, Gentime * i + 180, 132)},nil,1)
-	CSPlotOrder(Bigwave2, P6, 64, "celebrate1", nil, 1, 32, CSMakeLine(6,1,0,15,0), 0, Attack, "HealZone", nil, 64, nil, P6,{Deaths(P8, Exactly, Gentime * i + 180, 132)},nil,1)
+	CSPlotOrder(Bigwave1, P6, 77, "celebrate1", nil, 1, 48, CSMakePolygon(6,1,0,50,1), 0, Attack, "HealZone", nil, 64, nil, P6,{Deaths(P8, Exactly, Gentime * i + 180, 132)},nil,1)
+	CSPlotOrder(Bigwave1, P6, 78, "celebrate1", nil, 1, 48, CSMakePolygon(6,1,0,50,1), 0, Attack, "HealZone", nil, 64, nil, P6,{Deaths(P8, Exactly, Gentime * i + 180, 132)},nil,1)
+	CSPlotOrder(Bigwave1, P6, 104, "celebrate1", nil, 1, 48, CSMakePolygon(6,1,0,50,1), 0, Attack, "HealZone", nil, 64, nil, P6,{Deaths(P8, Exactly, Gentime * i + 180, 132)},nil,1)
+	CSPlotOrder(Bigwave1, P6, 88, "celebrate1", nil, 1, 48, CSMakePolygon(6,1,0,50,1), 0, Attack, "HealZone", nil, 64, nil, P6,{Deaths(P8, Exactly, Gentime * i + 180, 132)},nil,1)
+	CSPlotOrder(Bigwave2, P6, 64, "celebrate1", nil, 1, 48, CSMakeLine(6,1,0,15,0), 0, Attack, "HealZone", nil, 64, nil, P6,{Deaths(P8, Exactly, Gentime * i + 180, 132)},nil,1)
 end
 
 
 for i = 1 , 10 do
 	Trigger2(Force1, Deaths(P8, Exactly, Gentime * i, 132), {MinimapPing("celebrate2"),MinimapPing("celebrate2"),MinimapPing("celebrate2")})
-	CSPlotOrder(Bigwave1, P6, 37, "celebrate2", nil, 1, 32, CSMakePolygon(6,1,0,50,1), 0, Attack, "HealZone", nil, 64, nil, P6,{Deaths(P8, Exactly, Gentime * i, 132)},nil,1)
+	CSPlotOrder(Bigwave1, P6, 37, "celebrate2", nil, 1, 48, CSMakePolygon(6,1,0,50,1), 0, Attack, "HealZone", nil, 64, nil, P6,{Deaths(P8, Exactly, Gentime * i, 132)},nil,1)
 	CSPlotOrder(Bigwave1, P6, 38, "celebrate2", nil, 1, 32, CSMakePolygon(6,1,0,50,1), 0, Attack, "HealZone", nil, 64, nil, P6,{Deaths(P8, Exactly, Gentime * i, 132)},nil,1)
 	CSPlotOrder(Bigwave1, P6, 37, "celebrate2", nil, 1, 32, CSMakePolygon(6,1,0,50,1), 0, Attack, "HealZone", nil, 64, nil, P6,{Deaths(P8, Exactly, Gentime * i, 132)},nil,1)
 	CSPlotOrder(Bigwave1, P6, 38, "celebrate2", nil, 1, 32, CSMakePolygon(6,1,0,50,1), 0, Attack, "HealZone", nil, 64, nil, P6,{Deaths(P8, Exactly, Gentime * i, 132)},nil,1)
-	CSPlotOrder(Bigwave2, P6, 62, "celebrate2", nil, 1, 32, CSMakeLine(6,1,0,15,0), 0, Attack, "HealZone", nil, 64, nil, P6,{Deaths(P8, Exactly, Gentime * i, 132)},nil,1)
+	CSPlotOrder(Bigwave2, P6, 62, "celebrate2", nil, 1, 48, CSMakeLine(6,1,0,15,0), 0, Attack, "HealZone", nil, 64, nil, P6,{Deaths(P8, Exactly, Gentime * i, 132)},nil,1)
 end
 
 for i = 10, 15 do
 	Trigger2(Force1, Deaths(P8, Exactly, Gentime * i + 120, 132), {MinimapPing("celebrate2"),MinimapPing("celebrate2"),MinimapPing("celebrate2")})
-	CSPlotOrder(Bigwave1, P6, 65, "celebrate2", nil, 1, 32, CSMakePolygon(6,1,0,50,1), 0, Attack, "HealZone", nil, 64, nil, P6,{Deaths(P8, Exactly, Gentime * i + 120, 132)},nil,1)
+	CSPlotOrder(Bigwave1, P6, 65, "celebrate2", nil, 1, 48, CSMakePolygon(6,1,0,50,1), 0, Attack, "HealZone", nil, 64, nil, P6,{Deaths(P8, Exactly, Gentime * i + 120, 132)},nil,1)
 	CSPlotOrder(Bigwave1, P6, 66, "celebrate2", nil, 1, 32, CSMakePolygon(6,1,0,50,1), 0, Attack, "HealZone", nil, 64, nil, P6,{Deaths(P8, Exactly, Gentime * i + 120, 132)},nil,1)
 	CSPlotOrder(Bigwave1, P6, 51, "celebrate2", nil, 1, 32, CSMakePolygon(6,1,0,50,1), 0, Attack, "HealZone", nil, 64, nil, P6,{Deaths(P8, Exactly, Gentime * i + 120, 132)},nil,1)
 	CSPlotOrder(Bigwave1, P6, 88, "celebrate2", nil, 1, 32, CSMakePolygon(6,1,0,50,1), 0, Attack, "HealZone", nil, 64, nil, P6,{Deaths(P8, Exactly, Gentime * i + 120, 132)},nil,1)
-	CSPlotOrder(Bigwave2, P6, 70, "celebrate2", nil, 1, 32, CSMakeLine(6,1,0,15,0), 0, Attack, "HealZone", nil, 64, nil, P6,{Deaths(P8, Exactly, Gentime * i + 120, 132)},nil,1)
+	CSPlotOrder(Bigwave2, P6, 70, "celebrate2", nil, 1, 48, CSMakeLine(6,1,0,15,0), 0, Attack, "HealZone", nil, 64, nil, P6,{Deaths(P8, Exactly, Gentime * i + 120, 132)},nil,1)
 end
 
 for i = 16, 20 do
 	Trigger2(Force1, Deaths(P8, Exactly, Gentime * i + 180, 132), {MinimapPing("celebrate2"),MinimapPing("celebrate2"),MinimapPing("celebrate2")})
-	CSPlotOrder(Bigwave1, P6, 77, "celebrate2", nil, 1, 32, CSMakePolygon(6,1,0,50,1), 0, Attack, "HealZone", nil, 64, nil, P6,{Deaths(P8, Exactly, Gentime * i + 180, 132)},nil,1)
-	CSPlotOrder(Bigwave1, P6, 78, "celebrate2", nil, 1, 32, CSMakePolygon(6,1,0,50,1), 0, Attack, "HealZone", nil, 64, nil, P6,{Deaths(P8, Exactly, Gentime * i + 180, 132)},nil,1)
-	CSPlotOrder(Bigwave1, P6, 104, "celebrate2", nil, 1, 32, CSMakePolygon(6,1,0,50,1), 0, Attack, "HealZone", nil, 64, nil, P6,{Deaths(P8, Exactly, Gentime * i + 180, 132)},nil,1)
-	CSPlotOrder(Bigwave1, P6, 88, "celebrate2", nil, 1, 32, CSMakePolygon(6,1,0,50,1), 0, Attack, "HealZone", nil, 64, nil, P6,{Deaths(P8, Exactly, Gentime * i + 180, 132)},nil,1)
-	CSPlotOrder(Bigwave2, P6, 64, "celebrate2", nil, 1, 32, CSMakeLine(6,1,0,15,0), 0, Attack, "HealZone", nil, 64, nil, P6,{Deaths(P8, Exactly, Gentime * i + 180, 132)},nil,1)
+	CSPlotOrder(Bigwave1, P6, 77, "celebrate2", nil, 1, 48, CSMakePolygon(6,1,0,50,1), 0, Attack, "HealZone", nil, 64, nil, P6,{Deaths(P8, Exactly, Gentime * i + 180, 132)},nil,1)
+	CSPlotOrder(Bigwave1, P6, 78, "celebrate2", nil, 1, 48, CSMakePolygon(6,1,0,50,1), 0, Attack, "HealZone", nil, 64, nil, P6,{Deaths(P8, Exactly, Gentime * i + 180, 132)},nil,1)
+	CSPlotOrder(Bigwave1, P6, 104, "celebrate2", nil, 1, 48, CSMakePolygon(6,1,0,50,1), 0, Attack, "HealZone", nil, 64, nil, P6,{Deaths(P8, Exactly, Gentime * i + 180, 132)},nil,1)
+	CSPlotOrder(Bigwave1, P6, 88, "celebrate2", nil, 1, 48, CSMakePolygon(6,1,0,50,1), 0, Attack, "HealZone", nil, 64, nil, P6,{Deaths(P8, Exactly, Gentime * i + 180, 132)},nil,1)
+	CSPlotOrder(Bigwave2, P6, 64, "celebrate2", nil, 1, 48, CSMakeLine(6,1,0,15,0), 0, Attack, "HealZone", nil, 64, nil, P6,{Deaths(P8, Exactly, Gentime * i + 180, 132)},nil,1)
 end
 end
 function Install_HealZoneTrigger()
@@ -1246,12 +1293,12 @@ end
 end
 function Install_DonateNbanTrigger()
     ------<  기부 트리거  >--------------------------------------------- [ GiveRateUnit = 8  ]
-    GText1 = "\x13\x1F─━┫ \x04기부금액 단위가 \x1F5,000 Ore \x04로 \x11변경\x04되었습니다. \x1F┣━─"
-    GText2 = "\x13\x1F─━┫ \x04기부금액 단위가 \x1F10,000 Ore \x04로 \x11변경\x04되었습니다. \x1F┣━─"
-    GText3 = "\x13\x1F─━┫ \x04기부금액 단위가 \x1F50,000 Ore \x04로 \x11변경\x04되었습니다. \x1F┣━─"
-    GText4 = "\x13\x1F─━┫ \x04기부금액 단위가 \x1F100,000 Ore \x04로 \x11변경\x04되었습니다. \x1F┣━─"
-    GText5 = "\x13\x1F─━┫ \x04기부금액 단위가 \x1F500,000 Ore \x04로 \x11변경\x04되었습니다. \x1F┣━─"
-    GText6 = "\x13\x1F─━┫ \x04기부금액 단위가 \x1F1,000 Ore \x04로 \x11변경\x04되었습니다. \x1F┣━─"
+    GText1 = "\x04기부금액 단위가 \x1F5,000 Ore \x04로 \x11변경\x04되었습니다."
+    GText2 = "\x04기부금액 단위가 \x1F10,000 Ore \x04로 \x11변경\x04되었습니다."
+    GText3 = "\x04기부금액 단위가 \x1F50,000 Ore \x04로 \x11변경\x04되었습니다."
+    GText4 = "\x04기부금액 단위가 \x1F100,000 Ore \x04로 \x11변경\x04되었습니다."
+    GText5 = "\x04기부금액 단위가 \x1F500,000 Ore \x04로 \x11변경\x04되었습니다."
+    GText6 = "\x04기부금액 단위가 \x1F1,000 Ore \x04로 \x11변경\x04되었습니다."
     -- 1000 = 0 // 5000 = 1 // 10000 = 2 // 50000 = 3 // 100000 = 4 // 500000 = 5
     GTable = {{0,1,GText1},{1,2,GText2},{2,3,GText3},{3,4,GText4},{4,5,GText5},{5,0,GText6}}
     --Give Trig -- [ GiveUnit (58,60,69,71,72) ]
@@ -1305,7 +1352,7 @@ function Install_DonateNbanTrigger()
                 actions = {
                         ModifyUnitEnergy(all, GiveUnitID[j+1], k, "Anywhere", 0);
                         RemoveUnitAt(1,GiveUnitID[j+1],"Anywhere",k);
-                        DisplayText("\x1F─━┫ “ \x1F잔액\x04이 부족합니다.\x0F”",4);
+                        DisplayText(StrDesignX("\x1F잔액\x04이 부족합니다."),4);
                         PreserveTrigger()
                     },
             }
@@ -1324,9 +1371,9 @@ function Install_DonateNbanTrigger()
                         SetResources(j,Add,GiveRate2[i+1],Ore);
                         ModifyUnitEnergy(all, GiveUnitID[j+1], k, "Anywhere", 0);
                         RemoveUnitAt(1,GiveUnitID[j+1],"Anywhere",k);
-                        DisplayText("\x1F─━┫ “ "..PlayerArr[j+1].."\x04에게 \x1F"..GiveRate2[i+1].." Ore\x04를 기부하였습니다. \x0F”",4);
+                        DisplayText(StrDesignX(PlayerArr[j+1].."\x04에게 \x1F"..GiveRate2[i+1].." Ore\x04를 기부하였습니다."),4);
                         SetMemory(0x6509B0,SetTo,j);
-                        DisplayText("\x1F─━┫ “ "..PlayerArr[k+1].."\x04에게 \x1F"..GiveRate2[i+1].." Ore\x04를 기부받았습니다. \x0F”",4);
+                        DisplayText(StrDesignX(PlayerArr[j+1].."\x04에게 \x1F"..GiveRate2[i+1].." Ore\x04를 기부받았습니다."),4);
                         SetMemory(0x6509B0,SetTo,k);
                         PreserveTrigger();
                     },
@@ -1340,7 +1387,7 @@ function Install_DonateNbanTrigger()
                 PlayerCheck(j,0);
             },
         actions = {
-                DisplayText("\x1F─━┫ “"..PlayerArr[j+1].."\x04이(가) 존재하지 않습니다. \x0F”",4);
+                DisplayText(StrDesignX(PlayerArr[j+1].."\x04이(가) 존재하지 않습니다."),4);
                 ModifyUnitEnergy(all, GiveUnitID[j+1], k, "Anywhere", 0);
                 RemoveUnitAt(1,GiveUnitID[j+1],"Anywhere",k);
                 PreserveTrigger();
@@ -1357,7 +1404,7 @@ function Install_DonateNbanTrigger()
     
 --------------------- Ban Trigger ------------------------
 
-BanText = "\x13\x1F─━┫【 \x04당신은 \x11방장에 의해 \x08강제퇴장 \x04당하였습니다.  \x1F】┣━─"
+BanText = "\x04당신은 \x11방장에 의해 \x08강제퇴장 \x04당하였습니다."
 BanLocArr = {"banP1","banP2","banP3","banP4"}
 for i = 0, 3 do
 Trigger {
@@ -1367,13 +1414,15 @@ Trigger {
             Bring(Force1,AtLeast,1,15,BanLocArr[i+1]);
         },
     actions = {
-            RotatePlayer({DisplayTextX(BanText)},{i},FP);
+            RotatePlayer({DisplayTextX(StrDesignX(BanText))},{i},FP);
             RotatePlayer({Defeat()},{i},FP);
         }
 }
 end
 end
 function Install_ConvertMarineTrigger()
+    ConvertT1 = "\x04약해빠진 \x1dPrivate \x1fGuardians of \x19Galaxy\x04가 전투를 통해 조금 더 강해졌습니다 !"
+    ConvertT2 = "\x04뺑끼치는 \x07Hero \x1fGuardians of \x19Galaxy\x04가 전투를 통해 조금 더 강해졌습니다 !"
     for e = 1, 2 do    
         for i = 0, 3 do    
             Trigger { -- 일마  > 영마 변환
@@ -1386,7 +1435,7 @@ function Install_ConvertMarineTrigger()
                     SetResources(CurrentPlayer, Subtract, 10000, Ore);
                     RemoveUnitAt(1, 0, "convertH"..e, CurrentPlayer);
                     CreateUnit(1, 20, "HealZone", CurrentPlayer);
-                    DisplayText("Convert Hero Text", 4);
+                    DisplayText(StrDesignX(ConvertT1), 4);
                     PlayWAV("staredit\\wav\\ghost_living.ogg");
                     PreserveTrigger();
                 },
@@ -1409,204 +1458,27 @@ function Install_ConvertMarineTrigger()
                 },
             }
             
-            Trigger { -- 일마  > 영마 변환
-                players = {i},
-                conditions = {
-                    Bring(CurrentPlayer, AtLeast, 1, 0, "convertH"..e);
-                    Accumulate(CurrentPlayer, AtLeast, 10000, Ore);
-                },
-                actions = {
-                    SetResources(CurrentPlayer, Subtract, 10000, Ore);
-                    RemoveUnitAt(1, 0, "convertH"..e, CurrentPlayer);
-                    CreateUnit(1, 20, "HealZone", CurrentPlayer);
-                    DisplayText("Convert Hero Text", 4);
-                    PlayWAV("staredit\\wav\\ghost_dead.ogg");
-                    PreserveTrigger();
-                },
-            }
-            
-            Trigger { -- 영마 > 스마 변환
-                players = {i},
-                conditions = {
-                    Bring(CurrentPlayer, AtLeast, 1, 20, "convertH"..e);
-                    Bring(CurrentPlayer, AtLeast, 1, 129, "Anywhere");
-                    Accumulate(CurrentPlayer, AtLeast, 15000, Ore);
-                },
-                actions = {
-                    SetResources(CurrentPlayer, Subtract, 15000, Ore);
-                    RemoveUnitAt(1, 20, "convertH"..e, CurrentPlayer);
-                    CreateUnit(1, 1, "HealZone", CurrentPlayer);
-                    DisplayText("Convert Special Text", 4);
-                    PlayWAV("staredit\\wav\\ghost_living.ogg");
-                    PreserveTrigger();
-                },
-            }
-            
-            Trigger { -- 일마  > 영마 변환
-                players = {i},
-                conditions = {
-                    Bring(CurrentPlayer, AtLeast, 1, 0, "convertH"..e);
-                    Accumulate(CurrentPlayer, AtLeast, 10000, Ore);
-                },
-                actions = {
-                    SetResources(CurrentPlayer, Subtract, 10000, Ore);
-                    RemoveUnitAt(1, 0, "convertH"..e, CurrentPlayer);
-                    CreateUnit(1, 20, "HealZone", CurrentPlayer);
-                    DisplayText("Convert Hero Text", 4);
-                    PlayWAV("staredit\\wav\\ghost_dead.ogg");
-                    PreserveTrigger();
-                },
-            }
-            
-            Trigger { -- 영마 > 스마 변환
-                players = {i},
-                conditions = {
-                    Bring(CurrentPlayer, AtLeast, 1, 20, "convertH"..e);
-                    Bring(CurrentPlayer, AtLeast, 1, 129, "Anywhere");
-                    Accumulate(CurrentPlayer, AtLeast, 15000, Ore);
-                },
-                actions = {
-                    SetResources(CurrentPlayer, Subtract, 15000, Ore);
-                    RemoveUnitAt(1, 20, "convertH"..e, CurrentPlayer);
-                    CreateUnit(1, 1, "HealZone", CurrentPlayer);
-                    DisplayText("Convert Special Text", 4);
-                    PlayWAV("staredit\\wav\\ghost_living.ogg");
-                    PreserveTrigger();
-                },
-            }
-            
-            Trigger { -- 일마  > 영마 변환
-                players = {i},
-                conditions = {
-                    Bring(CurrentPlayer, AtLeast, 1, 0, "convertH"..e);
-                    Accumulate(CurrentPlayer, AtLeast, 10000, Ore);
-                },
-                actions = {
-                    SetResources(CurrentPlayer, Subtract, 10000, Ore);
-                    RemoveUnitAt(1, 0, "convertH"..e, CurrentPlayer);
-                    CreateUnit(1, 20, "HealZone", CurrentPlayer);
-                    DisplayText("Convert Hero Text", 4);
-                    PlayWAV("staredit\\wav\\ghost_dead.ogg");
-                    PreserveTrigger();
-                },
-            }
-    
-            Trigger { -- 일마  > 영마 변환
-                players = {i},
-                conditions = {
-                    Bring(CurrentPlayer, AtLeast, 1, 0, "convertH"..e);
-                    Accumulate(CurrentPlayer, AtLeast, 10000, Ore);
-                },
-                actions = {
-                    SetResources(CurrentPlayer, Subtract, 10000, Ore);
-                    RemoveUnitAt(1, 0, "convertH"..e, CurrentPlayer);
-                    CreateUnit(1, 20, "HealZone", CurrentPlayer);
-                    DisplayText("Convert Hero Text", 4);
-                    PlayWAV("staredit\\wav\\ghost_dead.ogg");
-                    PreserveTrigger();
-                },
-            }
-    
-            
-            Trigger { -- 영마 > 스마 변환
-                players = {CurrentPlayer},
-                conditions = {
-                    Bring(CurrentPlayer, AtLeast, 1, 20, "convertH"..e);
-                    Bring(CurrentPlayer, AtLeast, 1, 129, "Anywhere");
-                    Accumulate(CurrentPlayer, AtLeast, 15000, Ore);
-                },
-                actions = {
-                    SetResources(CurrentPlayer, Subtract, 15000, Ore);
-                    RemoveUnitAt(1, 20, "convertH"..e, CurrentPlayer);
-                    CreateUnit(1, 1, "HealZone", CurrentPlayer);
-                    DisplayText("Convert Special Text", 4);
-                    PlayWAV("staredit\\wav\\ghost_living.ogg");
-                    PreserveTrigger();
-                },
-            }
-    
-            Trigger { -- 영마 > 스마 변환
-                players = {i},
-                conditions = {
-                    Bring(CurrentPlayer, AtLeast, 1, 20, "convertH"..e);
-                    Bring(CurrentPlayer, AtLeast, 1, 129, "Anywhere");
-                    Accumulate(CurrentPlayer, AtLeast, 15000, Ore);
-                },
-                actions = {
-                    SetResources(CurrentPlayer, Subtract, 15000, Ore);
-                    RemoveUnitAt(1, 20, "convertH"..e, CurrentPlayer);
-                    CreateUnit(1, 1, "HealZone", CurrentPlayer);
-                    DisplayText("Convert Special Text", 4);
-                    PlayWAV("staredit\\wav\\ghost_living.ogg");
-                    PreserveTrigger();
-                },
-            }
             
         end
     end
+    for i = 0 , 3 do
         Trigger{ -- 해금
-            players = {P1},
+            players = {i},
             conditions = {
-                Deaths(P7, Exactly, 1, 152);
-                Deaths(P7, Exactly, 1, 151);
-                Deaths(P9,Exactly,0,200);
+                Deaths(P7, AtLeast, 1, 152);
+                Deaths(P7, AtLeast, 1, 151);
             },
             actions = {
+                DisplayText("\x13\x04\n\x0D\x0D\x13\x04● ● ● \x08ＮＯＴＩＣＥ\x04 ● ● ●\n\x14\n\x14\n", 4);
                 DisplayText("\x13\x19｡˙+ﾟ\x11Special \x1fGuardians of \x19Galaxy\x19 ｡+ﾟ. 가 전장에 합류했습니다 !", 4);
-                MinimapPing("unlock1");
-                MinimapPing("unlock1");
-                MinimapPing("unlock1");
-                CreateUnit(1, 129, "unlock1", CurrentPlayer);
+                DisplayText("\x13\x04\n\x0D\x0D\x13\x04● ● ● \x08ＮＯＴＩＣＥ\x04 ● ● ●\n\x14\n\x14\n", 4);
+                MinimapPing("unlock"..(i+1));
+                MinimapPing("unlock"..(i+1));
+                MinimapPing("unlock"..(i+1));
+                CreateUnit(1, 129, "unlock"..(i+1), CurrentPlayer);
             }
         }
-        
-        Trigger{ -- 해금
-            players = {P2},
-            conditions = {
-                Deaths(P7, Exactly, 1, 152);
-                Deaths(P7, Exactly, 1, 151);
-                Deaths(P9,Exactly,0,200);
-            },
-            actions = {
-                DisplayText("\x13\x19｡˙+ﾟ\x11Special \x1fGuardians of \x19Galaxy\x19 ｡+ﾟ. 가 전장에 합류했습니다 !", 4);
-                MinimapPing("unlock2");
-                MinimapPing("unlock2");
-                MinimapPing("unlock2");
-                CreateUnit(1, 129, "unlock2", CurrentPlayer);
-            }
-        }
-        
-        Trigger{ -- 해금
-            players = {P3},
-            conditions = {
-                Deaths(P7, Exactly, 1, 152);
-                Deaths(P7, Exactly, 1, 151);
-                Deaths(P9,Exactly,0,200);
-            },
-            actions = {
-                DisplayText("\x13\x19｡˙+ﾟ\x11Special \x1fGuardians of \x19Galaxy\x19 ｡+ﾟ. 가 전장에 합류했습니다 !", 4);
-                MinimapPing("unlock3");
-                MinimapPing("unlock3");
-                MinimapPing("unlock3");
-                CreateUnit(1, 129, "unlock3", CurrentPlayer);
-            }
-        }
-        
-        Trigger{ -- 해금
-            players = {P4},
-            conditions = {
-                Deaths(P7, Exactly, 1, 152);
-                Deaths(P7, Exactly, 1, 151);
-                Deaths(P9,Exactly,0,200);
-            },
-            actions = {
-                DisplayText("\x13\x19｡˙+ﾟ\x11Special \x1fGuardians of \x19Galaxy\x19 ｡+ﾟ. 가 전장에 합류했습니다 !", 4);
-                MinimapPing("unlock4");
-                MinimapPing("unlock4");
-                MinimapPing("unlock4");
-                CreateUnit(1, 129, "unlock4", CurrentPlayer);
-            }
-        }
+    end
 end
 function Install_CCMU()
 CanText1 = "\x13\x04\n\x0D\x0D\x13\x04● ● ● \x08! ! ! ＤＡＮＧＥＲ ! ! ! \x04 ● ● ●\n\x14\n\x14\n"
@@ -1641,7 +1513,7 @@ Trigger{ -- 적당히 하십시오 휴먼
 	},
 }
 
-TriggerX(Force1, {FMemory(0x58F450, Exactly, 1)}, { -- 1캔
+TriggerX(AllPlayers, {FMemory(0x58F450, Exactly, 1)}, { -- 1캔
 KillUnit(16, Force2),
 KillUnit(44, Force2),
 KillUnit(56, Force2),
@@ -1659,10 +1531,11 @@ DisplayText(CanText11, 4),
 DisplayText(CanText22, 4),
 DisplayText(CanText33, 4),
 PlayWAV("sound\\Terran\\GOLIATH\\TGoPss01.WAV"),
+PlayWAV("sound\\Terran\\GOLIATH\\TGoPss01.WAV"),
 PlayWAV("sound\\Terran\\GOLIATH\\TGoPss01.WAV")}
 )
 
-TriggerX(Force1, {FMemory(0x58F450, Exactly, 2)}, { -- 2캔
+TriggerX(AllPlayers, {FMemory(0x58F450, Exactly, 2)}, { -- 2캔
 KillUnit(16, Force2),
 KillUnit(44, Force2),
 KillUnit(56, Force2),
@@ -1679,6 +1552,7 @@ RunAIScriptAt(JYD, "Anywhere"),
 DisplayText(CanText111, 4),
 DisplayText(CanText222, 4),
 DisplayText(CanText333, 4),
+PlayWAV("sound\\Terran\\GOLIATH\\TGoPss01.WAV"),
 PlayWAV("sound\\Terran\\GOLIATH\\TGoPss01.WAV"),
 PlayWAV("sound\\Terran\\GOLIATH\\TGoPss01.WAV")}
 )
@@ -1723,7 +1597,7 @@ function Install_BGMPhase()
         SetDeaths(P6,Subtract,1,160);
         SetDeaths(P6,Subtract,1,167);
         SetDeaths(P6,Subtract,1,154);
-        PreserveTrigger()
+        PreserveTrigger();
     }
 }
 
@@ -2046,6 +1920,13 @@ function Install_BGMPhase()
     SetDeaths(CurrentPlayer, Add, 1, 204) -- 순대 브금 스위치
 })
 
+    TriggerX(Force1, {Deaths(P7, AtLeast, 1, 152)}, {DisplayText(StrDesignX("\x04Daggoth \x11Destroyed! \x07+ 200,000 \x17Points! "), 4),
+    SetScore(CurrentPlayer, Add, 200000, Kills),
+    SetDeaths(CurrentPlayer, Add, 1, 204) -- Daggoth BGM Switch
+})
+
+
+
     
 end
 function Install_NormalGunPlotShape()
@@ -2186,7 +2067,67 @@ function Install_NormalGunPlotShape()
 
 
         ----- Hive Shape Plot
-        function HiveGunPlot2(Hivename, DeathVar)
+        function HiveGunPlot1lv(Hivename, DeathVar)
+            Trigger {
+                players = {P6},
+                conditions = {
+                    CommandLeastAt(133, Hivename);
+                },
+                actions = {
+                    SetDeaths(P10, Add, 1, DeathVar);
+                    PreserveTrigger()
+                },
+            }
+            Trigger2(P6, {Deaths(P10, AtLeast, 1, 10)})
+            CAPlot(CS_SortR(HiveEtf1,1),P6,84,Hivename,nil,1,32,{1,0,0,0,HiveEtf1[1]/36,0},nil,P6,{CommandLeastAt(133,Hivename)})
+
+            for i = 1 ,16 do
+            Line1 = CSMakeLineX(2,64,90+11*i,17,1)
+            CSPlotOrder(Line1,P6,56,Hivename,nil,1,32,Line1,0,Attack, "HealZone",nil,0,nil,P6,{CommandLeastAt(133, Hivename), Deaths(P10, Exactly, HiveGenTime[i] * SDspeed, DeathVar)} )
+            end
+
+            for i = 1 ,15 do
+            Line2 = CSMakeLineX(2,64,101+11*i,17,1)
+            CSPlotWithProperties(Line2, P6, 84, Hivename, nil, 1, 32, P6, {CommandLeastAt(133, Hivename), Deaths(P10, AtLeast, HiveEftTime[i] * SDspeed, DeathVar)},nil,0,EftProperties)
+            end
+
+            CSPlotOrder(Triangle2, P6, 38, Hivename, nil, 1, 20, Triangle2, 0, Patrol, "HealZone", nil,0 , nil, P6, {CommandLeastAt(133, Hivename), Deaths(P10, AtLeast, HiveGenTime[1] * SDspeed, DeathVar)})
+            CSPlotOrder(Triangle1, P6, 51, Hivename, nil, 1, 20, Triangle1, 0, Attack, "HealZone", nil,0 , nil, P6, {CommandLeastAt(133, Hivename), Deaths(P10, AtLeast, HiveGenTime[1] * SDspeed, DeathVar)})
+
+            CSPlotOrder(LGU3, P6, 16, Hivename, nil, 1, 20, LGU3, 0, Attack, "HealZone", nil,0 , nil, P6, {CommandLeastAt(133, Hivename), Deaths(P10, AtLeast, HiveGenTime[5] * SDspeed, DeathVar)})
+            CSPlotOrder(LGU2, P6, 38, Hivename, nil, 1, 20, LGU2, 0, Patrol, "HealZone", nil,0 , nil, P6, {CommandLeastAt(133, Hivename), Deaths(P10, AtLeast, HiveGenTime[5] * SDspeed, DeathVar)})
+            CSPlotOrder(LGU1, P6, 48, Hivename, nil, 1, 20, LGU1, 0, Attack, "HealZone", nil,0 , nil, P6, {CommandLeastAt(133, Hivename), Deaths(P10, AtLeast, HiveGenTime[5] * SDspeed, DeathVar)})
+            CSPlotOrderWithProperties(Trdline, P6, 69, Hivename, nil, 1, 20, Trdline, 0, Attack, "HealZone", nil,0 , nil, P6, {CommandLeastAt(133, Hivename), Deaths(P10, AtLeast, HiveGenTime[5] * SDspeed, DeathVar)},nil,0,HiveProperties)
+
+            CSPlotOrder(LGU3, P6, 16, Hivename, nil, 1, 20, LGU3, 0, Attack, "HealZone", nil,0 , nil, P6, {CommandLeastAt(133, Hivename), Deaths(P10, AtLeast, HiveGenTime[9] * SDspeed, DeathVar)})
+            CSPlotOrder(LGU2, P6, 38, Hivename, nil, 1, 20, LGU2, 0, Patrol, "HealZone", nil,0 , nil, P6, {CommandLeastAt(133, Hivename), Deaths(P10, AtLeast, HiveGenTime[9] * SDspeed, DeathVar)})
+            CSPlotOrder(LGU1, P6, 51, Hivename, nil, 1, 20, LGU1, 0, Attack, "HealZone", nil,0 , nil, P6, {CommandLeastAt(133, Hivename), Deaths(P10, AtLeast, HiveGenTime[9] * SDspeed, DeathVar)})
+
+            CSPlotOrderWithProperties(Trdline2, P6, 62, Hivename, nil, 1, 20, Trdline2, 0, Attack, "HealZone", nil,0 , nil, P6, {CommandLeastAt(133, Hivename), Deaths(P10, AtLeast, HiveGenTime[9] * SDspeed, DeathVar)},nil,0,HiveProperties)
+            CSPlotOrderWithProperties(Trdline, P6, 62, Hivename, nil, 1, 20, Trdline2, 0, Attack, "HealZone", nil,0 , nil, P6, {CommandLeastAt(133, Hivename), Deaths(P10, AtLeast, HiveGenTime[13] * SDspeed, DeathVar)},nil,0,HiveProperties)
+
+            CSPlotOrder(LGU3, P6, 16, Hivename, nil, 1, 20, LGU3, 0, Attack, "HealZone", nil,0 , nil, P6, {CommandLeastAt(133, Hivename), Deaths(P10, AtLeast, HiveGenTime[13] * SDspeed, DeathVar)})
+            CSPlotOrder(LGU2, P6, 38, Hivename, nil, 1, 20, LGU2, 0, Patrol, "HealZone", nil,0 , nil, P6, {CommandLeastAt(133, Hivename), Deaths(P10, AtLeast, HiveGenTime[13] * SDspeed, DeathVar)})
+            CSPlotOrder(LGU1, P6, 51, Hivename, nil, 1, 20, LGU1, 0, Attack, "HealZone", nil,0 , nil, P6, {CommandLeastAt(133, Hivename), Deaths(P10, AtLeast, HiveGenTime[13] * SDspeed, DeathVar)})
+
+            CSPlotOrder(Triangle2, P6, 38, Hivename, nil, 1, 20, Triangle2, 0, Patrol, "HealZone", nil,0 , nil, P6, {CommandLeastAt(133, Hivename), Deaths(P10, AtLeast, HiveGenTime[16] * SDspeed, DeathVar)})
+            CSPlotOrder(Triangle1, P6, 51, Hivename, nil, 1, 20, Triangle1, 0, Attack, "HealZone", nil,0 , nil, P6, {CommandLeastAt(133, Hivename), Deaths(P10, AtLeast, HiveGenTime[16] * SDspeed, DeathVar)})
+
+            for e = 2,8 do
+            CSPlotOrder(CS_Rotate(LGU1,10*(e-1)), P7, 84, Hivename, nil, 1, 20, CS_Rotate(LGU1,10*(e-1)), 0, Attack , "HealZone", nil, 0, nil, P7, {CommandLeastAt(133, Hivename), Deaths(P10, AtLeast, HiveGenTime2[e] * SDspeed,DeathVar)})
+            CSPlotOrder(CS_Rotate(LGU2,10*(e-1)), P6, 84, Hivename, nil, 1, 20, CS_Rotate(LGU2,10*(e-1)), 0, Attack , "HealZone", nil, 0, nil, P6, {CommandLeastAt(133, Hivename), Deaths(P10, AtLeast, HiveGenTime2[e] * SDspeed,DeathVar)})
+            CSPlotOrder(CS_Rotate(LGU3,10*(e-1)), P7, 84, Hivename, nil, 1, 20, CS_Rotate(LGU3,10*(e-1)), 0, Attack , "HealZone", nil, 0, nil, P7, {CommandLeastAt(133, Hivename), Deaths(P10, AtLeast, HiveGenTime2[e] * SDspeed,DeathVar)})
+
+            CSPlotOrder(CS_Rotate(LGU1,10*(e-1)), P7, 51, Hivename, nil, 1, 20, CS_Rotate(LGU1,10*(e-1)), 0, Attack , "HealZone", nil, 0, nil, P7, {CommandLeastAt(133, Hivename), Deaths(P10, AtLeast, HiveGenTime2[e] * SDspeed,DeathVar)})
+            CSPlotOrder(CS_Rotate(LGU2,10*(e-1)), P6, 38, Hivename, nil, 1, 20, CS_Rotate(LGU2,10*(e-1)), 0, Attack , "HealZone", nil, 0, nil, P6, {CommandLeastAt(133, Hivename), Deaths(P10, AtLeast, HiveGenTime2[e] * SDspeed,DeathVar)})
+            CSPlotOrder(CS_Rotate(LGU3,10*(e-1)), P7, 46, Hivename, nil, 1, 20, CS_Rotate(LGU3,10*(e-1)), 0, Patrol , "HealZone", nil, 0, nil, P7, {CommandLeastAt(133, Hivename), Deaths(P10, AtLeast, HiveGenTime2[e] * SDspeed,DeathVar)})
+            end
+            Trigger2(P6, {Deaths(P10, AtLeast, (HiveGenTime2[8] * SDspeed) + 5, DeathVar)})
+        end
+        
+
+
+        function HiveGunPlot2lv(Hivename, DeathVar)
             Trigger {
                 players = {P6},
                 conditions = {
@@ -2240,6 +2181,7 @@ function Install_NormalGunPlotShape()
             CSPlotOrder(CS_Rotate(LGU1,10*(e-1)), P7, 51, Hivename, nil, 1, 20, CS_Rotate(LGU1,10*(e-1)), 0, Attack , "HealZone", nil, 0, nil, P7, {CommandLeastAt(133, Hivename), Deaths(P10, AtLeast, HiveGenTime2[e] * SDspeed,DeathVar)})
             CSPlotOrder(CS_Rotate(LGU2,10*(e-1)), P6, 17, Hivename, nil, 1, 20, CS_Rotate(LGU2,10*(e-1)), 0, Attack , "HealZone", nil, 0, nil, P6, {CommandLeastAt(133, Hivename), Deaths(P10, AtLeast, HiveGenTime2[e] * SDspeed,DeathVar)})
             CSPlotOrder(CS_Rotate(LGU3,10*(e-1)), P7, 95, Hivename, nil, 1, 20, CS_Rotate(LGU3,10*(e-1)), 0, Patrol , "HealZone", nil, 0, nil, P7, {CommandLeastAt(133, Hivename), Deaths(P10, AtLeast, HiveGenTime2[e] * SDspeed,DeathVar)})
+            CSPlotOrder(CS_Rotate(spiral1,10*(e-1)), P7, 88, Hivename, nil, 1, 20, CS_Rotate(spiral1,10*(e-1)), 0, Attack , "HealZone", nil, 0, nil, P7, {CommandLeastAt(133, Hivename), Deaths(P10, AtLeast, HiveGenTime2[e] * SDspeed,DeathVar)})
             end
             Trigger2(P6, {Deaths(P10, AtLeast, (HiveGenTime2[8] * SDspeed) + 5, DeathVar)})
         end
@@ -2382,7 +2324,7 @@ function Install_NormalGunPlotShape()
 
         Trigger2(P6, {Deaths(P10, AtLeast, (StargateGenTime[27] * SDspeed) - 2, Deathvar)}, {SetScanImage(971)})
         CSPlot(Eftstar, P6, 33, stargatename, nil, 1, 32, P6,{CommandLeastAt(167, stargatename), Deaths(P10, AtLeast, StargateEftTime[4] * SDspeed, Deathvar)})
-        CSPlot(Eftstar, P6, 60, stargatename, nil, 1, 32, P7,{CommandLeastAt(167, stargatename), Deaths(P10, AtLeast, StargateGenTime[26] * SDspeed, Deathvar)})
+        CSPlot(Eftstar, P6, 64, stargatename, nil, 1, 32, P7,{CommandLeastAt(167, stargatename), Deaths(P10, AtLeast, StargateGenTime[26] * SDspeed, Deathvar)})
         for i = 27,27 do
             CSPlotWithProperties(EllipseArr[1], P8, 65, stargatename, nil, 1, 64, P8, {CommandLeastAt(167, stargatename), Deaths(P10, AtLeast, StargateGenTime[i] * SDspeed - 1, Deathvar)},nil,nil,StargateProperties)
             CSPlotWithProperties(EllipseArr[2], P8, 66, stargatename, nil, 1, 64, P8, {CommandLeastAt(167, stargatename), Deaths(P10, AtLeast, StargateGenTime[i] * SDspeed - 1, Deathvar)},nil,nil,StargateProperties)
@@ -2403,20 +2345,23 @@ function Install_NormalGunPlotShape()
         for i = 1, 6 do -- 1 ~ 6
             HatcheryGunplot1("hat"..i,i);
         end
-        for i = 7 , 10 do -- 7 ~ 14
+        for i = 7 , 10 do -- 7 ~ 10
             HatcheryGunplot2("hat"..i,i);
         end
-        for i = 1 , 12 do -- 15 ~ 26
-            LairGunplot("lair"..i, i + 14);
+        for i = 1 , 12 do -- 11 ~ 22
+            LairGunplot("lair"..i, i + 10);
         end
-        for i = 1 , 10 do -- 27 ~ 37
-            HiveGunPlot2("hive"..i, i + 26);
+        for i = 1 , 4 do -- 23 ~ 26
+            HiveGunPlot1lv("hive"..i, i + 22);
         end
-        for i = 1 , 10 do -- 38 ~ 48
-            Starport_GunPlot("starp"..i, i + 37);
+        for i = 5, 10 do -- 27 ~ 32
+            HiveGunPlot2lv("hive"..i, i + 22);
         end
-        for i = 1 , 10 do -- 49 ~ 59
-            StargateGunplot("starg"..i,  i + 48);
+        for i = 1 , 10 do -- 33 ~ 42
+            Starport_GunPlot("starp"..i, i + 32);
+        end
+        for i = 1 , 10 do -- 43 ~ 52
+            StargateGunplot("starg"..i,  i + 42);
         end
 end
 function Install_SpecialGunPlotShape()
@@ -2462,6 +2407,44 @@ function Install_SpecialGunPlotShape()
     ----------- Start of Daggoth plot shape functions
     TriggerX(P7, {CommandLeastAt(152, "celebrate2")}, {SetDeaths(P10, Add, 1, 61)}, preserved);
     
+    for i = 1, 24 do
+        Circular = CSMakeLineX(1,60,0+15*i,7,1) -- Circle
+        CSPlot(Circular,P6,84,"celebrate2",nil,1,48,P7,{CommandLeastAt(152,"celebrate2"),Deaths(P10,Exactly,4*i+102,61)})
+        CSPlot(Circular,P6,55,"celebrate2",nil,1,48,P7,{CommandLeastAt(152,"celebrate2"),Deaths(P10,Exactly,4*i+102,61)})
+        CSPlot(Circular,P6,56,"celebrate2",nil,1,48,P7,{CommandLeastAt(152,"celebrate2"),Deaths(P10,Exactly,800+4*i+102,61)})
+        CSPlot(Circular,P6,84,"celebrate2",nil,1,48,P7,{CommandLeastAt(152,"celebrate2"),Deaths(P10,Exactly,800+4*i+102,61)})
+    end
+    CSPlot(CX2,P6,51,"celebrate2",nil,1,32,P7,{CommandLeastAt(152,"celebrate2"),Deaths(P10,Exactly,96+102,61)}) --외접원
+    CSPlot(CX2,P6,46,"celebrate2",nil,1,32,P7,{CommandLeastAt(152,"celebrate2"),Deaths(P10,Exactly,896+102,61)}) --외접원
+    TriggerX(P7, {CommandLeastAt(152, "celebrate2"),Deaths(P10, AtLeast, 100+(3*SDspeed), 61)}, {
+        Order(55, Force2, "celebrate2", Attack, "HealZone"),Order(51, Force2, "celebrate2", Attack, "HealZone")})
+    TriggerX(P7, {CommandLeastAt(152, "celebrate2"),Deaths(P10, AtLeast, 900+(3*SDspeed), 61)}, {
+        Order(56, Force2, "celebrate2", Attack, "HealZone"),Order(46, Force2, "celebrate2", Attack, "HealZone")})
+    for j = 1, 24 do
+        GLj = CSMakeLineX(1,60,360-15*j,11,1) -- 원그리기 2
+        CSPlot(GLj,P6,84,"celebrate2",nil,1,64,P7,{CommandLeastAt(152,"celebrate2"),Deaths(P10,Exactly,400+4*j+102,61)})
+        CSPlot(GLj,P6,8,"celebrate2",nil,1,64,P7,{CommandLeastAt(152,"celebrate2"),Deaths(P10,Exactly,400+4*j+102,61)})
+        CSPlot(GLj,P6,88,"celebrate2",nil,1,64,P7,{CommandLeastAt(152,"celebrate2"),Deaths(P10,Exactly,1200+4*j+102,61)})
+        CSPlot(GLj,P6,84,"celebrate2",nil,1,64,P7,{CommandLeastAt(152,"celebrate2"),Deaths(P10,Exactly,1200+4*j+102,61)})
+    end
+    CSPlot(CX2,P6,65,"celebrate2",nil,1,48,P7,{CommandLeastAt(152,"celebrate2"),Deaths(P10,Exactly,496+102,61)})
+    CSPlot(CX2,P6,17,"celebrate2",nil,1,48,P7,{CommandLeastAt(152,"celebrate2"),Deaths(P10,Exactly,1296+102,61)})
+    TriggerX(P7, {CommandLeastAt(152, "celebrate2"),Deaths(P10, AtLeast, 500+(3*SDspeed), 61)}, {
+        Order(8, Force2, "celebrate2", Attack, "HealZone"),Order(65, Force2, "celebrate2", Attack, "HealZone")})
+    TriggerX(P7, {CommandLeastAt(152, "celebrate2"),Deaths(P10, AtLeast, 1300+(3*SDspeed), 61)}, {
+        Order(88, Force2, "celebrate2", Attack, "HealZone"),Order(17, Force2, "celebrate2", Attack, "HealZone")})
+
+    GA1 = CS_MoveXY(CS_InvertXY(CS_FillGradA(0,{0,512},270,18,"SHBF",0),270),-500,0) --A그라데이션
+    GA1D = CS_RatioXY(CS_MoveXY(CS_InvertXY(CS_FillGradA(0,{0,512},270,18,"SHBF",0),270),-500,0),0.1,0.1) --도착지 도형
+    CSPlotOrder(spiral1,P6,84,"celebrate2",nil,1,64,CSMakeSpiral(4, 1, 1/1.2, 40, 0, 37, 5),0,Attack,"HealZone",nil,64,nil,P6,{CommandLeastAt(152,"celebrate2"),Deaths(P10,Exactly,1500+(3*SDspeed),61)})
+    CSPlotOrder(spiral1,P6,30,"celebrate2",nil,1,64,CSMakeSpiral(4, 1, 1/1.2, 40, 0, 37, 5),0,Attack,"HealZone",nil,64,nil,P6,{CommandLeastAt(152,"celebrate2"),Deaths(P10,Exactly,1500+(3*SDspeed),61)})
+    CSPlotOrder(GA1,P7,96,"celebrate2",nil,1,64,GA1D,0,Attack,"HealZone",nil,64,nil,P7,{CommandLeastAt(152,"celebrate2"),Deaths(P10,Exactly,1500+(3*SDspeed),61)})
+    ----------- End of Daggoth plot shape functions
+
+    ----------- Start of Infested Command Center1 functions
+
+    TriggerX(P7, {CommandLeastAt(130, "nuke1")}, {SetDeaths(P10, Add, 1, 62)},preserved);
+
 
 end
 
