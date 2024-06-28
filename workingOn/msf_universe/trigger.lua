@@ -327,6 +327,18 @@ StargateGenTime = {
 -- Cerebrate
 --Circular = CSMakeLineX(1,60,0+15*i,7,1)
 
+--- Infested Center
+
+
+Arc1 = CS_CompassA({128,0},{0,0},{256,0},0,36)
+Arc2 = CS_CompassA({64,0},{0,0},{128,0},0,18)
+Arc3 = CS_CompassA({192,0},{128,0},{256,0},1,18)
+SH_Arc = CS_SymmetryA(CS_OverlapX(Arc1,Arc2,Arc3),4,0,360)
+SH_Arc2 = CS_SymmetryA(CS_FillPathHX(CS_OverlapX(Arc1,Arc2,Arc3),0,15,15,0,0),4,0,360)
+SH_ICenterB = CS_RatioXY(CS_RemoveStack(CS_OverlapX(SH_Arc,SH_Arc2),5),7,7)
+
+-----
+
 ---------------------- Init system setting --------
 
 function Install_initial_system_setting()
@@ -2441,9 +2453,13 @@ function Install_SpecialGunPlotShape()
     CSPlotOrder(GA1,P7,96,"celebrate2",nil,1,64,GA1D,0,Attack,"HealZone",nil,64,nil,P7,{CommandLeastAt(152,"celebrate2"),Deaths(P10,Exactly,1500+(3*SDspeed),61)})
     ----------- End of Daggoth plot shape functions
 
-    ----------- Start of Infested Command Center1 functions
-
+    ----------- Start of Infested Command Center1 functions 
+        
     TriggerX(P7, {CommandLeastAt(130, "nuke1")}, {SetDeaths(P10, Add, 1, 62)},preserved);
+    
+    CAPlotWithProperties(SH_ICenterB,P8,29,"nuke1",{2048,2048},1,32,{1,0,0,0,4,0},nil,FP,{CommandLeastAt(130, "nuke1"), Deaths(P10, AtLeast, 10, 62)},nil,nil,StargateProperties)
+
+
 
 
 end
