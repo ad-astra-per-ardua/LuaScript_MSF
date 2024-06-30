@@ -2381,6 +2381,10 @@ function Install_NormalGunPlotShape()
         end
 end
 function Install_SpecialGunPlotShape()
+    
+    TriggerX(Force2, {Deaths(P11, Exactly, 1, 100)}, {SetDeaths(P9, SetTo, 1, 201),SetAllianceStatus(Force1, Ally)},preserved)
+    TriggerX(Force2, {Deaths(P11, Exactly, 0, 100)}, {SetDeaths(P9, SetTo, 0, 201),SetAllianceStatus(Force1, Enemy)},preserved)
+
     -- Cerebrate from palm1 
     function SHBF(Y) return Y end
     TriggerX(P7, {CommandLeastAt(151, "celebrate1")}, {SetDeaths(P10, Add, 1, 60)},preserved);
@@ -2461,7 +2465,11 @@ function Install_SpecialGunPlotShape()
         
     TriggerX(P7, {CommandLeastAt(130, "nuke1")}, {SetDeaths(P10, Add, 1, 62)},preserved);
     ---- Pulling Trigger Temp disabled
-    TriggerX(P7, {CommandLeastAt(130, "nuke1"),Deaths(P10, AtLeast, 5, 62)}, {SetDeaths(P11, SetTo, 1, 100)},preserved)
+    TriggerX(P7, {CommandLeastAt(130, "nuke1"),Deaths(P10, Exactly, 5, 62)}, {SetDeaths(P11, SetTo, 1, 100)})
+
+    TriggerX(Force2, {Deaths(P11, Exactly, 1, 100)}, {SetDeaths(P9, SetTo, 1, 201),SetAllianceStatus(Force1, Ally)},preserved)
+    TriggerX(Force2, {Deaths(P11, Exactly, 0, 100)}, {SetDeaths(P9, SetTo, 0, 201),SetAllianceStatus(Force1, Enemy)},preserved)
+
     TriggerX(Force2, {CommandLeastAt(130, "nuke1")}, {SetDeaths(P9, SetTo, 1, 201),SetAllianceStatus(Force1, Ally)})
 
     CAPlotWithProperties(SH_Arc1, P5, 64,"HealZone", {2048,2048}, 1, 32, {1,0,0,0,1,0}, nil, P5, {CommandLeastAt(130, "nuke1"),Deaths(P10, AtLeast, 30, 62)},nil, nil, StargateProperties)
@@ -2491,7 +2499,6 @@ function Install_SpecialGunPlotShape()
 
     
     TriggerX(FP, {CommandLeastAt(130, "nuke1"),Deaths(P10, AtLeast, 35 * SDspeed, 62)}, {SetDeaths(P11, SetTo, 0, 100)})
-    TriggerX(Force2, {CommandLeastAt(130, "nuke1"),Deaths(P10, AtLeast, 35 * SDspeed, 62)}, {SetAllianceStatus(Force1, Enemy)})
     TriggerX(P8, {CommandLeastAt(130, "nuke1"),Deaths(P10, AtLeast, 35 * SDspeed, 62)}, {SetAllianceStatus(Force1, Ally)})
 
 
