@@ -339,6 +339,11 @@ SH_Arc2 = CS_RatioXY(CS_Rotate(CS_FillPathXY(ArcTemp,0,15,15,0),90),7,7)
 SH_Arc3 = CS_RatioXY(CS_Rotate(CS_FillPathXY(ArcTemp,0,15,15,0),180),7,7)
 SH_Arc4 = CS_RatioXY(CS_Rotate(CS_FillPathXY(ArcTemp,0,15,15,0),270),7,7)
 
+Shell_Arc1 = CS_Rotate(ArcTemp, 0)
+Shell_Arc2 = CS_Rotate(ArcTemp, 90)
+Shell_Arc3 = CS_Rotate(ArcTemp, 180)
+Shell_Arc4 = CS_Rotate(ArcTemp, 270)
+
 SH_ICenterB = CS_RatioXY(CS_RemoveStack(CS_OverlapX(SH_Arc1,SH_Arc2,SH_Arc3,SH_Arc4),5),7,7)
 
 -----
@@ -2461,7 +2466,7 @@ function Install_SpecialGunPlotShape()
     CSPlotOrder(GA1,P7,96,"celebrate2",nil,1,64,GA1D,0,Attack,"HealZone",nil,64,nil,P7,{CommandLeastAt(152,"celebrate2"),Deaths(P10,Exactly,1500+(3*SDspeed),61)})
     ----------- End of Daggoth plot shape functions
 
-    ----------- Start of Infested Command Center1 functions 
+    ----------- Start of 12 Clock Infested Command Center functions 
         
     TriggerX(P7, {CommandLeastAt(130, "nuke1")}, {SetDeaths(P10, Add, 1, 62)},preserved);
     ---- Pulling Trigger Temp disabled
@@ -2472,10 +2477,10 @@ function Install_SpecialGunPlotShape()
 
     TriggerX(Force2, {CommandLeastAt(130, "nuke1")}, {SetDeaths(P9, SetTo, 1, 201),SetAllianceStatus(Force1, Ally)})
 
-    CAPlotWithProperties(SH_Arc1, P5, 64,"HealZone", {2048,2048}, 1, 32, {1,0,0,0,1,0}, nil, P5, {CommandLeastAt(130, "nuke1"),Deaths(P10, AtLeast, 30, 62)},nil, nil, StargateProperties)
-    CAPlotWithProperties(SH_Arc2, P6, 70,"HealZone", {2048,2048}, 1, 32, {1,0,0,0,1,0}, nil, P5, {CommandLeastAt(130, "nuke1"),Deaths(P10, AtLeast, 30, 62)},nil, nil, StargateProperties)
-    CAPlotWithProperties(SH_Arc3, P7, 88,"HealZone", {2048,2048}, 1, 32, {1,0,0,0,1,0}, nil, P5, {CommandLeastAt(130, "nuke1"),Deaths(P10, AtLeast, 30, 62)},nil, nil, StargateProperties)
-    CAPlotWithProperties(SH_Arc4, P8, 89,"HealZone", {2048,2048}, 1, 32, {1,0,0,0,1,0}, nil, P5, {CommandLeastAt(130, "nuke1"),Deaths(P10, AtLeast, 30, 62)},nil, nil, StargateProperties)
+    CAPlotWithProperties(Shell_Arc1,SH_Arc1, P5, 64,"HealZone", {2048,2048}, 1, 32, {1,0,0,0,1,0}, nil, P5, {CommandLeastAt(130, "nuke1"),Deaths(P10, AtLeast, 30, 62)},nil, nil, StargateProperties)
+    CAPlotWithProperties(Shell_Arc2,SH_Arc2, P6, 70,"HealZone", {2048,2048}, 1, 32, {1,0,0,0,1,0}, nil, P5, {CommandLeastAt(130, "nuke1"),Deaths(P10, AtLeast, 30, 62)},nil, nil, StargateProperties)
+    CAPlotWithProperties(Shell_Arc3,SH_Arc3, P7, 88,"HealZone", {2048,2048}, 1, 32, {1,0,0,0,1,0}, nil, P5, {CommandLeastAt(130, "nuke1"),Deaths(P10, AtLeast, 30, 62)},nil, nil, StargateProperties)
+    CAPlotWithProperties(Shell_Arc4,SH_Arc4, P8, 89,"HealZone", {2048,2048}, 1, 32, {1,0,0,0,1,0}, nil, P5, {CommandLeastAt(130, "nuke1"),Deaths(P10, AtLeast, 30, 62)},nil, nil, StargateProperties)
 
     TriggerX(Force2, {CommandLeastAt(130, "nuke1"),Deaths(P10, AtLeast, 10 * SDspeed, 62)}, {Order(64, P5, "Anywhere", Move, "hive4")})
     TriggerX(Force2, {CommandLeastAt(130, "nuke1"),Deaths(P10, AtLeast, 10 * SDspeed, 62)}, {Order(70, P6, "Anywhere", Move, "starg8")})
@@ -2491,7 +2496,7 @@ function Install_SpecialGunPlotShape()
     TriggerX(Force2, {CommandLeastAt(130, "nuke1"),Deaths(P10, AtLeast, 30 * SDspeed, 62)}, {SetInvincibility(Disable, 88, Force2, "Anywhere")})
     TriggerX(Force2, {CommandLeastAt(130, "nuke1"),Deaths(P10, AtLeast, 30 * SDspeed, 62)}, {SetInvincibility(Disable, 89, Force2, "Anywhere")})
     
-
+   
     TriggerX(Force2, {CommandLeastAt(130, "nuke1"),Deaths(P10, AtLeast, 32 * SDspeed, 62)}, {RunAIScriptAt(JYD, "hive3")})
     TriggerX(Force2, {CommandLeastAt(130, "nuke1"),Deaths(P10, AtLeast, 32 * SDspeed, 62)}, {RunAIScriptAt(JYD, "starg3")})
     TriggerX(Force2, {CommandLeastAt(130, "nuke1"),Deaths(P10, AtLeast, 32 * SDspeed, 62)}, {RunAIScriptAt(JYD, "starg8")})
@@ -2501,7 +2506,7 @@ function Install_SpecialGunPlotShape()
     TriggerX(FP, {CommandLeastAt(130, "nuke1"),Deaths(P10, AtLeast, 35 * SDspeed, 62)}, {SetDeaths(P11, SetTo, 0, 100)})
     TriggerX(P8, {CommandLeastAt(130, "nuke1"),Deaths(P10, AtLeast, 35 * SDspeed, 62)}, {SetAllianceStatus(Force1, Ally)})
 
-
+    --------- End of 12 Clock Infested Command Center fuctions
 
 end
 
