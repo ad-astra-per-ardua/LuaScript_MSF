@@ -339,10 +339,10 @@ SH_Arc2 = CS_RatioXY(CS_Rotate(CS_FillPathXY(ArcTemp,0,15,15,0),90),7,7)
 SH_Arc3 = CS_RatioXY(CS_Rotate(CS_FillPathXY(ArcTemp,0,15,15,0),180),7,7)
 SH_Arc4 = CS_RatioXY(CS_Rotate(CS_FillPathXY(ArcTemp,0,15,15,0),270),7,7)
 
-Shell_Arc1 = CS_Rotate(ArcTemp, 0)
-Shell_Arc2 = CS_Rotate(ArcTemp, 90)
-Shell_Arc3 = CS_Rotate(ArcTemp, 180)
-Shell_Arc4 = CS_Rotate(ArcTemp, 270)
+Shell_Arc1 = CS_RatioXY(CS_Rotate(ArcTemp, 0),7,7)
+Shell_Arc2 = CS_RatioXY(CS_Rotate(ArcTemp, 90),7,7)
+Shell_Arc3 = CS_RatioXY(CS_Rotate(ArcTemp, 180),7,7)
+Shell_Arc4 = CS_RatioXY(CS_Rotate(ArcTemp, 270),7,7)
 
 SH_ICenterB = CS_RatioXY(CS_RemoveStack(CS_OverlapX(SH_Arc1,SH_Arc2,SH_Arc3,SH_Arc4),5),7,7)
 
@@ -2468,19 +2468,31 @@ function Install_SpecialGunPlotShape()
 
     ----------- Start of 12 Clock Infested Command Center functions 
         
+
     TriggerX(P7, {CommandLeastAt(130, "nuke1")}, {SetDeaths(P10, Add, 1, 62)},preserved);
+    TriggerX(Force2, {Deaths(P11, Exactly, 1, 100)}, {SetDeaths(P9, SetTo, 1, 201),SetAllianceStatus(Force1, Ally)},preserved)
+    TriggerX(Force2, {Deaths(P11, Exactly, 0, 100)}, {SetDeaths(P9, SetTo, 0, 201),SetAllianceStatus(Force1, Enemy)},preserved)
+    TriggerX(Force1, {CommandLeastAt(130, "nuke1"),Deaths(P10, AtLeast, 4, 62),Deaths(P9, Exactly, 1, 201)},{
+        RunAIScript('Turn ON Shared Vision for Player 5'),
+        RunAIScript('Turn ON Shared Vision for Player 6'),
+        RunAIScript('Turn ON Shared Vision for Player 7'),
+        RunAIScript('Turn ON Shared Vision for Player 8')
+    })
     ---- Pulling Trigger Temp disabled
     TriggerX(P7, {CommandLeastAt(130, "nuke1"),Deaths(P10, Exactly, 5, 62)}, {SetDeaths(P11, SetTo, 1, 100)})
 
-    TriggerX(Force2, {Deaths(P11, Exactly, 1, 100)}, {SetDeaths(P9, SetTo, 1, 201),SetAllianceStatus(Force1, Ally)},preserved)
-    TriggerX(Force2, {Deaths(P11, Exactly, 0, 100)}, {SetDeaths(P9, SetTo, 0, 201),SetAllianceStatus(Force1, Enemy)},preserved)
 
-    TriggerX(Force2, {CommandLeastAt(130, "nuke1")}, {SetDeaths(P9, SetTo, 1, 201),SetAllianceStatus(Force1, Ally)})
+    TriggerX(Force2, {CommandLeastAt(130, "nuke1")}, {SetDeaths(P9, SetTo, 1, 201)})
 
-    CAPlotWithProperties(Shell_Arc1,SH_Arc1, P5, 64,"HealZone", {2048,2048}, 1, 32, {1,0,0,0,1,0}, nil, P5, {CommandLeastAt(130, "nuke1"),Deaths(P10, AtLeast, 30, 62)},nil, nil, StargateProperties)
-    CAPlotWithProperties(Shell_Arc2,SH_Arc2, P6, 70,"HealZone", {2048,2048}, 1, 32, {1,0,0,0,1,0}, nil, P5, {CommandLeastAt(130, "nuke1"),Deaths(P10, AtLeast, 30, 62)},nil, nil, StargateProperties)
-    CAPlotWithProperties(Shell_Arc3,SH_Arc3, P7, 88,"HealZone", {2048,2048}, 1, 32, {1,0,0,0,1,0}, nil, P5, {CommandLeastAt(130, "nuke1"),Deaths(P10, AtLeast, 30, 62)},nil, nil, StargateProperties)
-    CAPlotWithProperties(Shell_Arc4,SH_Arc4, P8, 89,"HealZone", {2048,2048}, 1, 32, {1,0,0,0,1,0}, nil, P5, {CommandLeastAt(130, "nuke1"),Deaths(P10, AtLeast, 30, 62)},nil, nil, StargateProperties)
+    CAPlotWithProperties(Shell_Arc1, P5, 64,"HealZone", {2048,2048}, 1, 32, {1,0,0,0,1,0}, nil, P5, {CommandLeastAt(130, "nuke1"),Deaths(P10, AtLeast, 30, 62)},nil, nil, StargateProperties)
+    CAPlotWithProperties(Shell_Arc2, P6, 70,"HealZone", {2048,2048}, 1, 32, {1,0,0,0,1,0}, nil, P5, {CommandLeastAt(130, "nuke1"),Deaths(P10, AtLeast, 30, 62)},nil, nil, StargateProperties)
+    CAPlotWithProperties(Shell_Arc3, P7, 88,"HealZone", {2048,2048}, 1, 32, {1,0,0,0,1,0}, nil, P5, {CommandLeastAt(130, "nuke1"),Deaths(P10, AtLeast, 30, 62)},nil, nil, StargateProperties)
+    CAPlotWithProperties(Shell_Arc4, P8, 89,"HealZone", {2048,2048}, 1, 32, {1,0,0,0,1,0}, nil, P5, {CommandLeastAt(130, "nuke1"),Deaths(P10, AtLeast, 30, 62)},nil, nil, StargateProperties)
+
+    CAPlotWithProperties(SH_Arc1, P5, 64,"HealZone", {2048,2048}, 1, 32, {1,0,0,0,1,0}, nil, P5, {CommandLeastAt(130, "nuke1"),Deaths(P10, AtLeast, 30, 62)},nil, nil, StargateProperties)
+    CAPlotWithProperties(SH_Arc2, P6, 70,"HealZone", {2048,2048}, 1, 32, {1,0,0,0,1,0}, nil, P5, {CommandLeastAt(130, "nuke1"),Deaths(P10, AtLeast, 30, 62)},nil, nil, StargateProperties)
+    CAPlotWithProperties(SH_Arc3, P7, 88,"HealZone", {2048,2048}, 1, 32, {1,0,0,0,1,0}, nil, P5, {CommandLeastAt(130, "nuke1"),Deaths(P10, AtLeast, 30, 62)},nil, nil, StargateProperties)
+    CAPlotWithProperties(SH_Arc4, P8, 89,"HealZone", {2048,2048}, 1, 32, {1,0,0,0,1,0}, nil, P5, {CommandLeastAt(130, "nuke1"),Deaths(P10, AtLeast, 30, 62)},nil, nil, StargateProperties)
 
     TriggerX(Force2, {CommandLeastAt(130, "nuke1"),Deaths(P10, AtLeast, 10 * SDspeed, 62)}, {Order(64, P5, "Anywhere", Move, "hive4")})
     TriggerX(Force2, {CommandLeastAt(130, "nuke1"),Deaths(P10, AtLeast, 10 * SDspeed, 62)}, {Order(70, P6, "Anywhere", Move, "starg8")})
@@ -2502,11 +2514,50 @@ function Install_SpecialGunPlotShape()
     TriggerX(Force2, {CommandLeastAt(130, "nuke1"),Deaths(P10, AtLeast, 32 * SDspeed, 62)}, {RunAIScriptAt(JYD, "starg8")})
     TriggerX(Force2, {CommandLeastAt(130, "nuke1"),Deaths(P10, AtLeast, 32 * SDspeed, 62)}, {RunAIScriptAt(JYD, "hive4")})
 
-    
+    ----- Turn on pulling trigger and call trigger
     TriggerX(FP, {CommandLeastAt(130, "nuke1"),Deaths(P10, AtLeast, 35 * SDspeed, 62)}, {SetDeaths(P11, SetTo, 0, 100)})
     TriggerX(P8, {CommandLeastAt(130, "nuke1"),Deaths(P10, AtLeast, 35 * SDspeed, 62)}, {SetAllianceStatus(Force1, Ally)})
+    TriggerX(Force1, {CommandLeastAt(130, "nuke1"),Deaths(P10, AtLeast, 35 * SDspeed + 2, 62)}, {
+        RunAIScript("Turn OFF Shared Vision for Player 5"),
+        RunAIScript("Turn OFF Shared Vision for Player 6"),
+        RunAIScript("Turn OFF Shared Vision for Player 7"),
+        RunAIScript("Turn OFF Shared Vision for Player 8")
+    })
 
     --------- End of 12 Clock Infested Command Center fuctions
+
+    --------- Start of 6 Clock Infested Command Center functions
+    --[[
+    12 : (2048,0) inf1
+    3 : (4096,2048) inf2
+    6 : (2048,4096) inf3
+    9 : (0,2048) inf4
+    plot size : 96
+    CSMakeLine(2,96,0,40,0)
+    ]]
+    Height = CSMakeLine(2,96,0,40,0)
+    Width = CSMakeLine(2,96,90,40,0)
+    DestinLoc = CSMakeLine(2,0,0,40,0)
+    local c12 = "inf1"
+    local c3 = "inf2"
+    local c6 = "inf3"
+    local c9 = "inf4"
+
+    InfcomTimeline = {}
+
+    TriggerX(P7, {CommandLeastAt(130, "nuke2")}, {SetDeaths(P10, Add, 1, 63)},preserved)
+    TriggerX(Force1, {CommandLeastAt(130, "nuke2")}, {
+        RunAIScript("Turn ON Shared Vision for Player 5"),
+        RunAIScript("Turn ON Shared Vision for Player 6"),
+        RunAIScript("Turn ON Shared Vision for Player 7"),
+        RunAIScript("Turn ON Shared Vision for Player 8")
+    })
+    CSPlotOrder(Width, P6, 55, c12, nil, 1, 96, DestinLoc, 0, Attack, "HealZone", nil, 32, nil, P6, {CommandLeastAt(130, "nuke2"),Deaths(P10, AtLeast, InfcomTimeline[] * SDspeed, 63)})
+
+
+    
+
+
 
 end
 
