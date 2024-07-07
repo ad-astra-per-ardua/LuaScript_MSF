@@ -2604,10 +2604,10 @@ function Install_SpecialGunPlotShape()
 
     --------- Start of 6 Clock Infested Command Center functions
     --[[
-    12 : (2048,0) inf1
-    3 : (4096,2048) inf2
-    6 : (2048,4096) inf3
-    9 : (0,2048) inf4
+    12 : (2048,0) inf1 = width
+    3 : (4096,2048) inf2 = height
+    6 : (2048,4096) inf3 = width
+    9 : (0,2048) inf4 = height
     plot size : 96
     CSMakeLine(2,96,0,40,0)
     ]]
@@ -2632,6 +2632,14 @@ function Install_SpecialGunPlotShape()
     CSPlot(Width, P5, 72, Locinf[1], nil, 1, 96, P6, {CommandLeastAt(130, "nuke2"),Deaths(P10, AtLeast, InfcomTimeline[1] * SDspeed, 63)})
     CSPlotOrder(Width, P6, 55, Locinf[1], nil, 1, 96, DestinLoc, 0, Attack, "HealZone", nil, 32, nil, P6, {CommandLeastAt(130, "nuke2"),Deaths(P10, AtLeast, InfcomTimeline[1] * SDspeed, 63)})
 
+    CSPlot(Height, P5, 72, Locinf[2], nil, 1, 96, P6, {CommandLeastAt(130, "nuke2"),Deaths(P10, AtLeast, InfcomTimeline[2] * SDspeed, 63)})
+    CSPlotOrder(Height, P6, 55, Locinf[2], nil, 1, 96, DestinLoc, 0, Attack, "HealZone", nil, 32, nil, P6, {CommandLeastAt(130, "nuke2"),Deaths(P10, AtLeast, InfcomTimeline[2] * SDspeed, 63)})
+
+    CSPlot(Width, P5, 72, Locinf[3], nil, 1, 96, P6, {CommandLeastAt(130, "nuke2"),Deaths(P10, AtLeast, InfcomTimeline[3] * SDspeed, 63)})
+    CSPlotOrder(Width, P6, 55, Locinf[3], nil, 1, 96, DestinLoc, 0, Attack, "HealZone", nil, 32, nil, P6, {CommandLeastAt(130, "nuke2"),Deaths(P10, AtLeast, InfcomTimeline[3] * SDspeed, 63)})
+
+    CSPlot(Height, P5, 72, Locinf[4], nil, 1, 96, P6, {CommandLeastAt(130, "nuke2"),Deaths(P10, AtLeast, InfcomTimeline[4] * SDspeed, 63)})
+    CSPlotOrder(Height, P6, 55, Locinf[4], nil, 1, 96, DestinLoc, 0, Attack, "HealZone", nil, 32, nil, P6, {CommandLeastAt(130, "nuke2"),Deaths(P10, AtLeast, InfcomTimeline[4] * SDspeed, 63)})
 
     
 
