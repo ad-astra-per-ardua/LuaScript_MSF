@@ -2711,12 +2711,7 @@ function Install_SpecialGunPlotShape()
     Inf12(96, 18)Inf6(96, 18) Inf9(96, 19)Inf3(96, 19)
     Inf12(88, 20)Inf6(88, 20) Inf9(88, 21)Inf3(88, 21)
     Inf12(89, 22)Inf6(89, 23) Inf9(89, 24)Inf3(89, 25)
-    Inf12(21, 29)Inf6(21, 28) Inf9(21, 27)Inf3(21, 26)
-
-
-
-    
-
+    Inf12(21, 29)Inf6(21, 28) Inf9(21, 27)Inf3(21, 26)   
 
 
 end
@@ -2724,11 +2719,13 @@ end
 function MiddleBossTrigger()
     MBB = {174,175,127,148}
     for i = 1 , 4 do
-        TriggerX(FP, {Bring(Force2, AtMost, 10, "Any unit", "middle"..i)}, {
+        TriggerX(FP, {Bring(Force2, AtMost, 10, "Men", "middle"..i),Bring(Force2, Exactly, 0, "Buildings", "middle"..i)}, {
         SetInvincibility(Disable, MBB[i-1], P7, "middle"..i);
         })
     end
-    -- Use P11 160 ~ 
+    -- Use Death Value P11 160 ~
+    TriggerX(P7, {CommandLeastAt(174, "middle1")}, {SetDeaths(P11, Add, 1, 160)}, preserved)
+    CreateUnitWithProperties(1, , Where, Player, Properties)
 end
 
 
