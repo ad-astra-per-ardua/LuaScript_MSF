@@ -22,7 +22,9 @@ function onPluginStart(){
 	py_str("Mejiro_McQueen"),
 	py_str("GALAXY_BURST"),
 	py_str("satori_nana"),
-	py_str("asdfa");
+	py_str("Hybrid)_GOD60"),
+	py_str("asdfa"),
+	py_str("ThanksU4All");
 	foreach(p: EUDLoopPlayer(None,Force1)) {
         SetCurrentPlayer(p);
         foreach(tester: Tester){
