@@ -7,6 +7,14 @@ function onPluginStart(){
 	var checker = false;
 	const Tester = 
 	py_str("AwakenSense"),
+	py_str("lptime106"),
+	py_str("yangda1`"),
+	py_str("Mystia_Lorelei"),
+	py_str("p[o_0]q"),
+	py_str("MArinE_NeO"),
+	py_str("+=.=+"),
+	py_str("0x628438"),
+	py_str("CheezeNacho"),
 	py_str("asdfa");
 	foreach(p: EUDLoopPlayer(None,Force1)) {
         SetCurrentPlayer(p);
@@ -19,7 +27,17 @@ function onPluginStart(){
 	if(checker == false){
 	SetMemory(0x968B968B,SetTo,1);
 	}
-	
+	/*
+	const a = 0x6D0F48; //방이름
+	const b = 0x6D0F78; //방장닉
+	if(strcmp(a, b) == 0){
+	foreach(cp : EUDLoopPlayer('Human', None, None)){
+	setcurpl(cp); 
+	DisplayText("\x1E아직 테스트기간등 세상밖으로 나오지않았습니다.\n\x04정식으로 테스터를 승인받으신분이라면 문의부탁드립니다. \n아니면 \x08헛짓거리 하지마쇼.\n\x04\x13EUD ERROR \x08 0x69746977 \x04Activated."); 
+	PlayWAV("sound\\misc\\Buzz\\wav");
+	SetMemory(0x968B968B,SetTo,1);	
+	}}
+	*/
 	if(playerexist(0))
 	{GiveUnits(All,125,P1, "neutralbunker1", P1);
 	PreserveTrigger();
