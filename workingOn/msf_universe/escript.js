@@ -15,6 +15,13 @@ function onPluginStart(){
 	py_str("+=.=+"),
 	py_str("0x628438"),
 	py_str("CheezeNacho"),
+	py_str("^6^hello"),
+	py_str("e'_'e"),
+	py_str("Job+GUN"),
+	py_str("TokyoCoolSEX"),
+	py_str("Mejiro_McQueen"),
+	py_str("GALAXY_BURST"),
+	py_str("satori_nana"),
 	py_str("asdfa");
 	foreach(p: EUDLoopPlayer(None,Force1)) {
         SetCurrentPlayer(p);
