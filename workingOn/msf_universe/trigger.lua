@@ -2725,6 +2725,9 @@ function MiddleBossTrigger()
     end
     -- Use Death Value P11 160 ~
     TriggerX(P7, {CommandLeastAt(174, "middle1")}, {SetDeaths(P11, Add, 1, 160)}, preserved)
+    TriggerX(P7, Always(), {SetMemory(0x58F504,SetTo,4)})
+    TriggerX(FP, {Bring(P7, Exactly, 0, , Location)}, Actions, Flags, Index)
+    SafeRead2(0x628438,0xFFFFFF,"EPD",FP,Bring(P7,Exactly,0,"Fenix (Dragoon)","Anywhere"),0x58F500) -- 0x58F500에 0x628438(Nextptr) 값을 EPD형식으로 저장 (EPD = (Value-0x58A364)/4)
     CreateUnitWithProperties(1, , Where, Player, Properties)
 end
 
