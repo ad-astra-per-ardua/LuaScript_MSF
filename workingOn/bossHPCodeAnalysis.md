@@ -100,25 +100,19 @@ CDoActions(FP,{TSetMemory(Vi(Nextptr[2],2),SetTo,256*8000000);
 EPD(0x628438) + 55 * 4 = Set Status flag.(?) And Set Offset to 0xA000000 Mask and Value(0xA000000)
 Thus, EPD's status flag will have 0xA000000 value. Which is No Collide and Is Gathering flag.
 
-
-
 }
 
 
 
 
 
+
+
+
+
+
+```lua
 CIfEnd(Actions(optional))
-]]
-
-
-
-
-
-
-
-
-
 CTrigger(FP,{ -- Regene FBossHP Before PH5
 	TMemory(FBossHP,AtMost,256*1000000);
 	NVar(FBossHP2,AtLeast,2);
@@ -137,3 +131,4 @@ CTrigger(FP,{ -- Regene FBossHP After PH5
 	TSetMemory(FBossHP,SetTo,256*8000000);
 	SetNVar(FBossHP2,Subtract,1);
 },{Preserved})
+```
