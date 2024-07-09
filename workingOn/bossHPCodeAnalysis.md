@@ -120,11 +120,11 @@ Thus, EPD's status flag will have 0xA000000 value Which is 0000 0000 1010 0000 0
     CIfEnd()
 
     CTrigger(FP,{
-        TMemory(FBossHP,AtMost,256*300000);
+        TMemory(FBossHP,AtMost,256*300000); -- Lowest Hitpoint
         NVar(FBossHP2,AtLeast,1);
     },{
-        TSetMemory(FBossHP,SetTo,256*6500000);
-        SetNVar(FBossHP2,Subtract,1);
+        TSetMemory(FBossHP,SetTo,256*6500000); -- Hitpoint Regen Trigger Activate
+        SetNVar(FBossHP2,Subtract,1); -- Subtract 1 Variable of times
     },{preserved})
     -------------- End of Boss HP Overflow Trigger ----------------------
 ```
