@@ -96,11 +96,11 @@ CDoActions(FP,{TSetMemory(Vi(Nextptr[2],2),SetTo,256*8000000);<br>
 1. CDoActions is same as DoActionsX, but able to use T/TT actions(Cstruct)<br>
 2. Basically, DoActions trigger. So no need to define conditions.<br>
 3. Thus, {TSetMemory(Vi(Nextptr[2],2),SetTo,256*8000000); is Actions pharse.<br>
-4. Vi(Nextptrs[2],2) = { Vi(Index, Deviation, Player, Next) | ex) V(0x10,1) = Add (+1) CurrentPlayer's Variable Index which is 0x10 }. |
+4. Vi(Nextptrs[2],2) = { Vi(Index, Deviation, Player, Next) | ex) V(0x10,1) = Add (+1) CurrentPlayer's Variable Index which is 0x10 }. | <br>
 5. Add (+2) Variable Information (Nextptr[2]) + 2 <br> Thus, Nextptr[2](0x628438) + 2(0x08 / 4) = Modify Nextptrs unit's hit points, <br> TSetMemory(4, SetTo, 256*8000000) to 8,000,000
 6. TSetMemoryX(Vi(Nextptr[2],55),SetTo,0xA00000,0xA00000);<br>
 EPD(0x628438) + 55 * 4 = Set Status flag.(?) And Set Offset to 0xA000000 Mask and Value(0xA000000)<br>
-Thus, EPD's status flag will have 0xA000000 value. Which is No Collide and Is Gathering flag.<br>
+Thus, EPD's status flag will have 0xA000000 value Which is 0000 0000 1010 0000 0000 0000 0000 0000 For binary, And 21th and 23th bits are has True value. <br> Which is No Collide(21th) and Is Gathering(23th) flag.<br>
 }
 
 ```lua
