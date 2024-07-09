@@ -115,8 +115,8 @@ Thus, EPD's status flag will have 0xA000000 value. Which is No Collide and Is Ga
                 TSetMemory(Vi(Nextptr[2],2),SetTo,256*6500000); -- Next unit pointer offset's HP set
                 TSetMemoryX(Vi(Nextptr[2],55),SetTo,0xA00000,0xA00000); -- Next unit pointer offset's status flag set
             })
-        CMov(FP,FBossHP,Nextptr,2) 
-        DoActionsX(FP,{SetNVar(FBossHP2,SetTo,4)})
+        CMov(FP,FBossHP,Nextptr,2)  -- CMov : @Param{ Player, Dest, Source, Deviation, Mask, Clear } in this case, We allocate Nextptr + 2 (EPD(0x628438) + (0x008 / 4)).  
+        DoActionsX(FP,{SetNVar(FBossHP2,SetTo,4)}) -- DoAction Trigger for setting number of HP regen times.
     CIfEnd()
 
     CTrigger(FP,{
