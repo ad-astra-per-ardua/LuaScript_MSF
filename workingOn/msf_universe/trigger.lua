@@ -2717,18 +2717,47 @@ function Install_SpecialGunPlotShape()
 end
 
 function MiddleBossTrigger()
-    MBB = {174,175,127,148}
-    for i = 1 , 4 do
-        TriggerX(FP, {Bring(Force2, AtMost, 10, "Men", "middle"..i),Bring(Force2, Exactly, 0, "Buildings", "middle"..i)}, {
-        SetInvincibility(Disable, MBB[i-1], P7, "middle"..i);
-        })
-    end
+    -- MBB = {174,175,127,148}
+    -- for i = 1 , 4 do
+    --     TriggerX(FP, {Bring(Force2, AtMost, 10, "Men", "middle"..i),Bring(Force2, Exactly, 0, "Buildings", "middle"..i)}, {
+    --     SetInvincibility(Disable, MBB[i-1], P7, "middle"..i);
+    --     })
+    -- end
     -- Use Death Value P11 160 ~
     TriggerX(P7, {CommandLeastAt(174, "middle1")}, {SetDeaths(P11, Add, 1, 160)}, preserved)
-    TriggerX(P7, Always(), {SetMemory(0x58F504,SetTo,4)})
-    TriggerX(FP, {Bring(P7, Exactly, 0, , Location)}, Actions, Flags, Index)
-    SafeRead2(0x628438,0xFFFFFF,"EPD",FP,Bring(P7,Exactly,0,"Fenix (Dragoon)","Anywhere"),0x58F500) -- 0x58F500에 0x628438(Nextptr) 값을 EPD형식으로 저장 (EPD = (Value-0x58A364)/4)
-    CreateUnitWithProperties(1, , Where, Player, Properties)
+    SetBossHP, PH5_Stage, BossEnd = CreateCcodes(3)
+    Nextptr, FBossPtr, FBossHP, FBossHP2 = CreateVars(4,FP)
+    CIfOnce(FP)
+        f_Read(FP,0x628438,nil,Nextptr)
+        CMov(FP,FBossPtr,Nextptr) -- Save FBossPtr
+            CDoActions(FP,{
+                CreateUnit(1,68,"HealZone",P7);
+                TSetMemory(Vi(Nextptr[2],2),SetTo,256*6500000);
+                TSetMemoryX(Vi(Nextptr[2],55),SetTo,0xA00000,0xA00000);
+            })
+        CMov(FP,FBossHP,Nextptr,2) -- Save FBossHP
+    CIfEnd()
+
+    CTrigger(FP,{ -- Regene FBossHP Before PH5
+        TMemory(FBossHP,AtMost,256*300000);
+        NVar(FBossHP2,AtLeast,4);
+        CDeathsX("X",Exactly,0,BossEnd,0xFF);
+    },{
+        TSetMemory(FBossHP,SetTo,256*6500000);
+        SetNVar(FBossHP2,Subtract,1);
+        SetCDeaths("X",SetTo,1,PH5_Stage);
+    },{preserved})
+
+    CTrigger(FP,{ -- Regene FBossHP After PH5
+        TMemory(FBossHP,AtMost,256*300000);
+        NVar(FBossHP2,AtLeast,1);
+        CDeathsX("X",Exactly,1,BossEnd,0xFF);
+    },{
+        TSetMemory(FBossHP,SetTo,256*6500000);
+        SetNVar(FBossHP2,Subtract,1);
+    },{preserved})
+
+
 end
 
 
@@ -2756,6 +2785,7 @@ Install_CCMU()
 Install_BGMPhase()
 Install_NormalGunPlotShape()
 Install_SpecialGunPlotShape()
+MiddleBossTrigger()
 TriggerX(FP, Always(), {SetMemoryBA(0x657A9C, SetTo, 31)})
 
 
