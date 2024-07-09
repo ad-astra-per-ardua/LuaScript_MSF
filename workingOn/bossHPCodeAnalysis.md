@@ -1,3 +1,4 @@
+```lua
 SetBossHP, PH5_Stage, BossEnd = CreateCcodes(3)
 Nextptr, FBossPtr, FBossHP, FBossHP2 = CreateVars(4,FP)
 
@@ -17,11 +18,12 @@ CIfOnce(FP)
 	CMov(FP,FBossHP,Nextptr,2) -- Save FBossHP
 	DoActions(FP,SetImageColor(135,0))
 CIfEnd()
-
+```
 --- Summarize ---
+```lua
 SetBossHP, PH5_Stage, BossEnd = CreateCcodes(3)
 Nextptr, FBossPtr, FBossHP, FBossHP2 = CreateVars(4,FP)
- --[[ 
+```
 Declaring Variable named SetBossHP, PH5_Stage, BossEnd
 In this case, 
 CreateCcodes(number) means Create Ccode() in front of variable numbers returns Auto Allocated Ccodes.
@@ -34,7 +36,7 @@ Secondary, Nextptr, FBossPtr, FBossHP, FBossHP2 = CreateVars(4,FP)
 Auto Allocated CVariable(Number). returns Each V(Auto Allocated Index)
 CVariable : Declaring Variable functions | Param {Player, Index} = Check player of variable trigger. Index : Allocated index of variable trigger.
 What if Index Param is nil? idk exactly
-]]
+```lua
 CIfOnce(FP)
 	f_Read(FP,0x628438,nil,Nextptr)
 	DoActions(FP,SetImageColor(135,12))
@@ -49,7 +51,7 @@ CIfOnce(FP)
 	CMov(FP,FBossHP,Nextptr,2) -- Save FBossHP
 	DoActions(FP,SetImageColor(135,0))
 CIfEnd()
---[[
+```
 - CIfOnce(PlayerID, Conditions(optional), Actions(optional)) : Like if function, CIfOnce execute ONLY once 
 when boolean of conditions are True. Open the If gate.
 In this case, there's no conditions. So Triggers Which wrapped up with CIfOnce will Always with no conditions, Execute With only once.
@@ -68,7 +70,7 @@ Clear : Auto reset flag - Using on Stream Operation | Input 1 when need Dest ful
 - Each Mem(Auto Allocated Index) -> Arr(X) = *A* | 
 V(Auto Allocated index1) ,V(Auto Allocated index2) ... } -> VArr(X) = *VA*
 
-**f_Read(PlayerID, Input, Output, EPDOutput, Mask, Clear) : Read source same method with CRead.
+**f_Read(PlayerID, Input, Output, EPDOutput, Mask, Clear)** : Read source same method with CRead.
 Output << f_maskread(EPD(Source), Mask)
 Param{
 1. Check player of Generating Triggers
