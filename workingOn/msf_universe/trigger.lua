@@ -29,10 +29,6 @@ Include_CtrigPlib(360,"Switch 254",1)
 Include_64BitLibrary("Switch 255")
 
 
-Nextptrs = CreateVar(FP)
-CanWT = CreateCcode()
-CanCT = CreateCcode()
-P_Count = CreateNcode()
 HumanPlayers = {P1,P2,P3,P4,P5,P6,P7,P8,P9,P10,P11,P12}
 
 CJumpEnd(AllPlayers,0)
@@ -1406,7 +1402,7 @@ function Install_DonateNbanTrigger()
                         RemoveUnitAt(1,GiveUnitID[j+1],"Anywhere",k);
                         DisplayText(StrDesignX(PlayerArr[j+1].."\x04에게 \x1F"..GiveRate2[i+1].." Ore\x04를 기부하였습니다."),4);
                         SetMemory(0x6509B0,SetTo,j);
-                        DisplayText(StrDesignX(PlayerArr[j+1].."\x04에게 \x1F"..GiveRate2[i+1].." Ore\x04를 기부받았습니다."),4);
+                        DisplayText(StrDesignX(PlayerArr[k+1].."\x04에게 \x1F"..GiveRate2[i+1].." Ore\x04를 기부받았습니다."),4);
                         SetMemory(0x6509B0,SetTo,k);
                         PreserveTrigger();
                     },
@@ -2718,11 +2714,11 @@ end
 
 function MiddleBossTrigger()
     MBB = {174,175,127,148}
-    for i = 1 , 4 do
-        TriggerX(FP, {Bring(Force2, AtMost, 10, "Men", "middle"..i),Bring(Force2, Exactly, 0, "Buildings", "middle"..i)}, {
-        SetInvincibility(Disable, MBB[i-1], P7, "middle"..i);
-        })
-    end
+    -- for i = 1 , 4 do
+    --     TriggerX(FP, {Bring(Force2, AtMost, 10, "Men", "middle"..i),Bring(Force2, Exactly, 0, "Buildings", "middle"..i)}, {
+    --     SetInvincibility(Disable, MBB[i-1], P7, "middle"..i);
+    --     })
+    -- end
     -- Use Death Value P11 160 ~
     TriggerX(P7, {CommandLeastAt(174, "middle1")}, {SetDeaths(P11, Add, 1, 160)}, preserved)
     
@@ -2760,13 +2756,6 @@ function MiddleBossTrigger()
     -------------- End of Boss HP Overflow Trigger ----------------------
 
 end
-
-
-
-
-
-
-
 
 
 
