@@ -35,7 +35,7 @@ CVariable : Declaring Variable functions | Param {Player, Index} = Check player 
 Secondary, Nextptr, FBossPtr, FBossHP, FBossHP2 = CreateVars(4,FP)<br>
 Auto Allocated CVariable(Number). returns Each V(Auto Allocated Index)<br>
 
-**7/10 Edited CreateVars() Returns Auto allocated Indexed V(). Thus, Nextptr has 3 length of Array Nextptr[1] == index, Nextptr[2] == Player , Nextptr[3] == Next(Of variable). <br> This is the reason why we can access the array index on TSetMemory(Vi(Nextptr[2],2),SetTo,256*8000000); pharse** 
+**7/10 Edited CreateVars() Returns Auto allocated Indexed V(). Thus, Nextptr has 3 length of Array Nextptr[1] == index, Nextptr[2] == Player , Nextptr[3] == Next(Of variable). <br> This is the reason why we can access the array index on TSetMemory(Vi(Nextptr[2],2),SetTo,256*8000000); pharse V(Auto Allocated index1) ,V(Auto Allocated index2) ... } -> VArr(X) = VA** 
 
 CVariable : Declaring Variable functions | Param {Player, Index} = Check player of variable trigger. Index : Allocated index of variable trigger.<br>
 What if Index Param is nil? idk exactly<br>
