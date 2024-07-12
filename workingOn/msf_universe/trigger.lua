@@ -2895,7 +2895,7 @@ function MiddleBossTrigger()
     TriggerX(Force2,{CommandLeastAt(174, "middle1"),Deaths(P11, AtLeast, M11tl[26] * SDspeed, 160)}, {SetInvincibility(Disable, 22, P6, "middle1")})
     for i = 1 ,64 do
         local index = (i - 1) % n + 1
-        CSPlotWithProperties(CS_Rotate3D(MiddleGen2,(360-11.25*i),(11.25*i),(360-11.25*i)), P6, MBoss11_1T[index], "middle1", {495,351}, 1, 32, FP, {CommandLeastAt(174, "middle1"),Deaths(P11, AtLeast, (M11tl[7]*SDspeed) + (12 + i*11),160)}, nil, nil, MemoryProp)
+        CSPlotWithProperties(CS_Rotate3D(MiddleGen2,(360-11.25*i),(11.25*i),(360-11.25*i)), P6, MBoss11_1T[index], "middle1", {495,351}, 1, 32, FP, {CommandLeastAt(174, "middle1"),Deaths(P11, AtLeast, (M11tl[26]*SDspeed) + (12 + i*11),160)}, nil, nil, MemoryProp)
     end
     CSPlotOrder(Shape11_1, P6, 16, M11, {495,351}, 1, 32, CSMakePolygon(6,0,0,85,7), nil, Attack, "nuke3", nil, 32, nil, P7, {CommandLeastAt(174, "middle1"),Deaths(P11, AtLeast, M11tl[27] * SDspeed, 160)})
     CSPlotOrder(Shape11_1, P6, 25, M11, {495,351}, 1, 32, CSMakePolygon(6,0,0,85,7), nil, Attack, "nuke3", nil, 32, nil, P7, {CommandLeastAt(174, "middle1"),Deaths(P11, AtLeast, M11tl[28] * SDspeed, 160)})
