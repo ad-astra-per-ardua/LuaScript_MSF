@@ -349,7 +349,7 @@ SH_ICenterB = CS_RatioXY(CS_RemoveStack(CS_OverlapX(SH_Arc1,SH_Arc2,SH_Arc3,SH_A
 ---------------------- Init system setting --------
 
 function Install_initial_system_setting()
-    TriggerX(FP,Always(),{CreateUnit(1, 87, "HealZone",P1), CreateUnit(130, 1, "hive8", P1)}) -- 디버깅용 유닛
+    TriggerX(FP,Always(),{CreateUnit(1, 87, "HealZone",P1), CreateUnit(130, 1, "hive10", P1)}) -- 디버깅용 유닛
     DoActions(FP, SetInvincibility(Enable, "Buildings", P12, "Anywhere"),preserved)
     -- TriggerX(Force1, {Always()}, {PlayWAV("staredit\\wav\\op.ogg"),PlayWAV("staredit\\wav\\op.ogg")});
     DoActions(FP, {KillUnit(94, Force2),KillUnit(84, Force2),KillUnit(42, Force2),KillUnit(72, Force2)}, preserved)
@@ -2926,7 +2926,7 @@ function MiddleBossTrigger()
 
 
 
-    ------ Start of 1 Middle boss trigger ----- + plot death value = 161 | skill death value = 162
+    ------ Start of 1 Middle boss trigger ----- + plot death value = 161 | skill death value = 162 | Boss deaths alert = 163
     MBossPtr1, MBossHP1, MBossHP1_2 = CreateVars(3,FP)
     TriggerX(P7, {CommandLeastAt(175, "middle2")}, {SetDeaths(P11, Add, 1, 161),SetDeaths(P11, Add, 1, 162)}, preserved)
     TriggerX(FP, Deaths(P11, AtLeast, 2000, 162), {SetDeaths(P11, SetTo, 1, 162)}, preserved)
@@ -2955,7 +2955,7 @@ function MiddleBossTrigger()
     Bimage = 973
     Bscript = 242
     Bcolor = 16
-    BulletInitSetting(FP,{195,123,284},87,208,516,Bimage,Bscript,Bcolor,10000,10,7,1,1,2,{0,0,0},0)
+    BulletInitSetting(FP,{195,123,284},87,208,516,Bimage,Bscript,Bcolor,10000,10,7,1,1,3,{10,10,10},0)
 
     CDoActions(FP,{
         TSetNVar(RandomRange,SetTo,_Add(_Mod(_Rand(),128),8));
@@ -2970,7 +2970,7 @@ function MiddleBossTrigger()
     TriggerX(FP,{CDeathsX("X",Exactly,2*16777216,BulletTimer,0xFF000000)},{SetImageColor(440,13),SetImageColor(Bimage,13)},{Preserved}) -- Green
     SpreadBullet = InitCFunc(FP)
     CFunc(SpreadBullet)
-        CreateBullet(FP,P8,195,3,ScatteredAngle,768,RandomRange,{"middle2",3632,335},{Deaths(P11, AtLeast, 1000, 162),Bring(P7, AtLeast, 1, 68, "middle2")})
+        CreateBullet(FP,P8,195,3,ScatteredAngle,768,RandomRange,{"middle2",3632,335},{Deaths(P11, AtLeast, 1000, 162),Deaths(P6, Exactly, 0, 68)})
     CFuncEnd()
         CDoActions(FP,{TSetNVar(ScatteredAngle,SetTo,_Add(Temp,0*256))})
         CallCFuncX(FP,SpreadBullet)
