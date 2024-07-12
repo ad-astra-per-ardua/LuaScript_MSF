@@ -349,7 +349,7 @@ SH_ICenterB = CS_RatioXY(CS_RemoveStack(CS_OverlapX(SH_Arc1,SH_Arc2,SH_Arc3,SH_A
 ---------------------- Init system setting --------
 
 function Install_initial_system_setting()
-    TriggerX(FP,Always(),{CreateUnit(1, 87, "HealZone",P1), CreateUnit(130, 1, "hive10", P1)}) -- 디버깅용 유닛
+    TriggerX(FP,Always(),{CreateUnit(1, 87, "HealZone",P1), CreateUnit(130, 1, "hive8", P1)}) -- 디버깅용 유닛
     DoActions(FP, SetInvincibility(Enable, "Buildings", P12, "Anywhere"),preserved)
     -- TriggerX(Force1, {Always()}, {PlayWAV("staredit\\wav\\op.ogg"),PlayWAV("staredit\\wav\\op.ogg")});
     DoActions(FP, {KillUnit(94, Force2),KillUnit(84, Force2),KillUnit(42, Force2),KillUnit(72, Force2)}, preserved)
@@ -970,7 +970,6 @@ actions = {
     DisplayText("\x13\x11｡˙+ﾟ\x08Parallel's \x03Didymos \x11ﾟ.+｡ \x01을 \x06처치 \x04하였습니다 + 35000 \x1FPoints!\x04", 4);
     SetScore(CurrentPlayer, Add, 35000, Kills);
     PlayWAV("staredit\\wav\\killsound.wav");
-    PlayWAV("staredit\\wav\\killsound.wav");
     PreserveTrigger();
 },
 }
@@ -984,7 +983,6 @@ conditions = {
 actions = {
     DisplayText("\x13\x11｡˙+ﾟ\x08Parallel's \x03Dimorphos \x11ﾟ.+｡ \x01을 \x06처치 \x04하였습니다 + 40000 \x1FPoints!\x04", 4);
     SetScore(CurrentPlayer, Add, 40000, Kills);
-    PlayWAV("staredit\\wav\\killsound.wav");
     PlayWAV("staredit\\wav\\killsound.wav");
     PreserveTrigger();
 },
@@ -1000,7 +998,6 @@ actions = {
     DisplayText("\x13\x11｡˙+ﾟ\x08Parallel's \x03Biela’s Comet \x11ﾟ.+｡ \x01을 \x06처치 \x04하였습니다 + 45000 \x1FPoints!\x04", 4);
     SetScore(CurrentPlayer, Add, 45000, Kills);
     PlayWAV("staredit\\wav\\killsound.wav");
-    PlayWAV("staredit\\wav\\killsound.wav");
     PreserveTrigger();
 },
 }
@@ -1014,7 +1011,6 @@ conditions = {
 actions = {
     DisplayText("\x13\x11｡˙+ﾟ\x08Parallel's \x03Psyche \x11.+ﾟ｡ \x01을 \x06처치 \x04하였습니다 + 45000 \x1FPoints!\x04", 4);
     SetScore(CurrentPlayer, Add, 45000, Kills);
-    PlayWAV("staredit\\wav\\killsound.wav");
     PlayWAV("staredit\\wav\\killsound.wav");
     PreserveTrigger();
 },
@@ -1030,7 +1026,6 @@ actions = {
     DisplayText("\x13\x11｡˙+ﾟ\x08Parallel's \x03Restriction \x11.+ﾟ｡ \x01을 \x06처치 \x04하였습니다 + 50000 \x1FPoints!\x04", 4);
     SetScore(CurrentPlayer, Add, 50000, Kills);
     PlayWAV("staredit\\wav\\killsound.wav");
-    PlayWAV("staredit\\wav\\killsound.wav");
     PreserveTrigger();
 },
 }
@@ -1044,7 +1039,6 @@ conditions = {
 actions = {
     DisplayText("\x13\x11｡˙+ﾟ\x08Parallel's \x03Aphophis \x11.+ﾟ｡ \x01를 \x06처치 \x04하였습니다 + 55000 \x1FPoints!\x04", 4);
     SetScore(CurrentPlayer, Add, 55000, Kills);
-    PlayWAV("staredit\\wav\\killsound.wav");
     PlayWAV("staredit\\wav\\killsound.wav");
     PreserveTrigger();
 },
@@ -1060,7 +1054,6 @@ actions = {
     DisplayText("\x13\x11｡˙+ﾟ\x08Parallel's \x03Comet Hyakutake \x11.+ﾟ｡ \x01를 \x06처치 \x04하였습니다 + 100000 \x1FPoints!\x04", 4);
     SetScore(CurrentPlayer, Add, 100000, Kills);
     PlayWAV("staredit\\wav\\killsound.wav");
-    PlayWAV("staredit\\wav\\killsound.wav");
     PreserveTrigger();
 },
 }
@@ -1074,7 +1067,6 @@ conditions = {
 actions = {
     DisplayText("\x13\x11｡˙+ﾟ\x08Parallel's \x03'Oumuamua \x11.+ﾟ｡ \x01를 \x06처치 \x04하였습니다 + 45000 \x1FPoints!\x04", 4);
     SetScore(CurrentPlayer, Add, 45000, Kills);
-    PlayWAV("staredit\\wav\\killsound.wav");
     PlayWAV("staredit\\wav\\killsound.wav");
     PreserveTrigger();
 },
@@ -1090,7 +1082,6 @@ actions = {
     DisplayText("\x13\x11｡˙+ﾟ\x08Parallel's \x03Vesta \x11.+ﾟ｡ \x01를 \x06처치 \x04하였습니다 + 50000 \x1FPoints!\x04", 4);
     SetScore(CurrentPlayer, Add, 50000, Kills);
     PlayWAV("staredit\\wav\\killsound.wav");
-    PlayWAV("staredit\\wav\\killsound.wav");
     PreserveTrigger();
 },
 }
@@ -1104,7 +1095,6 @@ conditions = {
 actions = {
     DisplayText("\x13\x11｡˙+ﾟ\x08Parallel's \x03Cassini \x11.+ﾟ｡ \x01를 \x06처치 \x04하였습니다 + 130000 \x1FPoints!\x04", 4);
     SetScore(CurrentPlayer, Add, 130000, Kills);
-    PlayWAV("staredit\\wav\\killsound.wav");
     PlayWAV("staredit\\wav\\killsound.wav");
     PreserveTrigger();
 },
@@ -1120,7 +1110,6 @@ actions = {
     DisplayText("\x13\x11｡˙+ﾟ\x08Parallel's \x03Bennu \x11.+ﾟ｡ \x01를 \x06처치 \x04하였습니다 + 65000 \x1FPoints!\x04", 4);
     SetScore(CurrentPlayer, Add, 65000, Kills);
     PlayWAV("staredit\\wav\\killsound.wav");
-    PlayWAV("staredit\\wav\\killsound.wav");
     PreserveTrigger();
 },
 }
@@ -1134,7 +1123,6 @@ conditions = {
 actions = {
     DisplayText("\x13\x11｡˙+ﾟ\x08Parallel's \x03Borisov \x11.+ﾟ｡ \x01를 \x06처치 \x04하였습니다 + 85000 \x1FPoints!\x04", 4);
     SetScore(CurrentPlayer, Add, 85000, Kills);
-    PlayWAV("staredit\\wav\\killsound.wav");
     PlayWAV("staredit\\wav\\killsound.wav");
     PreserveTrigger();
 },
@@ -1150,7 +1138,6 @@ actions = {
     DisplayText("\x13\x11｡˙+ﾟ\x08Parallel's \x03Perseid meteor \x11.+ﾟ｡ \x01를 \x06처치 \x04하였습니다 + 75000 \x1FPoints!\x04", 4);
     SetScore(CurrentPlayer, Add, 75000, Kills);
     PlayWAV("staredit\\wav\\killsound.wav");
-    PlayWAV("staredit\\wav\\killsound.wav");
     PreserveTrigger();
 },
 }
@@ -1164,7 +1151,6 @@ conditions = {
 actions = {
     DisplayText("\x13\x11｡˙+ﾟ\x08Parallel's \x03Tempel 1 \x11.+ﾟ｡ \x01를 \x06처치 \x04하였습니다 + 200000 \x1FPoints!\x04", 4);
     SetScore(CurrentPlayer, Add, 200000, Kills);
-    PlayWAV("staredit\\wav\\killsound.wav");
     PlayWAV("staredit\\wav\\killsound.wav");
     PreserveTrigger();
 },
@@ -1180,7 +1166,6 @@ actions = {
     DisplayText("\x13\x11｡˙+ﾟ\x08Parallel's \x03Halley’s Comet \x11.+ﾟ｡ \x01를 \x06처치 \x04하였습니다 + 70000 \x1FPoints!\x04", 4);
     SetScore(CurrentPlayer, Add, 70000, Kills);
     PlayWAV("staredit\\wav\\killsound.wav");
-    PlayWAV("staredit\\wav\\killsound.wav");
     PreserveTrigger();
 },
 }
@@ -1194,7 +1179,6 @@ conditions = {
 actions = {
     DisplayText("\x13\x11｡˙+ﾟ\x08Parallel's \x03Pluto \x11.+ﾟ｡ \x01를 \x06처치 \x04하였습니다 + 75000 \x1FPoints!\x04", 4);
     SetScore(CurrentPlayer, Add, 75000, Kills);
-    PlayWAV("staredit\\wav\\killsound.wav");
     PlayWAV("staredit\\wav\\killsound.wav");
     PreserveTrigger();
 },
@@ -1210,7 +1194,6 @@ actions = {
     DisplayText("\x13\x11｡˙+ﾟ\x08Parallel's \x03Ikeya-Seki \x11.+ﾟ｡ \x01를 \x06처치 \x04하였습니다 + 90000 \x1FPoints!\x04", 4);
     SetScore(CurrentPlayer, Add, 90000, Kills);
     PlayWAV("staredit\\wav\\killsound.wav");
-    PlayWAV("staredit\\wav\\killsound.wav");
     PreserveTrigger();
 }
 }
@@ -1224,7 +1207,6 @@ conditions = {
 actions = {
     DisplayText("\x13\x11｡˙+ﾟ\x08Parallel's \x03Intercepter \x11.+ﾟ｡ \x01를 \x06처치 \x04하였습니다 + 80000 \x1FPoints!\x04", 4);
     SetScore(CurrentPlayer, Add, 80000, Kills);
-    PlayWAV("staredit\\wav\\killsound.wav");
     PlayWAV("staredit\\wav\\killsound.wav");
     PreserveTrigger();
 }
@@ -1255,7 +1237,6 @@ actions = {
     DisplayText("\x13\x11｡˙+ﾟ\x08Parallel's \x03Veil \x11.+ﾟ｡ \x01를 \x06처치 \x04하였습니다 + 100000 \x1FPoints!\x04", 4);
     SetScore(CurrentPlayer, Add, 100000, Kills);
     PlayWAV("staredit\\wav\\killsound.wav");
-    PlayWAV("staredit\\wav\\killsound.wav");
     PreserveTrigger();
 }
 }
@@ -1269,7 +1250,6 @@ conditions = {
 actions = {
     DisplayText("\x13\x11｡˙+ﾟ\x08Parallel's \x03Unrevealer \x11.+ﾟ｡ \x01를 \x06처치 \x04하였습니다 + 150000 \x1FPoints!\x04", 4);
     SetScore(CurrentPlayer, Add, 150000, Kills);
-    PlayWAV("staredit\\wav\\killsound.wav");
     PlayWAV("staredit\\wav\\killsound.wav");
     PreserveTrigger();
 }
@@ -1285,7 +1265,6 @@ actions = {
     DisplayText("\x13\x11｡˙+ﾟ\x08Parallel's \x03Dark Matter \x11ﾟ.+｡ \x01를 \x06처치 \x04하였습니다 + 100000 \x1FPoints!\x04", 4);
     SetScore(CurrentPlayer, Add, 100000, Kills);
     PlayWAV("staredit\\wav\\killsound.wav");
-    PlayWAV("staredit\\wav\\killsound.wav");
     PreserveTrigger();
 },
 }
@@ -1299,7 +1278,6 @@ conditions = {
 actions = {
     DisplayText("\x13\x11｡˙+ﾟ\x08Parallel's \x03Duke S Mode \x11ﾟ.+｡ \x01를 \x06처치 \x04하였습니다 + 75000 \x1FPoints!\x04", 4);
     SetScore(CurrentPlayer, Add, 75000, Kills);
-    PlayWAV("staredit\\wav\\killsound.wav");
     PlayWAV("staredit\\wav\\killsound.wav");
     PreserveTrigger();
 },
@@ -1650,6 +1628,7 @@ function Install_BGMPhase()
             Deaths(CurrentPlayer, Exactly, 0, "Unused Terran Bldg type   2"); -- 하이브 브금 타이머
             Deaths(CurrentPlayer, Exactly, 0, 220); -- 스타포트 브금 타이머
             Deaths(CurrentPlayer, Exactly, 0, 221); -- 스타게이트 브금 타이머
+            Deaths(CurrentPlayer, Exactly, 0, 197); -- 중보 11시
             Deaths(CurrentPlayer, Exactly, 0, 158); -- 브금온오프
         },
         actions = {
@@ -1693,6 +1672,7 @@ function Install_BGMPhase()
             Deaths(CurrentPlayer, Exactly, 0, "Unused Terran Bldg type   2"); -- 하이브 브금 타이머
             Deaths(CurrentPlayer, Exactly, 0, 220); -- 스타포트 브금 타이머
             Deaths(CurrentPlayer, Exactly, 0, 221); -- 스타게이트 브금 타이머
+            Deaths(CurrentPlayer, Exactly, 0, 197); -- 중보 11시
             Deaths(CurrentPlayer, Exactly, 0, 158); -- 브금온오프
         },
         actions = {
@@ -1736,6 +1716,7 @@ function Install_BGMPhase()
             Deaths(CurrentPlayer, Exactly, 0, "Unused Zerg Bldg"); -- 레어 브금 타이머
             Deaths(CurrentPlayer, Exactly, 0, 220); -- 스타포트 브금 타이머
             Deaths(CurrentPlayer, Exactly, 0, 221); -- 스타게이트 브금 타이머
+            Deaths(CurrentPlayer, Exactly, 0, 197); -- 중보 11시
             Deaths(CurrentPlayer, Exactly, 0, 158); -- 브금온오프
         },
         actions = {
@@ -1780,6 +1761,7 @@ function Install_BGMPhase()
             Deaths(CurrentPlayer, Exactly, 1, "Independent Starport"); -- 스타포트 브금 스위치
             Deaths(CurrentPlayer, Exactly, 0, 220); -- 스타포트 브금 타이머
             Deaths(CurrentPlayer, Exactly, 0, 221); -- 스타게이트 브금 타이머
+            Deaths(CurrentPlayer, Exactly, 0, 197); -- 중보 11시
             Deaths(CurrentPlayer, Exactly, 0, 158); -- 브금온오프
         },
         actions = {
@@ -1823,6 +1805,7 @@ function Install_BGMPhase()
             Deaths(CurrentPlayer, Exactly, 0, 220); -- 스타포트 브금 타이머
             Deaths(CurrentPlayer, Exactly, 0, 221); -- 스타게이트 브금 타이머
             Deaths(CurrentPlayer, Exactly, 1, 218); -- 스타게이트 브금 스위치
+            Deaths(CurrentPlayer, Exactly, 0, 197); -- 중보 11시
             Deaths(CurrentPlayer, Exactly, 0, 158); -- 브금온오프
         },
         actions = {
@@ -1867,6 +1850,7 @@ function Install_BGMPhase()
             Deaths(CurrentPlayer, Exactly, 0, 220); -- 스타포트 브금 타이머
             Deaths(CurrentPlayer, Exactly, 0, 221); -- 스타게이트 브금 타이머
             Deaths(CurrentPlayer, Exactly, 1, 204); -- 순대 브금 스위치
+            Deaths(CurrentPlayer, Exactly, 0, 197); -- 중보 11시
             Deaths(CurrentPlayer, Exactly, 0, 158); -- 브금온오프
         },
         actions = {
@@ -1910,10 +1894,11 @@ function Install_BGMPhase()
             Deaths(CurrentPlayer, Exactly, 0, 221); -- 스타게이트 브금 타이머
             Deaths(CurrentPlayer, Exactly, 0, 215); -- 순대 브금 타이머
             Deaths(CurrentPlayer, Exactly, 1, 222); -- inf1 com 브금 타이머
+            Deaths(CurrentPlayer, Exactly, 0, 197); -- 중보 11시
             Deaths(CurrentPlayer, Exactly, 0, 158); -- 브금온오프
         },
         actions = {
-            SetDeaths(CurrentPlayer, SetTo, 2686, 215); -- inf1 com 브금 타이머
+            SetDeaths(CurrentPlayer, SetTo, 2550, 215); -- inf1 com 브금 타이머
             PlayWAV("staredit\\wav\\inf1.ogg");
             PlayWAV("staredit\\wav\\inf1.ogg");
             PreserveTrigger();
@@ -1942,6 +1927,8 @@ function Install_BGMPhase()
         },
     }
 
+    
+
     Trigger { -- 경우 8
         players = {Force1},
         conditions = {
@@ -1952,15 +1939,17 @@ function Install_BGMPhase()
             Deaths(CurrentPlayer, Exactly, 0, 221); -- 스타게이트 브금 타이머
             Deaths(CurrentPlayer, Exactly, 0, 215); -- 순대 브금 타이머
             Deaths(CurrentPlayer, Exactly, 1, 223); -- inf2 com 브금 타이머
+            Deaths(CurrentPlayer, Exactly, 0, 197); -- 중보 11시
             Deaths(CurrentPlayer, Exactly, 0, 158); -- 브금온오프
         },
         actions = {
-            SetDeaths(CurrentPlayer, SetTo, 3060, 164); -- inf2 브금 타이머
+            SetDeaths(CurrentPlayer, SetTo, 2890, 164); -- inf2 브금 타이머
             PlayWAV("staredit\\wav\\inf2.ogg");
             PlayWAV("staredit\\wav\\inf2.ogg");
             PreserveTrigger();
         },
     }
+    TriggerX(Force1,Deaths(CurrentPlayer, AtLeast, 1, 223), SetDeaths(CurrentPlayer, SetTo, 0, 223), preserved)
 
     Trigger { -- 중보 1
         players = {Force1},
@@ -1971,19 +1960,42 @@ function Install_BGMPhase()
             SetDeaths(CurrentPlayer, SetTo, 3774, 197); -- 11시 중보 브금 타이머
             PlayWAV("staredit\\wav\\11MB.ogg");
             PlayWAV("staredit\\wav\\11MB.ogg");
-            PlayWAV("staredit\\wav\\11MB.ogg");
-            PlayWAV("staredit\\wav\\11MB.ogg");
             PreserveTrigger();
         },
     }
-    TriggerX(Force1,Deaths(CurrentPlayer, AtLeast, 1, 224), SetDeaths(CurrentPlayer, SetTo, 0, 224), preserved)
+
+    Trigger { -- 중보 2
+        players = {Force1},
+        conditions = {
+            Deaths(CurrentPlayer, Exactly, 1, 225)
+        },
+        actions = {
+            SetDeaths(CurrentPlayer, SetTo, 6970, 198); -- 1시 중보 브금 타이머
+            PlayWAV("staredit\\wav\\FBoss3.ogg");
+            PreserveTrigger();
+        },
+    }
+    TriggerX(Force1,Deaths(CurrentPlayer, AtLeast, 1, 224), SetDeaths(CurrentPlayer, SetTo, 0, 224), preserved) -- 11시 중보 스위치
+    TriggerX(Force1,Deaths(CurrentPlayer, AtLeast, 1, 225), SetDeaths(CurrentPlayer, SetTo, 0, 225), preserved) -- 11시 중보 스위치
+
     Trigger { -- 노래시간 감소
         players = {P6},
         conditions = {
             Always();
         },
         actions = {
-            SetDeaths(Force1, Subtract, 1, 197); -- inf2 브금 타이머
+            SetDeaths(Force1, Subtract, 1, 197); -- 11시 중보 브금 타이머
+            PreserveTrigger();
+        },
+    }
+
+    Trigger { -- 노래시간 감소
+        players = {P6},
+        conditions = {
+            Always();
+        },
+        actions = {
+            SetDeaths(Force1, Subtract, 1, 198); -- 1시 중보 브금 타이머
             PreserveTrigger();
         },
     }
@@ -2001,16 +2013,6 @@ function Install_BGMPhase()
         },
     }
     
-    Trigger { -- 변수 초기화
-        players = {Force1},
-        conditions = {
-            Deaths(CurrentPlayer, AtLeast, 1, 223); -- 순대 브금 스위치
-        },
-        actions = {
-            SetDeaths(CurrentPlayer, SetTo, 0, 223); -- 순대 브금 스위치
-            PreserveTrigger();
-        },
-    }
     
     Trigger { -- Link with variation with trigger
         players = {Force1},
@@ -2093,15 +2095,20 @@ SetScore(CurrentPlayer, Add, 400000, Kills),
 SetDeaths(CurrentPlayer, Add, 1, 222) -- Inf1 com BGM Switch
 })
 
-TriggerX(Force1, {Deaths(P7, AtLeast, 1, 106)}, {DisplayText(StrDesignX("\x04Daggoth \x11Destroyed! \x07+ 400,000 \x17Points! "), 4),
+TriggerX(Force1, {Deaths(P7, AtLeast, 1, 106)}, {DisplayText(StrDesignX("\x04Infested Command Center \x11Destroyed! \x07+ 400,000 \x17Points! "), 4),
 SetScore(CurrentPlayer, Add, 400000, Kills),
 SetDeaths(CurrentPlayer, Add, 1, 223) -- Inf2 com BGM Switch
 })
-TriggerX(Force1,Deaths(CurrentPlayer, AtLeast, 1, 223), SetDeaths(CurrentPlayer, SetTo, 0, 223), preserved)
+
 
 TriggerX(Force1, {Deaths(P7, AtLeast, 1, 174)}, {DisplayText(StrDesignX("\x04? ? ? ? ? ? ? \x11Destroyed! \x07+ 1,000,000 \x17Ore! "), 4),
 SetResources(CurrentPlayer, Add, 1000000, Ore),
 SetDeaths(CurrentPlayer, Add, 1, 224) -- 11시 중보 BGM Switch
+})
+
+TriggerX(Force1, {Deaths(P7, AtLeast, 1, 175)}, {DisplayText(StrDesignX("\x04? ? ? ? ? ? ? \x11Destroyed! \x07+ 1,000,000 \x17Ore! "), 4),
+SetResources(CurrentPlayer, Add, 1000000, Ore),
+SetDeaths(CurrentPlayer, Add, 1, 225) -- 1시 중보 BGM Switch
 })
 
 
@@ -2547,20 +2554,25 @@ function Install_NormalGunPlotShape()
 end
 function Install_SpecialGunPlotShape()
     
-    TriggerX(Force1, {Deaths(P11, Exactly, 1, 100)}, {
+    TriggerX(Force2, {Deaths(P11, Exactly, 1, 100)}, {
         SetAllianceStatus(Force1, Ally),
-        RunAIScript('Turn ON Shared Vision for Player 5'),
-        RunAIScript('Turn ON Shared Vision for Player 6'),
-        RunAIScript('Turn ON Shared Vision for Player 7'),
-        RunAIScript('Turn ON Shared Vision for Player 8')
 },preserved)
-    TriggerX(Force1, {Deaths(P11, Exactly, 0, 100)}, {
+    TriggerX(Force1, {Deaths(P11, Exactly, 1, 100)},{
+            RunAIScript('Turn ON Shared Vision for Player 5'),
+            RunAIScript('Turn ON Shared Vision for Player 6'),
+            RunAIScript('Turn ON Shared Vision for Player 7'),
+            RunAIScript('Turn ON Shared Vision for Player 8')
+    },preserved)
+
+    TriggerX(Force2, {Deaths(P11, Exactly, 0, 100)}, {
         SetAllianceStatus(Force1, Enemy),
+    },preserved)
+    TriggerX(Force1, {Deaths(P11, Exactly, 0, 100)},{
         RunAIScript('Turn OFF Shared Vision for Player 5'),
         RunAIScript('Turn OFF Shared Vision for Player 6'),
         RunAIScript('Turn OFF Shared Vision for Player 7'),
         RunAIScript('Turn ON Shared Vision for Player 8')
-    })
+    },preserved)
 
     -- Cerebrate from palm1 
     function SHBF(Y) return Y end
@@ -2904,6 +2916,106 @@ function MiddleBossTrigger()
     CSPlotOrder(Shape11_1, P6, 28, M11, {495,351}, 1, 32, CSMakePolygon(6,0,0,85,7), nil, Attack, "nuke3", nil, 32, nil, P7, {CommandLeastAt(174, "middle1"),Deaths(P11, AtLeast, M11tl[39] * SDspeed, 160)})
     TriggerX(Force2,{CommandLeastAt(174, "middle1"),Deaths(P11, AtLeast, M11tl[39] * SDspeed, 160)}, {SetInvincibility(Disable, 22, P6, "middle1")})
 
+    ------ End of 11 Middle boss trigger -----
+    
+
+
+
+
+
+
+
+
+    ------ Start of 1 Middle boss trigger ----- + plot death value = 161 | skill death value = 162
+    MBossPtr1, MBossHP1, MBossHP1_2 = CreateVars(3,FP)
+    TriggerX(P7, {CommandLeastAt(175, "middle2")}, {SetDeaths(P11, Add, 1, 161),SetDeaths(P11, Add, 1, 162)}, preserved)
+    TriggerX(FP, Deaths(P11, AtLeast, 2000, 162), {SetDeaths(P11, SetTo, 1, 162)}, preserved)
+    CIfOnce(FP,{Deaths(P11, Exactly, 10, 161)})
+        f_Read(FP,0x628438,nil,Nextptr) -- Save 0x628438(Next unit pointer) Offset, Convert into EPD and save into Variable
+        CMov(FP,MBossHP1,Nextptr) -- Save FBossPtr from Nextptr's 
+            CDoActions(FP,{
+                CreateUnit(1,68,"middle2",P6);
+                SetInvincibility(Enable, 68, P6, "middle2");
+                TSetMemory(Vi(Nextptr[2],2),SetTo,256*6500000); -- Next unit pointer offset's HP set
+                TSetMemoryX(Vi(Nextptr[2], 55), SetTo, 0xA00000, 0xA00000); -- Next unit pointer offset's status flag set
+            })
+        CMov(FP,MBossHP1,Nextptr,2) 
+        DoActionsX(FP,{SetNVar(MBossHP1_2,SetTo,6)})
+    CIfEnd()
+    CTrigger(FP,{
+        TMemory(MBossHP1,AtMost,256*100000);
+        NVar(MBossHP1_2,AtLeast,1);
+    },{
+        TSetMemory(MBossHP1,SetTo,256*6500000);
+        SetNVar(MBossHP1_2,Subtract,1);
+    },{preserved})
+    ------- Start of Bullet function ------
+    BulletTimer = CreateCcode()
+    Temp, Bangle, RandomRange, ScatteredAngle = CreateVars(4,FP)
+    Bimage = 973
+    Bscript = 242
+    Bcolor = 16
+    BulletInitSetting(FP,{195,123,284},87,208,516,Bimage,Bscript,Bcolor,10000,10,7,1,1,2,{0,0,0},0)
+
+    CDoActions(FP,{
+        TSetNVar(RandomRange,SetTo,_Add(_Mod(_Rand(),128),8));
+        SetCDeathsX("X",Add,1*16777216,BulletTimer,0xFF000000);
+    })
+
+    TriggerX(FP,{NVar(Bangle,Exactly,0)},{SetNVar(Temp,Add,2*256)},{Preserved})
+    TriggerX(FP,{NVar(Bangle,Exactly,1)},{SetNVar(Temp,Add,-2*256)},{Preserved})
+    
+    TriggerX(FP,{CDeathsX("X",Exactly,0*16777216,BulletTimer,0xFF000000)},{SetImageColor(440,0),SetImageColor(Bimage,0)},{Preserved}) -- Yellow
+    TriggerX(FP,{CDeathsX("X",Exactly,1*16777216,BulletTimer,0xFF000000)},{SetImageColor(440,16),SetImageColor(Bimage,16)},{Preserved}) -- Blue
+    TriggerX(FP,{CDeathsX("X",Exactly,2*16777216,BulletTimer,0xFF000000)},{SetImageColor(440,13),SetImageColor(Bimage,13)},{Preserved}) -- Green
+    SpreadBullet = InitCFunc(FP)
+    CFunc(SpreadBullet)
+        CreateBullet(FP,P8,195,3,ScatteredAngle,768,RandomRange,{"middle2",3632,335},{Deaths(P11, AtLeast, 1000, 162),Bring(P7, AtLeast, 1, 68, "middle2")})
+    CFuncEnd()
+        CDoActions(FP,{TSetNVar(ScatteredAngle,SetTo,_Add(Temp,0*256))})
+        CallCFuncX(FP,SpreadBullet)
+        CDoActions(FP,{TSetNVar(ScatteredAngle,SetTo,_Add(Temp,21*256))})
+        CallCFuncX(FP,SpreadBullet)
+        CDoActions(FP,{TSetNVar(ScatteredAngle,SetTo,_Add(Temp,43*256))})
+        CallCFuncX(FP,SpreadBullet)
+        CDoActions(FP,{TSetNVar(ScatteredAngle,SetTo,_Add(Temp,64*256))})
+        CallCFuncX(FP,SpreadBullet)
+        CDoActions(FP,{TSetNVar(ScatteredAngle,SetTo,_Add(Temp,85*256))})
+        CallCFuncX(FP,SpreadBullet)
+        CDoActions(FP,{TSetNVar(ScatteredAngle,SetTo,_Add(Temp,107*256))})
+        CallCFuncX(FP,SpreadBullet)
+        CDoActions(FP,{TSetNVar(ScatteredAngle,SetTo,_Add(Temp,128*256))})
+        CallCFuncX(FP,SpreadBullet)
+        CDoActions(FP,{TSetNVar(ScatteredAngle,SetTo,_Add(Temp,149*256))})
+        CallCFuncX(FP,SpreadBullet)
+        CDoActions(FP,{TSetNVar(ScatteredAngle,SetTo,_Add(Temp,171*256))})
+        CallCFuncX(FP,SpreadBullet)
+        CDoActions(FP,{TSetNVar(ScatteredAngle,SetTo,_Add(Temp,192*256))})
+        CallCFuncX(FP,SpreadBullet)
+        CDoActions(FP,{TSetNVar(ScatteredAngle,SetTo,_Add(Temp,213*256))})
+        CallCFuncX(FP,SpreadBullet)
+        CDoActions(FP,{TSetNVar(ScatteredAngle,SetTo,_Add(Temp,235*256))})
+        CallCFuncX(FP,SpreadBullet)
+
+    TriggerX(FP,{NVar(Bangle,Exactly,0),NVar(Temp,AtLeast,4*255*256)},{SetNVar(Bangle,SetTo,1)},{Preserved}) 
+    TriggerX(FP,{NVar(Bangle,Exactly,1),NVar(Temp,Exactly,0*256)},{SetNVar(Bangle,SetTo,0)},{Preserved}) 
+
+    TriggerX(FP,{CDeathsX("X",Exactly,3*16777216,BulletTimer,0xFF000000)},{SetCDeathsX("X",SetTo,0*16777216,BulletTimer,0xFF000000)},{Preserved}) -- ResetColor
+    --------End of Bullet function ------
+
+    ------Start of Trigger function ----
+    TriggerX(Force1, {CommandLeastAt(175, "middle2"), Deaths(P11, Exactly, 20, 161)}, {
+        MinimapPing("middle2"),
+        MinimapPing("middle2"),
+        MinimapPing("middle2"),
+        SetInvincibility(Disable, 68, P6, "middle2");
+        PlayWAV("sound\\Protoss\\ARCHON\\PArYes00.wav"),
+        PlayWAV("sound\\Protoss\\ARCHON\\PArYes00.wav"),
+        PlayWAV("sound\\Protoss\\ARCHON\\PArYes00.wav"),
+        TalkingPortrait(68, 1000)
+    })
+
+
 
 
 
@@ -2945,7 +3057,7 @@ Install_SpecialGunplot()
 Install_ExchangeTrigger()
 -- Install_WaveTrigger()
 Install_HealZoneTrigger()
-Install_HerounitTrigger()
+-- Install_HerounitTrigger()
 Install_Neutral_bunkerTrigger()
 Install_DonateNbanTrigger()
 Install_ConvertMarineTrigger()
