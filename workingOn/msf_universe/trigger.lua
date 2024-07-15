@@ -2926,7 +2926,7 @@ function MiddleBossTrigger()
 
 
 
-    ------ Start of 1 Middle boss trigger ----- + plot death value = 161 | skill death value = 162 | Boss deaths alert = 163
+    ------ Start of 1 Middle boss trigger ----- + plot death value = 161 | skill death value = 162
     MBossPtr1, MBossHP1, MBossHP1_2 = CreateVars(3,FP)
     TriggerX(P7, {CommandLeastAt(175, "middle2")}, {SetDeaths(P11, Add, 1, 161),SetDeaths(P11, Add, 1, 162)}, preserved)
     TriggerX(FP, Deaths(P11, AtLeast, 2000, 162), {SetDeaths(P11, SetTo, 1, 162)}, preserved)
@@ -2936,12 +2936,11 @@ function MiddleBossTrigger()
             CDoActions(FP,{
                 CreateUnit(1,68,"middle2",P6);
                 SetInvincibility(Enable, 68, P6, "middle2");
-                GiveUnits(1, 68, P6, "middle2", P9);
                 TSetMemory(Vi(Nextptr[2],2),SetTo,256*6500000); -- Next unit pointer offset's HP set
                 TSetMemoryX(Vi(Nextptr[2], 55), SetTo, 0xA00000, 0xA00000); -- Next unit pointer offset's status flag set
             })
         CMov(FP,MBossHP1,Nextptr,2) 
-        DoActionsX(FP,{SetNVar(MBossHP1_2,SetTo,6)})
+        DoActionsX(FP,{SetNVar(MBossHP1_2,SetTo,7)})
     CIfEnd()
     CTrigger(FP,{
         TMemory(MBossHP1,AtMost,256*100000);
@@ -3005,22 +3004,92 @@ function MiddleBossTrigger()
     --------End of Bullet function ------
 
     ------Start of Trigger function ----
-    MB1TL = {3, }
+    GenerateRandomIndex,RandomIndex = CreateVars(2,FP)
+    MB1TL = {33.5, 34, 34.5, 35, 35.5, 36,
+    37, 37.5, 38, 39, 39.5, 40,
+    43, 47, 51, 55, 59,
+    63, 67, 71, 75, 79,
+    83, 87, 91, 95, 99
+}
+
+
+    MB1CircleS = CSMakeCircle(6,64,0,37,1)
+    MB1CircleA = CSMakeCircle(6,0,0,37,1)
+    -- CDoActions(FP, f_Rand(FP,GenerateRandomIndex), preserved)
+    -- CDoActions(FP,CMov(FP, RandomIndex, GenerateRandomIndex),preserved)
+
+    LocM1 = "middle2"
+    local A1 = 0.5
+    local A2 = 1
     TriggerX(Force1, {CommandLeastAt(175, "middle2"), Deaths(P11, Exactly, 20, 161)}, {
         MinimapPing("middle2"),
         MinimapPing("middle2"),
         MinimapPing("middle2"),
-        GiveUnits(1, 68, P9, "middle2", P6),
-        SetInvincibility(Disable, 68, Force2, "middle2"),
+        SetInvincibility(Disable, 68, P6, "middle2"),
         PlayWAV("sound\\Protoss\\ARCHON\\PArYes00.wav"),
         PlayWAV("sound\\Protoss\\ARCHON\\PArYes00.wav"),
         PlayWAV("sound\\Protoss\\ARCHON\\PArYes00.wav"),
         TalkingPortrait(68, 1000)
     })
+    Tier1G = {8, 51 ,65, 66, 16,30, 52, 81, 102, 88, 89,95}
+    Tier2H = {3, 25, 23, 75, 76, 77, 78, 93, 104, 96}
+    Tier3H = {7, 21, 58, 60, 62, 64, 69, 70, 86}
 
-    TriggerX(FP, {CommandLeastAt(175, "middle2"), Deaths(P11, AtLeast, MB1TL[1] * SDspeed, 161)}, {
-        
-    })
+    TriggerX(FP, {CommandLeastAt(175, "middle2"), Deaths(P11, Exactly, (MB1TL[1]-1) * SDspeed , 161)},{SetScanImage(214)})
+    CSPlot(MB1CircleS, P6, 33, LocM1, nil, 1, 32, FP,{CommandLeastAt(175, "middle2"), Deaths(P11, Exactly, (MB1TL[1]) * SDspeed , 161)})
+    CSPlot(MB1CircleS, P6, 33, LocM1, nil, 1, 32, FP,{CommandLeastAt(175, "middle2"), Deaths(P11, Exactly, (MB1TL[2]) * SDspeed , 161)},{SetScanImage(928)})
+    CSPlot(MB1CircleS, P6, 33, LocM1, nil, 1, 32, FP,{CommandLeastAt(175, "middle2"), Deaths(P11, Exactly, (MB1TL[3]) * SDspeed , 161)},{SetScanImage(546)})
+
+    CSPlotOrder(MB1CircleS, P6, 77, LocM1, nil, 1, 32, MB1CircleA, nil, Attack, "emp3", nil,32, nil, FP, {CommandLeastAt(175, "middle2"), Deaths(P11, Exactly, (MB1TL[4]) * SDspeed , 161)})
+    CSPlotOrder(MB1CircleS, P6, 8, LocM1, nil, 1, 32, MB1CircleA, nil, Attack, "emp3", nil,32, nil, FP, {CommandLeastAt(175, "middle2"), Deaths(P11, Exactly, (MB1TL[5]) * SDspeed , 161)})
+    CSPlotOrder(MB1CircleS, P6, 104, LocM1, nil, 1, 32, MB1CircleA, nil, Attack, "emp3", nil,32, nil, FP, {CommandLeastAt(175, "middle2"), Deaths(P11, Exactly, (MB1TL[6]) * SDspeed , 161)})
+
+    CSPlotOrder(MB1CircleS, P6, 16, LocM1, nil, 1, 32, MB1CircleA, nil, Attack, "emp3", nil,32, nil, FP, {CommandLeastAt(175, "middle2"), Deaths(P11, Exactly, (MB1TL[7]) * SDspeed , 161)})
+    CSPlotOrder(MB1CircleS, P6, 96, LocM1, nil, 1, 32, MB1CircleA, nil, Attack, "emp3", nil,32, nil, FP, {CommandLeastAt(175, "middle2"), Deaths(P11, Exactly, (MB1TL[8]) * SDspeed , 161)})
+    CSPlotOrder(MB1CircleS, P6, 76, LocM1, nil, 1, 32, MB1CircleA, nil, Attack, "emp3", nil,32, nil, FP, {CommandLeastAt(175, "middle2"), Deaths(P11, Exactly, (MB1TL[9]) * SDspeed , 161)})
+
+    CSPlotOrder(MB1CircleS, P6, 52, LocM1, nil, 1, 32, MB1CircleA, nil, Attack, "emp3", nil,32, nil, FP, {CommandLeastAt(175, "middle2"), Deaths(P11, Exactly, (MB1TL[10]) * SDspeed , 161)})
+    CSPlotOrder(MB1CircleS, P6, 58, LocM1, nil, 1, 32, MB1CircleA, nil, Attack, "emp3", nil,32, nil, FP, {CommandLeastAt(175, "middle2"), Deaths(P11, Exactly, (MB1TL[11]) * SDspeed , 161)})
+    CSPlotOrder(MB1CircleS, P6, 76, LocM1, nil, 1, 32, MB1CircleA, nil, Attack, "emp3", nil,32, nil, FP, {CommandLeastAt(175, "middle2"), Deaths(P11, Exactly, (MB1TL[12]) * SDspeed , 161)})
+
+
+    for i = 13, 27 do
+        CSPlotOrder(MB1CircleS, P6, Tier1G[(i % 12) + 1], LocM1, nil, 1, 32, MB1CircleA, nil, Attack, "emp3", nil,32, nil, FP, {CommandLeastAt(175, "middle2"), Deaths(P11, Exactly, (MB1TL[i]) * SDspeed , 161)})
+        CSPlotOrder(MB1CircleS, P6, Tier2H[(i % 10) + 1], LocM1, nil, 1, 32, MB1CircleA, nil, Attack, "emp3", nil,32, nil, FP, {CommandLeastAt(175, "middle2"), Deaths(P11, Exactly, (MB1TL[i] + A1) * SDspeed , 161)})
+        CSPlotOrder(MB1CircleS, P5, Tier3H[(i % 9) + 1], LocM1, nil, 1, 32, MB1CircleA, nil, Attack, "emp3", nil,32, nil, FP, {CommandLeastAt(175, "middle2"), Deaths(P11, Exactly, (MB1TL[i] + A2) * SDspeed , 161)})
+    end
+
+    -------- End of 1 Middle Boss trigger -------
+
+
+    -------- Start of 5 Middle Boss Trigger ------ DeathValue = 163
+    TriggerX(FP, {CommandLeastAt(148, "middle4")}, {SetDeaths(P11, Add, 1, 163)}, preserved)
+    
+    
+
+    ------- Boss HP Overflow Trigger 4 Times & Status flag NoCollide + IsGathering ------- 
+
+    CIfOnce(FP,{CommandLeastAt(148, "middle4"),Deaths(P11, AtLeast, 10, 163)})
+        f_Read(FP,0x628438,nil,Nextptr) -- Save 0x628438(Next unit pointer) Offset, Convert into EPD and save into Variable
+        CMov(FP,FBossPtr,Nextptr) -- Save FBossPtr from Nextptr's 
+            CDoActions(FP,{
+                CreateUnit(1,68,"HealZone",P7);
+                TSetMemory(Vi(Nextptr[2],2),SetTo,256*6500000); -- Next unit pointer offset's HP set
+                TSetMemoryX(Vi(Nextptr[2],55),SetTo,0xA00000,0xA00000); -- Next unit pointer offset's status flag set
+            })
+        CMov(FP,FBossHP,Nextptr,2) 
+        DoActionsX(FP,{SetNVar(FBossHP2,SetTo,4)})
+    CIfEnd()
+
+    CTrigger(FP,{
+        TMemory(FBossHP,AtMost,256*100000);
+        NVar(FBossHP2,AtLeast,1);
+    },{
+        TSetMemory(FBossHP,SetTo,256*6500000);
+        SetNVar(FBossHP2,Subtract,1);
+    },{preserved})
+    -------------- End of Boss HP Overflow Trigger ----------------------
+
 
 
 
@@ -3030,7 +3099,6 @@ function MiddleBossTrigger()
 
     ------- Boss HP Overflow Trigger 4 Times & Status flag NoCollide + IsGathering ------- 
 
-    
     -- CIfOnce(FP,Always(),{Wait(10000)})
     --     f_Read(FP,0x628438,nil,Nextptr) -- Save 0x628438(Next unit pointer) Offset, Convert into EPD and save into Variable
     --     CMov(FP,FBossPtr,Nextptr) -- Save FBossPtr from Nextptr's 
@@ -3074,7 +3142,9 @@ Install_BGMPhase()
 Install_SpecialGunPlotShape()
 MiddleBossTrigger()
 TriggerX(FP, Always(), {SetMemoryBA(0x657A9C, SetTo, 31)})
-
+for i = 4, 7 do
+    TriggerX(Force2, Always(), {SetMemoryB(0x58F32C + (i * 15) + 4, SetTo, 255)})
+end
 
 CIfEnd()
 EndCtrig()
@@ -3144,6 +3214,8 @@ TEP3.0 기반 트리거 자체가 트리거 용량을 많이 잡아먹어서 어
 2. 중벙 트리거 관련. 중벙 안에 있는 유닛은 Men 감지를 받아서 안에있는데 갑자기 P12로 뺏기거나 하는일은 절대없음
 
 3. 이펙트쓰다가 데스값때문에 스캔 이미지값 꼬일수있으니 웬만하면 그냥 보스페이즈 아니면 드래그방지 플래그 걸고 유닛으로 이펙트 내는게 좋다고함.
+
+4. CSPlot Action은 해당 줄의 CSPlot 도형 실행후, Execute 하는 단락임.
 
 
 
