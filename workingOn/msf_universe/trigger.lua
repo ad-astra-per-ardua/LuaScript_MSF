@@ -3093,42 +3093,35 @@ function MiddleBossTrigger()
 
     -------- End of 1 Middle Boss trigger -------
 
-
     --[[
     1리젠 후 1화홀 + 3초무적
     일정 데스값마다 안밖 스킬사용
     ]]
-    -------- Start of 5 Middle Boss Trigger ------ DeathValue = 163 | BossInvinsible Deathvalue = 164 | BossGenerate Trigger = 165
-    Circulation1 = CSMakeCircleX(6,120,30,54,24)
+    -------- Start of 5 Middle Boss Trigger ------ DeathValue = 163 | BossGenerate Trigger = 165
+    CLX = CAPlotOrderForward()
+    Circulation1 = CSMakeCircleX(6,115,30,54,24)
     TempPerAction = {9,10,13,15,16,17}
     M5GenPlot = CSMakeStar(5,108,64,36,61,1)
     M5GenPlotA = CSMakeStar(5,108,0,36,61,1)
-    M5GenG = {30, 52, 3, 95, 93, 78, 81, 75, 23}
-    M5GenS = {44, 8, 88, 89, 96, 62, 60, 58, 29}
-    TriggerX(P7, {CommandLeastAt(148, "middle4")}, {SetDeaths(P11, Add, 1, 163),Order(50, P6, "Anywhere", Attack, "unrevealer2")}, preserved)
-    TriggerX(Force1, {CommandLeastAt(148, "middle4"),Deaths(P11, Exactly, 1900, 163)}, {PlayWAV("sound\\Zerg\\BUGGUY\\ZBGRdy00.wav"),PlayWAV("sound\\Zerg\\BUGGUY\\ZBGRdy00.wav")}, preserved)
+    M5GenG = {30, 52, 3, 95, 93, 78, 81, 75, 23, 104, 74}
+    M5GenS = {44, 8, 88, 89, 96, 62, 60, 58, 29, 64, 70}
+    TriggerX(P7, {CommandLeastAt(148, "middle4")}, {SetDeaths(P11, Add, 1, 163)}, preserved)
+    TriggerX(FP, {Deaths(P11, AtLeast, 3060, 163)}, {SetDeaths(P11, SetTo, 1, 163)}, preserved)
+    TriggerX(Force1, {CommandLeastAt(148, "middle4"),Deaths(P11, Exactly, 1900, 163)}, {PlayWAV("sound\\Zerg\\BUGGUY\\ZBGRdy00.wav"),PlayWAV("sound\\Zerg\\BUGGUY\\ZBGRdy00.wav"),PlayWAV("sound\\Zerg\\BUGGUY\\ZBGRdy00.wav")},{Preserved})
 
     CAPlot(Circulation1, P6, 84, "middle4", nil, 1, 32, {1,0,0,0,1,0}, nil, P7, {CommandLeastAt(148, "middle4"),Deaths(P11, AtMost, 2039, 163)}, nil,1)
     CAPlot(Circulation1, P6, 63, "middle4", nil, 1, 32, {1,0,0,0,1,0}, nil, P7, {CommandLeastAt(148, "middle4"),Deaths(P11, AtLeast, 2040, 163)}, nil,1)
-    CAPlot(CS_Convert(Circulation1,15), P6, 50, "middle4", nil, 1, 32, {1,0,0,0,1,0}, nil, P7, {CommandLeastAt(148, "middle4"),Deaths(P11, AtLeast, 2040, 163)}, nil,1)
-    -- CAPlotOrder(Circulation1, P6, 50, "middle4", nil, 1, 32, {1,0,0,0,1,0}, nil,CSMakeCircleX(6,0,30,54,24) , Patrol, "unrevealer2", nil, {1,0}, nil, {0,0}, FP, {CommandLeastAt(148, "middle4"),Deaths(P11, AtLeast, 2040, 163)}, nil, 1)
+    CAPlotOrder(CS_Convert(Circulation1,15), P6, 50, "middle4", nil, 1, 32, {1,0,0,0,1,0}, nil,CSMakeCircleX(6,0,30,54,24) , Patrol, "unrevealer2", nil, {1,0}, nil, {0,32}, FP, {CommandLeastAt(148, "middle4"),Deaths(P11, AtLeast, 2040, 163)},nil,{})
     
-
-
     CAPlot(CS_Rotate(CS_Reverse(Circulation1),5), P6, 84, "middle4", nil, 1, 32, {1,0,0,0,1,0}, nil, P7, {CommandLeastAt(148, "middle4"),Deaths(P11, AtMost, 2039, 163)}, nil,1)
-    CAPlot(CS_Rotate(CS_Reverse(Circulation1),5), P6, 63, "middle4", nil, 1, 32, {1,0,0,0,1,0}, nil, P7, {CommandLeastAt(148, "middle4"),Deaths(P11, AtLeast, 2040, 163)}, nil,1)
-    CAPlot(CS_Convert(CS_Rotate(CS_Reverse(Circulation1),5),15), P6, 50, "middle4", nil, 1, 32, {1,0,0,0,1,0}, nil, P7, {CommandLeastAt(148, "middle4"),Deaths(P11, AtLeast, 2040, 163)}, nil,1)    -- CAPlotOrder(CS_Rotate(CS_Reverse(Circulation1),5), P6, 50, "middle4", nil, 1, 32, {1,0,0,0,1,0},nil,CSMakeCircleX(6,0,30,54,24), Patrol, "unrevealer2", nil, {1,0}, nil, {0,0}, FP, {CommandLeastAt(148, "middle4"),Deaths(P11, AtLeast, 2040, 163)}, nil, 1)
-
-
+    CAPlot(CS_Rotate(CS_Reverse(Circulation1),5), P6, 63, "middle4", nil, 1, 32, {1,0,0,0,1,0}, nil, P7, {CommandLeastAt(148, "middle4"),Deaths(P11, AtLeast, 2040, 163)}, nil,1) 
+    CAPlotOrder(CS_Convert(CS_Rotate(CS_Reverse(Circulation1),5),15), P6, 50, "middle4", nil, 1, 32, {1,0,0,0,1,0},nil,CSMakeCircleX(6,0,30,54,24), Patrol, "unrevealer2", nil, {1,0}, nil, {0,32}, FP, {CommandLeastAt(148, "middle4"),Deaths(P11, AtLeast, 2040, 163)}, nil, {})
 
     for i = 1, 9 do
         CSPlotOrder(M5GenPlot, P6, M5GenG[i], "middle4", nil, 1, 32, M5GenPlotA, nil, Patrol, "unrevealer2", nil, 32, nil, P7, {CommandLeastAt(148, "middle4"),Deaths(P11, AtLeast, 1, 165)})
-        CSPlotOrder(M5GenPlot, P6, M5GenS[i], "middle4", nil,1, 32, M5GenPlotA, nil, Patrol, "unrevealer2", nil, 32, nil, P7, {CommandLeastAt(148, "middle4"),Deaths(P11, AtLeast, 1, 165)}, {SetDeaths(P11, SetTo, 0, 165),})
+        CSPlotOrder(M5GenPlot, P6, M5GenS[i], "middle4", nil,1, 32, M5GenPlotA, nil, Patrol, "unrevealer2", nil, 32, nil, P7, {CommandLeastAt(148, "middle4"),Deaths(P11, AtLeast, 1, 165)}, {SetDeaths(P11, SetTo, 0, 165)})
     end
     
-
-
-
     ----- Boss HP Overflow Trigger 4 Times & Status flag NoCollide + IsGathering ------- 
     MBossPtr5, MBossHP5, MBossHP5_2 = CreateVars(3,FP)
     CIfOnce(FP,{CommandLeastAt(148, "middle4"),Deaths(P11, AtLeast, 10, 163)})
@@ -3140,7 +3133,7 @@ function MiddleBossTrigger()
                 TSetMemoryX(Vi(Nextptr[2],55),SetTo,0xA00000,0xA00000); -- Next unit pointer offset's status flag set
             })
         CMov(FP,MBossHP5,Nextptr,2) 
-        DoActionsX(FP,{SetNVar(MBossHP5_2,SetTo,15)})
+        DoActionsX(FP,{SetNVar(MBossHP5_2,SetTo,12)})
     CIfEnd()
 
     CTrigger(FP,{
@@ -3152,6 +3145,11 @@ function MiddleBossTrigger()
         SetDeaths(P11, SetTo, 1, 165);
     },{preserved})
     ------------ End of Boss HP Overflow Trigger ----------------------
+    ------------ End of 5 Middle Boss Trigger  -------------------
+
+    ------------- Start of 7 Middle Boss Trigger -------------------
+
+    -- TriggerX(P7, {CommandLeastAt(127, "middle3")}, {}, Flags, Index)
 
 
 
