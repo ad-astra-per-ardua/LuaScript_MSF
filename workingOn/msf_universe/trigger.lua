@@ -200,7 +200,7 @@ hanger = 0,
 
 JYD = "Set Unit Order To: Junk Yard Dog"
 Gentime = SDspeed * 251
-ExRate = {29,31,33,35}
+ExRate = {26,28,30,32}
 ScanInitSetting(Force2,0)
 
 
@@ -345,6 +345,7 @@ SH_ICenterB = CS_RatioXY(CS_RemoveStack(CS_OverlapX(SH_Arc1,SH_Arc2,SH_Arc3,SH_A
 
 function Install_initial_system_setting()
     TriggerX(FP,Always(),{CreateUnit(1, 80, "HealZone", P1)}) -- 디버깅용 유닛
+    TriggerX(P7,{Always()},{{Order("Men", P7, "Anywhere", Move, "HealZone")}})
     DoActions(FP, SetInvincibility(Enable, "Buildings", P12, "Anywhere"),preserved)
     -- TriggerX(Force1, {Always()}, {PlayWAV("staredit\\wav\\op.ogg")});
     DoActions(FP, {KillUnit(94, Force2),KillUnit(84, Force2),KillUnit(42, Force2),KillUnit(72, Force2)}, preserved)
@@ -879,6 +880,7 @@ for i = 1, 2 do
 end
 CSPlot(HeroShape1, P7, 21, "wraith1", nil, 1, 32, P7, Always())
 CSPlot(HeroShape1, P7, 69, "vesta1", nil, 1, 32, P7, Always())
+CSPlot(HeroShape1, P7, 60, "corsair1", nil, 1, 32, P7, Always())
 
 
 Trigger { -- 영작유닛 데스값 -1
@@ -1460,8 +1462,8 @@ function Install_ConvertMarineTrigger()
         Trigger{ -- 해금
             players = {i},
             conditions = {
-                Deaths(P7, AtLeast, 1, 152);
-                Deaths(P7, AtLeast, 1, 151);
+                Deaths(P7, Exactly, 1, 152);
+                Deaths(P7, Exactly, 1, 151);
             },
             actions = {
                 DisplayText("\x13\x04\n\x0D\x0D\x13\x04● ● ● \x08ＮＯＴＩＣＥ\x04 ● ● ●\n\x14\n\x14\n", 4);
@@ -2607,11 +2609,12 @@ function Install_SpecialGunPlotShape()
         Unlock2 = StrDesignX(Utext1[i],Utext2[i]).."\n"..StrDesignX("무적이 \x07해제\x04되었습니다 !").."\n"
         Unlock3 = "\x13\x04\n\x0D\x0D\x13\x04● ● ● \x08 ＮＯＴＩＣＥ \x04 ● ● ●\n\x14\n\x14\n"
         TriggerX(Force1, {
-            Bring(Force2, AtMost, 1, "Factories", "middle"..i),
-            Bring(Force2, AtMost, 15, "Any unit", "middle"..i)
+            -- Bring(Force2, AtMost, 1, "Any unit", "middle"..i),
+            -- Bring(Force2, AtMost, 3, "Men", "middle"..i)
+            Always() -- 테스트용
         }, {
-            PlayWAV("staredit\\wav\\CAUTION.ogg"),
-            PlayWAV("staredit\\wav\\CAUTION.ogg"),
+            PlayWAV("staredit\\wav\\CAUTION.wav"),
+            PlayWAV("staredit\\wav\\CAUTION.wav"),
             SetInvincibility(Disable, MBBuildingArray[i], P7, "middle"..i),
             DisplayText(Unlock1, 4),
             DisplayText(Unlock2, 4),
@@ -3541,7 +3544,85 @@ STL1 = {21,8,56,58,70,89,64,96,89,88,7}
     -------------- End of Boss HP Overflow Trigger ----------------------
 
 end
+----------- Opening ---------------
+TriggerX(FP, Always(), {SetMemoryBA(0x657A9C, SetTo, 1)})
 
+Trigger { -- 오프닝
+	players = {Force1},
+	conditions = {
+			Always()
+		},
+	actions = {
+			CenterView("Anywhere");
+			-- PlayWAV("staredit\\wav\\scan.ogg");
+			DisplayText("\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――\n\n\n\n\n\n\n\n\n",4);
+			Wait(150);
+			DisplayText("\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04- 마린키우기 \x08U\x04niverse -\n\n\n\n\n\n\n\n",4);
+			Wait(150);
+			CenterView("Anywhere");
+			DisplayText("\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04- 마린키우기 \x11U\x08n\x04iverse -\n\n\x13\x07Created \x04By \x1BAwakenSense \n\n\n\n\n\n",4);
+			Wait(150);
+			DisplayText("\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04- 마린키우기 \x11U\x17n\x08iverse -\n\n\x13\x07Created \x04By \x1BAwakenSense \n\x13\x1FSTRCtrigAssembler \x08v5.5 \x04& \x08CB\x04 Paint \x08v2.5\x04 & \x08EP\x0FScript \x04In Used\n\n\n\n\n",4);
+			Wait(150);
+			CenterView("Anywhere");
+			DisplayText("\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04- 마린키우기 \x11U\x17ni\x08verse -\n\n\x13\x07Created \x04By \x1BAwakenSense \n\x13\x1FSTRCtrigAssembler \x08v5.5 \x04& \x08CB\x04 Paint \x08v2.5\x04 & \x08EP\x0FScript \x04In Used\n\n\n\n\n",4);
+			Wait(150);
+			DisplayText("\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04- 마린키우기 \x11U\x17niv\x08erse -\n\n\x13\x07Created \x04By \x1BAwakenSense \n\x13\x1FSTRCtrigAssembler \x08v5.5 \x04& \x08CB\x04 Paint \x08v2.5\x04 & \x08EP\x0FScript \x04In Used\n\n\n\x13\x04\x11Thanks \x04to \x1FG\x04ALAXY_BURST, \x0FM\x04ystia Lorelei, \x17C\x04heeze\x17N\x04acho, \x08[\x04Men\x08]\x04, \x10s\x04eeiogon, \x1BNinfia\n\n",4);
+			Wait(150);
+			CenterView("Anywhere");
+			DisplayText("\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04- 마린키우기 \x11U\x17nive\x08rse -\n\n\x13\x07Created \x04By \x1BAwakenSense \n\x13\x1FSTRCtrigAssembler \x08v5.5 \x04& \x08CB\x04 Paint \x08v2.5\x04 & \x08EP\x0FScript \x04In Used\n\n\n\x13\x04☆ \x11Thanks \x04to \x1FG\x04ALAXY_BURST, \x0FM\x04ystia Lorelei, \x17C\x04heeze\x17N\x04acho, \x08[\x04Men\x08]\x04, \x10s\x04eeiogon, \x1BNinfia \x17\x04☆\n\x08\x13 And \x04All \x19Precious\x17 Testers.\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――\n",4);
+			Wait(150);
+			DisplayText("\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04- 마린키우기 \x11U\x17niver\x08se -\n\n\x13\x07Created \x04By \x1BAwakenSense \n\x13\x1FSTRCtrigAssembler \x08v5.5 \x04& \x08CB\x04 Paint \x08v2.5\x04 & \x08EP\x0FScript \x04In Used\n\n\n\x13\x04★ \x11Thanks \x04to \x1FG\x04ALAXY_BURST, \x0FM\x04ystia Lorelei, \x17C\x04heeze\x17N\x04acho, \x08[\x04Men\x08]\x04, \x10s\x04eeiogon, \x1BNinfia \x04★\n\x08\x13 And \x04All \x19Precious\x17 Testers.\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――\n",4);
+            DisplayText("\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04- 마린키우기 \x11U\x17nivers\x08e -\n\n\x13\x07Created \x04By \x1BAwakenSense \n\x13\x1FSTRCtrigAssembler \x08v5.5 \x04& \x08CB\x04 Paint \x08v2.5\x04 & \x08EP\x0FScript \x04In Used\n\n\n\x13\x04☆ \x11Thanks \x04to \x1FG\x04ALAXY_BURST, \x0FM\x04ystia Lorelei, \x17C\x04heeze\x17N\x04acho, \x08[\x04Men\x08]\x04, \x10s\x04eeiogon, \x1BNinfia \x04☆\n\x08\x13 And \x04All \x19Precious\x17 Testers.\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――\n",4);
+            DisplayText("\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04- 마린키우기 \x11U\x17niverse \x04-\n\n\x13\x07Created \x04By \x1BAwakenSense \n\x13\x1FSTRCtrigAssembler \x08v5.5 \x04& \x08CB\x04 Paint \x08v2.5\x04 & \x08EP\x0FScript \x04In Used\n\n\n\x13\x04★ \x11Thanks \x04to \x1FG\x04ALAXY_BURST, \x0FM\x04ystia Lorelei, \x17C\x04heeze\x17N\x04acho, \x08[\x04Men\x08]\x04, \x10s\x04eeiogon, \x1BNinfia \x04★\n\x08\x13 And \x04All \x19Precious\x17 Testers.\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――\n",4);
+		}
+}
+
+Trigger {
+	players = {Force1},
+	conditions = {
+			Always()
+	},
+	actions = {
+		Wait(250);
+		CenterView("Anywhere");	
+		DisplayText("\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04- 마린키우기 \x11U\x17niverse \x04-\n\n\x13\x07Created \x04By \x1BAwakenSense \n\x13\x1FSTRCtrigAssembler \x08v5.5 \x04& \x08CB\x04 Paint \x08v2.5\x04 & \x08EP\x0FScript \x04In Used\n\n\n\x13\x04★ \x11Thanks \x04to \x1FG\x04ALAXY_BURST, \x0FM\x04ystia Lorelei, \x17C\x04heeze\x17N\x04acho, \x08[\x04Men\x08]\x04, \x10s\x04eeiogon, \x1BNinfia \x04★\n\x08\x13 And \x04All \x19Precious\x17 Testers.\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――\n",4);
+		
+		Wait(250);
+		CenterView("Anywhere");
+		DisplayText("\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04- 마린키우기 \x11U\x17niverse \x04-\n\n\x13\x07Created \x04By \x1BAwakenSense \n\x13\x1FSTRCtrigAssembler \x08v5.5 \x04& \x08CB\x04 Paint \x08v2.5\x04 & \x08EP\x0FScript \x04In Used\n\n\n\x13\x04★ \x11Thanks \x04to \x1FG\x04ALAXY_BURST, \x0FM\x04ystia Lorelei, \x17C\x04heeze\x17N\x04acho, \x08[\x04Men\x08]\x04, \x10s\x04eeiogon, \x1BNinfia \x04★\n\x08\x13 And \x04All \x19Precious\x17 Testers.\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――\n",4);
+	
+		Wait(250);
+		CenterView("Anywhere");
+		DisplayText("\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04- 마린키우기 \x11U\x17niverse \x04-\n\n\x13\x07Created \x04By \x1BAwakenSense \n\x13\x1FSTRCtrigAssembler \x08v5.5 \x04& \x08CB\x04 Paint \x08v2.5\x04 & \x08EP\x0FScript \x04In Used\n\n\n\x13\x04★ \x11Thanks \x04to \x1FG\x04ALAXY_BURST, \x0FM\x04ystia Lorelei, \x17C\x04heeze\x17N\x04acho, \x08[\x04Men\x08]\x04, \x10s\x04eeiogon, \x1BNinfia \x04★\n\x08\x13 And \x04All \x19Precious\x17 Testers.\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――\n",4);
+	
+		Wait(250);
+		CenterView("Anywhere");
+		DisplayText("\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04- 마린키우기 \x11U\x17niverse \x04-\n\n\x13\x07Created \x04By \x1BAwakenSense \n\x13\x1FSTRCtrigAssembler \x08v5.5 \x04& \x08CB\x04 Paint \x08v2.5\x04 & \x08EP\x0FScript \x04In Used\n\n\n\x13\x04★ \x11Thanks \x04to \x1FG\x04ALAXY_BURST, \x0FM\x04ystia Lorelei, \x17C\x04heeze\x17N\x04acho, \x08[\x04Men\x08]\x04, \x10s\x04eeiogon, \x1BNinfia \x04★\n\x08\x13 And \x04All \x19Precious\x17 Testers.\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――\n",4);
+	
+		Wait(250);
+		CenterView("Anywhere");
+		DisplayText("\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04- 마린키우기 \x11U\x17niverse \x04-\n\n\x13\x07Created \x04By \x1BAwakenSense \n\x13\x1FSTRCtrigAssembler \x08v5.5 \x04& \x08CB\x04 Paint \x08v2.5\x04 & \x08EP\x0FScript \x04In Used\n\n\n\x13\x04★ \x11Thanks \x04to \x1FG\x04ALAXY_BURST, \x0FM\x04ystia Lorelei, \x17C\x04heeze\x17N\x04acho, \x08[\x04Men\x08]\x04, \x10s\x04eeiogon, \x1BNinfia \x04★\n\x08\x13 And \x04All \x19Precious\x17 Testers.\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――\n",4);
+	
+		Wait(250);
+		CenterView("Anywhere");
+		DisplayText("\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04- 마린키우기 \x11U\x17niverse \x04-\n\n\x13\x07Created \x04By \x1BAwakenSense \n\x13\x1FSTRCtrigAssembler \x08v5.5 \x04& \x08CB\x04 Paint \x08v2.5\x04 & \x08EP\x0FScript \x04In Used\n\n\n\x13\x04★ \x11Thanks \x04to \x1FG\x04ALAXY_BURST, \x0FM\x04ystia Lorelei, \x17C\x04heeze\x17N\x04acho, \x08[\x04Men\x08]\x04, \x10s\x04eeiogon, \x1BNinfia \x04★\n\x08\x13 And \x04All \x19Precious\x17 Testers.\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――\n",4);
+	
+		Wait(250);
+		CenterView("Anywhere");
+		DisplayText("\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04- 마린키우기 \x11U\x17niverse \x04-\n\n\x13\x07Created \x04By \x1BAwakenSense \n\x13\x1FSTRCtrigAssembler \x08v5.5 \x04& \x08CB\x04 Paint \x08v2.5\x04 & \x08EP\x0FScript \x04In Used\n\n\n\x13\x04★ \x11Thanks \x04to \x1FG\x04ALAXY_BURST, \x0FM\x04ystia Lorelei, \x17C\x04heeze\x17N\x04acho, \x08[\x04Men\x08]\x04, \x10s\x04eeiogon, \x1BNinfia \x04★\n\x08\x13 And \x04All \x19Precious\x17 Testers.\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――\n",4);
+		SetSwitch("Switch 249",Set);
+	}
+}
+
+
+
+
+----------------------------------
+
+
+
+CIf(AllPlayers,{Switch("Switch 249", Set)})
 Install_initial_system_setting()
 Install_normalGunplot()
 Install_SpecialGunplot()
@@ -3553,11 +3634,6 @@ Install_DonateNbanTrigger()
 Install_ConvertMarineTrigger()
 Install_CCMU()
 Install_BGMPhase()
-
-CIf(AllPlayers,ElapsedTime(AtLeast,10))
-
-
-
 Install_HerounitTrigger()
 Install_NormalGunPlotShape()
 Install_SpecialGunPlotShape()
@@ -3576,57 +3652,57 @@ EUDTurbo(FP)
 
 
 
--- for i = 0, 10 do
--- if i%2 == 0 then
--- Trigger {
--- 	players = {P1},
--- 	conditions = {
--- 		Memory(0x640B60+0xDA*i, Exactly, 0xEABDB2EA);
--- 		Memory(0x640B64+0xDA*i, Exactly, 0x203AA0B3);	
--- 	},
--- 	actions = {
--- 		SetMemory(0x640B60+0xDA*i,SetTo,0);
--- 		PreserveTrigger();
--- 	}
--- }
--- Trigger {
--- 	players = {P1},
--- 	conditions = {
--- 		Memory(0x640B60+0xDA*i, Exactly, 0x4E524157);
--- 		Memory(0x640B64+0xDA*i, Exactly, 0x3A474E49);	
--- 	},
--- 	actions = {
--- 		SetMemory(0x640B60+0xDA*i,SetTo,0);
--- 		PreserveTrigger();
--- 	}
--- }
--- else
--- Trigger {
--- 	players = {P1},
--- 	conditions = {
--- 		MemoryX(0x640B5E + 0xDA*i, Exactly, 0xB2EA0000,0xFFFF0000);
--- 		Memory(0x640B62 + 0xDA*i, Exactly, 0xA0B3EABD);	
--- 		MemoryX(0x640B66 + 0xDA*i, Exactly, 0x203A,0xFFFF);
--- 	},
--- 	actions = {
--- 		SetMemory(0x640B5E + 0xDA*i,SetTo,0);
--- 		PreserveTrigger();
--- 	}
--- }
--- Trigger {
--- 	players = {P1},
--- 	conditions = {
--- 		MemoryX(0x640B5E + 0xDA*i, Exactly, 0x41570000,0xFFFF0000);
--- 		Memory(0x640B62 + 0xDA*i, Exactly, 0x4E494E52);	
--- 		MemoryX(0x640B66 + 0xDA*i, Exactly, 0x00003A47,0xFFFF);
--- 	},
--- 	actions = {
--- 		SetMemory(0x640B5E + 0xDA*i,SetTo,0);
--- 		PreserveTrigger();
--- 	}
--- }
--- end
--- end
+for i = 0, 10 do
+if i%2 == 0 then
+Trigger {
+	players = {P1},
+	conditions = {
+		Memory(0x640B60+0xDA*i, Exactly, 0xEABDB2EA);
+		Memory(0x640B64+0xDA*i, Exactly, 0x203AA0B3);	
+	},
+	actions = {
+		SetMemory(0x640B60+0xDA*i,SetTo,0);
+		PreserveTrigger();
+	}
+}
+Trigger {
+	players = {P1},
+	conditions = {
+		Memory(0x640B60+0xDA*i, Exactly, 0x4E524157);
+		Memory(0x640B64+0xDA*i, Exactly, 0x3A474E49);	
+	},
+	actions = {
+		SetMemory(0x640B60+0xDA*i,SetTo,0);
+		PreserveTrigger();
+	}
+}
+else
+Trigger {
+	players = {P1},
+	conditions = {
+		MemoryX(0x640B5E + 0xDA*i, Exactly, 0xB2EA0000,0xFFFF0000);
+		Memory(0x640B62 + 0xDA*i, Exactly, 0xA0B3EABD);	
+		MemoryX(0x640B66 + 0xDA*i, Exactly, 0x203A,0xFFFF);
+	},
+	actions = {
+		SetMemory(0x640B5E + 0xDA*i,SetTo,0);
+		PreserveTrigger();
+	}
+}
+Trigger {
+	players = {P1},
+	conditions = {
+		MemoryX(0x640B5E + 0xDA*i, Exactly, 0x41570000,0xFFFF0000);
+		Memory(0x640B62 + 0xDA*i, Exactly, 0x4E494E52);	
+		MemoryX(0x640B66 + 0xDA*i, Exactly, 0x00003A47,0xFFFF);
+	},
+	actions = {
+		SetMemory(0x640B5E + 0xDA*i,SetTo,0);
+		PreserveTrigger();
+	}
+}
+end
+end
 
 --[[
 1. Compile 후 시나리오 손상은 특정 trigger의 문제일 가능성이 농후하다.
